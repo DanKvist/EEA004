@@ -42,7 +42,64 @@ System description and analysis\\
 \section{Background/Introduction}
 This assignment study an air handling system with a heater and a humidifier.
 The system allow control of two variables, temperature $y_1$ and humidity $y_2$.
-This can be done through by controlling the flow of the heater $u_1$ and the flow of the humidifier $u_2$.
+This can be done through the flow of of a heater $u_1$ and the flow of a humidifier $u_2$.
+
+Although the system is not linear, it is assumed linear within a region of operation.
+With this in mind both the heater and the humidifier can be modeled as first order systems, [\ref{equ:firstOrder}].
+
+\begin{equation}
+G(s) = \frac{K}{\tau s + 1}
+\label{equ:firstOrder}
+\end{equation}
+
+The time constant $\tau$ has been given for the heater $\tau_1=50$ and for the humidifier $\tau_2=10$ in the assignment.
+The static gain $K$ will have to be calculated for each system.
+For that purpose the assignment include two enthalpy–entropy charts, one for each system.
+There is also information provided how the system reacts to a step input of $u_1 = 1$ or $u_2 = 2$.
+The heater open fully $u_1 = 1$ will increase incoming air of $10^\circ C, 40\% \: RH$ by $15^\circ C$ and the humidifier open fully will increase incoming air of $20^\circ C, 10\% \: RH$ by $70\% \: RH$.
+
+\subsection{Theory}
+A linear system can be represented on state space form.
+The general form of a state space formulation is as follows:
+
+\begin{equation}
+\begin{split}
+\dot{x} &= Ax + Bu \\
+y &= Cx + Du
+\end{split}
+\end{equation}
+
+
+The final value theorem is something that is often used for system identification.
+It can especially come in handy when a system is exited by a step input and the steady state output after a long time can be measured.
+The final value theorem states:
+
+\begin{equation}
+\lim_{t \to \infty} f(t) = \lim_{s \to 0} sF(s)
+\end{equation}
+
+Observability of a system loosely indicate if the system states can be reconstructed from the output, if a system is observable the observer poles can be placed arbitrarily.
+The observability matrix is defined as such:
+
+\begin{equation}
+\mathcal{O}(A,C) = 
+\begin{pmatrix}
+C \\ CA \\ \vdots \\ CA^{n-1}
+\end{pmatrix}
+\end{equation}
+
+If the observability matrix $\mathcal{O}$ has full rank (independent rows/columns) the system is observable.
+In a similar fashion, controllability loosely indicate if all states of a system can be controlled by the input, if a system is controllable the poles of a state feedback controller can be arbitrarily chosen.
+The Controllability matrix is defined as such:
+
+\begin{equation}
+\mathcal{S}(A,B) = 
+\begin{pmatrix}
+B & AB & \cdots & A^{n-1}C
+\end{pmatrix}
+\end{equation}
+
+If the controllability matrix $\mathcal{S}$ has full rank (independent rows/columns) the system is controllable.
 
 \section{Method}
 
