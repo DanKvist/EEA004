@@ -83,6 +83,7 @@ The final value theorem states:
 
 \begin{equation}
 \lim_{t \to \infty} f(t) = \lim_{s \to 0} sF(s)
+\label{equ:finalTheorem}
 \end{equation}
 
 Observability of a system loosely indicate if the system states can be reconstructed from the output, if a system is observable the observer poles can be placed arbitrarily.
@@ -109,10 +110,44 @@ B & AB & \cdots & A^{n-1}C
 If the controllability matrix $\mathcal{S}$ has full rank (independent rows/columns) the system is controllable.
 
 \section{Method}
+This section will describe the work flow of identifying the air handling system, doing basic analysis on the identified system and in the end designing a controller for for it.
 
+\subsection{System identification}
+The air handling system described in the introduction is one of multiple input multiple output (MIMO).
+Such a system will have a transfer function matrix $\boldsymbol{G}(s)$ from input to output. In this particular case it will be a $2x2$ matrix because of the two input $u_1, u_2$ and the two output $y_1, y_2$.
+The system can be written as such:
 
 \begin{equation}
-G(s) = \frac{K}{\tau s + 1}
+\begin{split}
+\boldsymbol{Y}(s) &= \boldsymbol{G}(s)\boldsymbol{U}(s) \leftrightarrow \\
+\begin{pmatrix}
+Y_1 \\ Y_2
+\end{pmatrix}
+&=
+\begin{pmatrix}
+G_{11}(s) & G_{12}(s) \\ G_{21}(s) & G_{22}(s)
+\end{pmatrix}
+\begin{pmatrix}
+U_1(s) \\ U_2(s)
+\end{pmatrix}
+\end{split}
+\end{equation}
+
+Both heater and humidifier is apporximated by first order systems [\ref{equ:firstOrder}].
+Hence the transfer function elements can be written:
+
+\begin{equation}
+G_{ij}(s) = \frac{K_{ij}}{\tau_{ij} s + 1}
+\end{equation}
+
+Where $\tau_{11} = \tau_{12} = \tau_1 = 50$ and $\tau_{21} = \tau_{22} = \tau_2 = 10$ are given in the introduction.
+
+In order to find $K_{ij}$ the final value theorem [\ref{equ:finalTheorem}] can be applied along with the steady state information from the introduction.
+
+\begin{equation}
+\lim_{t \to \infty} y_{1}(t) = 
+\lim_{s \to 0} sY_{1}(s) = 
+\lim_{s \to 0} s(G_{11}(s)U_{1} + G_{12}(s)U_{2})
 \end{equation}
 
 \begin{equation}
