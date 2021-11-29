@@ -40,11 +40,18 @@ System description and analysis\\
 \maketitle
 
 \section{Background/Introduction}
-This assignment study an air handling system with a heater and a humidifier.
+This assignment study an air handling system with a heater and a humidifier, figure \ref{fig:airSystem}.
 The system allow control of two variables, temperature $y_1$ and humidity $y_2$.
 This can be done through the flow of of a heater $u_1$ and the flow of a humidifier $u_2$.
 
-Although the system is not linear, it is assumed linear within a region of operation.
+\begin{figure}
+\center
+\includegraphics[scale=1]{../figures/heaterHumidifier.png}
+\caption{Air management system with heater $u_1$, humidifier $u_2$, thermometer $y_1$ and hygrometer $y_2$.}
+\label{fig:airSystem}
+\end{figure}
+
+Although the system is not linear, it is assumed linear within a small region of operation.
 With this in mind both the heater and the humidifier can be modeled as first order systems, [\ref{equ:firstOrder}].
 
 \begin{equation}
