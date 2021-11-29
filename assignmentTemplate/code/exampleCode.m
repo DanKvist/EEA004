@@ -3,7 +3,7 @@
 
 %% Setup figure saving
 
-figFolder = '../figures';
+figFolder = 'figures';
 mkdir(figFolder);
 
 % Save an example figure
