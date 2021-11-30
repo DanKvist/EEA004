@@ -319,8 +319,33 @@ The gain values $k_{p,i}$ are selected in 3 different interesting combinations.
 \section{Results}
 
 \subsection{Question 1}
+From (8), (10), and (11) above, the system transfer function is found to be:
+
+\begin{equation}
+G(s)
+&=
+\begin{pmatrix}
+G_{11}(s) & G_{12}(s) \\ G_{21}(s) & G_{22}(s)
+\end{pmatrix}
+\end{equation}
+
+where
+
+\begin{equation}
+G_{11}(s) = \frac{K_{11}}{\tau_{1} s + 1} = \frac{15}{50s + 1}
+\end{equation}
+\begin{equation}
+G_{12}(s) = \frac{K_{12}}{\tau_{2} s + 1} = \frac{-11}{10s + 1}
+\end{equation}
+\begin{equation}
+G_{21}(s) = \frac{K_{21}}{\tau_{1} s + 1} = \frac{-25}{50s + 1}
+\end{equation}
+\begin{equation}
+G_{22}(s) = \frac{K_{22}}{\tau_{2} s + 1} = \frac{70}{10s + 1}
+\end{equation}
 
 \subsection{Question 2}
+Following the method described in section 2.2 we find the state space representation to be:
 
 \begin{equation}
 \begin{split}
@@ -330,11 +355,11 @@ The gain values $k_{p,i}$ are selected in 3 different interesting combinations.
 \end{pmatrix}x
 +
 \begin{pmatrix}
-0.3 & -0.5 \\ -0.25 & 1.75
+1 & 0 \\ 0 & 4
 \end{pmatrix}u \\
 y &= 
 \begin{pmatrix}
-1 & 0 \\ 0 & 4
+0.3 & -0.275 \\ -0.5 & 1.75
 \end{pmatrix}x
 \end{split}
 \label{equ:ssSolution}
