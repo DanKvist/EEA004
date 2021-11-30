@@ -1,8 +1,10 @@
+%-------------------------------------------------------------------------
 %% Controller design
+%-------------------------------------------------------------------------
 
 %% First guess, unity gain controller
 L_y = [1 0;0 1];
-L_r = Ky;
+L_r = L_y;
 
 G_cl = minreal((eye(size(G)) + G*L_y) \ (G*L_r));
 S = (eye(size(G)) + G*L_y) \ eye(size(G));
