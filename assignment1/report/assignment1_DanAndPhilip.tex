@@ -74,6 +74,7 @@ The general form of a state space formulation is as follows:
 \dot{x} &= Ax + Bu \\
 y &= Cx + Du
 \end{split}
+\label{equ:stateSpace}
 \end{equation}
 
 
@@ -140,31 +141,108 @@ Hence the transfer function elements can be written:
 G_{ij}(s) = \frac{K_{ij}}{\tau_{ij} s + 1}
 \end{equation}
 
-Where $\tau_{11} = \tau_{12} = \tau_1 = 50$ and $\tau_{21} = \tau_{22} = \tau_2 = 10$ are given in the introduction.
+Where $\tau_{11} = \tau_{12} = \tau_1 = 50$ and $\tau_{21} = \tau_{22} = \tau_2 = 10$ are given by the assignment and presented in the introduction.
 
 In order to find $K_{ij}$ the final value theorem [\ref{equ:finalTheorem}] can be applied along with the steady state information from the introduction.
 
 \begin{equation}
-\lim_{t \to \infty} y_{1}(t) = 
+\begin{split}
+\lim_{t \to \infty} y_{1}(t) &= 
 \lim_{s \to 0} sY_{1}(s) = 
-\lim_{s \to 0} s(G_{11}(s)U_{1} + G_{12}(s)U_{2})
+\lim_{s \to 0} s(G_{11}(s)U_{1}(s) + G_{12}(s)U_{2}(s)) \\
+\lim_{t \to \infty} y_{2}(t) &= 
+\lim_{s \to 0} sY_{2}(s) = 
+\lim_{s \to 0} s(G_{21}(s)U_{1}(s) + G_{22}(s)U_{2}(s))
+\end{split}
+\label{equ:finalUsage}
 \end{equation}
 
-\begin{equation}
-G_{u_1y_1}(0) = K = 15degree
-\end{equation}
+If the input $u(t)$ is a unit step function $l(t)$, the transfer function $U(s)$ is $\frac{1}{s}$ and if only one of $u_1(t)/u_2(t)$ is a step and the other is zero, one of the terms on the right hand side of equation [\ref{equ:finalUsage}] will disappear.
+This will render 2 scenarios for the 2 equations:
 
 \begin{equation}
-G_{u_1y_2}(0) = K = -25\% 
+\begin{split}
+\lim_{t \to \infty} y_{1}(t) &= 
+\lim_{s \to 0} G_{11}(s) = G_{11}(0) = K_{11}, 
+\begin{cases}
+ u_1(t) = l(t) \\ u_2(t) = 0 
+\end{cases} \\
+\lim_{t \to \infty} y_{2}(t) &= 
+\lim_{s \to 0} G_{21}(s) = G_{21}(0) = K_{21}, 
+\begin{cases}
+ u_1(t) = l(t) \\ u_2(t) = 0 
+\end{cases} \\
+\lim_{t \to \infty} y_{1}(t) &= 
+\lim_{s \to 0} G_{12}(s) = G_{12}(0) = K_{12}, 
+\begin{cases}
+ u_1(t) = 0 \\ u_2(t) = l(t) 
+\end{cases} \\
+\lim_{t \to \infty} y_{2}(t) &= 
+\lim_{s \to 0} G_{22}(s) = G_{22}(0) = K_{22}, 
+\begin{cases}
+ u_1(t) = 0 \\ u_2(t) = l(t) 
+\end{cases} \\
+\end{split}
 \end{equation}
 
-\begin{equation}
-G_{u_2y_1}(0) = K = -10degree 
-\end{equation}
+A step input on only one input correspond to the excitation described in the assignment and was presented in the introduction of this report.
+The output after such a step input was also given and correspond to the output to 2 of the 4 equations.
+The other 2 output can be found using an entropy-enthalpy chart and can be seen in figure \ref{fig:entropy}.
+Here the step input effect on the heater (red) and the water mist humidifier (green) can be seen.
+The water humidifier was chosen in favor of the steam humidifier as the assignment didn't specify which to use.
+
+\begin{figure}
+\center
+\includegraphics[scale=0.5]{../figures/enthalpyEntropy.png}
+\caption{Temperature and humidity effect of a heater step input (red) and of a humidifier step input (green).}
+\label{fig:entropy}
+\end{figure}
+
+Reading out the temperature and humidity values of the chart give the final static values of the left hand side of equation [\ref{equ:finalUsage}].
 
 \begin{equation}
-G_{u_2y_2}(0) = K = 70\% 
+\begin{split}
+25 - 10 = 15 &= 
+\lim_{t \to \infty} y_{1}(t) = 
+K_{11} \\
+15 - 40 = -25 &= 
+\lim_{t \to \infty} y_{2}(t) = 
+K_{21} \\
+9 - 20 = -11 &= 
+\lim_{t \to \infty} y_{1}(t) = 
+K_{12} \\
+80 - 10 = 70 &= 
+\lim_{t \to \infty} y_{2}(t) = 
+K_{22} \\
+\end{split}
 \end{equation}
+
+With the values found for $K_{ij}$ and $\tau_{ij}$ the full MIMO system transfer function $\boldsymbol{G}(s)$ can be assembled and is presented in results as equation [input reference to result].
+
+\subsection{System state space formulation}
+A linear MIMO system such as the one developed in the previous example can also be expressed on state space form [\ref{equ:stateSpace}].
+A simple way to do this is to take aid of a computer.
+Matlab offer this functionality through the function \verb|ss(tf)|.
+The resulting state space formulation of our system is presented under results as equation [\ref{equ:ssSolution}]
+
+\subsection{Plant model singular values}
+The singular values $\sigma_i$ of a MIMO system on state space form [\ref{equ:stateSpace}] are the square roots of the eigenvalues $\sqrt{\lambda_i}$ of the matrix $A^*A$.
+The singular values is a measurement of the gain of the system and the input amplification lies between the largest and smallest singular value.
+Hence plotting the minimum and maximum singular values for all frequencies correspond to the MIMO equivalent of the bode gain plot.
+Since this is tedious to do by hand Matlab offer the function \verb|sigma(G)| to this purpose.
+The singular value plot for the air handling system can be found under results as figure [reference figure].
+
+\subsection{System observability and controllability}
+For the air handling system the observability and controllability matrices can be calculated using the Matlab commands \verb|obsv(A,C)| and \verb|ctrb(A,B)|.
+The matrices for the air handling system are:
+
+[TODO: matrices for obsv and ctrb]
+
+Using Matlab again \verb|rank| provides the rank of these matrices.
+The rank of them can then be compared to the smaller of column count or row count to see if the matrices are full rank.
+If they both are full rank the plant is both observable and controllable.
+
+\subsection{Controller design}
 
 \section{Results}
 
@@ -187,6 +265,7 @@ y &=
 1 & 0 \\ 0 & 4
 \end{pmatrix}x
 \end{split}
+\label{equ:ssSolution}
 \end{equation}
 
 \subsection{Question 3}
