@@ -95,6 +95,7 @@ The observability matrix is defined as such:
 \begin{pmatrix}
 C \\ CA \\ \vdots \\ CA^{n-1}
 \end{pmatrix}
+\label{equ:observ}
 \end{equation}
 
 If the observability matrix $\mathcal{O}$ has full rank (independent rows/columns) the system is observable.
@@ -106,9 +107,27 @@ The Controllability matrix is defined as such:
 \begin{pmatrix}
 B & AB & \cdots & A^{n-1}C
 \end{pmatrix}
+\label{equ:contr}
 \end{equation}
 
 If the controllability matrix $\mathcal{S}$ has full rank (independent rows/columns) the system is controllable.
+
+When analyzing closed loop systems, not only is the closed loop transfer function $G_c$ of interest, but also a few other functions.
+These other functions are related to output stability via noise, disturbance and modeling errors.
+They are the sensitivity function $S$, the complementary sensitivity function $T$ and the input sensitivity function $S_u$.
+They are defined as follow:
+
+\begin{equation}
+\begin{split}
+G_c &= (I + GL_y)^{-1}GL_r \\
+S &= (I + GL_y)^{-1} \\
+T &= (I + GL_y)^{-1}GL_y \\
+S_u &= (I + L_yG)^{-1}
+\end{split}
+\label{equ:transFunc}
+\end{equation}
+
+Here $L_y$ is the feedback controller and $L_r$ the feedforward controller of the standard controller form.
 
 \section{Method}
 This section will describe the work flow of identifying the air handling system, doing basic analysis on the identified system and in the end designing a controller for for it.
@@ -233,17 +252,70 @@ Since this is tedious to do by hand Matlab offer the function \verb|sigma(G)| to
 The singular value plot for the air handling system can be found under results as figure [reference figure].
 
 \subsection{System observability and controllability}
-For the air handling system the observability and controllability matrices can be calculated using the Matlab commands \verb|obsv(A,C)| and \verb|ctrb(A,B)|.
+For the air handling system the observability and controllability matrices [\ref{equ:observ}],[\ref{equ:contr}] can be calculated using the Matlab commands \verb|obsv(A,C)| and \verb|ctrb(A,B)|.
 The matrices for the air handling system are:
 
-[TODO: matrices for obsv and ctrb]
+\begin{equation}
+\mathcal{O} = 
+\begin{pmatrix}
+0.3 & -0.275		\\
+-0.5 & 1.75		\\
+-0.006 & 0.0275	\\
+0.01 & -0.175
+\end{pmatrix}
+,\;
+\mathcal{C} = 
+\begin{pmatrix}
+1 & 0 & -0.02 & 0 \\
+0 & 4 & 0 & -0.4
+\end{pmatrix}
+\end{equation}
 
-Using Matlab again \verb|rank| provides the rank of these matrices.
+Using Matlab again \verb|rank(A)| provides the rank of these matrices.
 The rank of them can then be compared to the smaller of column count or row count to see if the matrices are full rank.
 If they both are full rank the plant is both observable and controllable.
 
 \subsection{Controller design}
+A controller $u(t)$ will be designed for the system using feedback.
+The general form of a controller is:
 
+\begin{equation}
+u(t) = -L_y(p)y(t) + L_r(p)r(t)
+\end{equation}
+
+The assignment asks for a standard proportional controller on each output.
+For a standard proportional controller $L_r = L_y$ and the proportional gains $k_{p,i}$ will be the diagonal of the controller matrix $L_y$.
+With 2 system outputs, 2 control signals and 2 reference values the size of $L_y$ will be a $2 \times 2$ matrix.
+For the air handling system with proportional controller feedback the controller will be:
+
+\begin{equation}
+\begin{split}
+u(t) = -L_y(p)y(t) + L_y(p)r(t) &= 
+L_y(p)(-y(t) + r(t)) = 
+L_y(p)e(t) \\
+L_y(p) &= 
+\begin{pmatrix}
+k_{p,1} 	& 	0 		\\
+0 		&	k_{p,2}	
+\end{pmatrix}
+\end{split}
+\end{equation}
+
+The gain values $k_{p,i}$ are selected in 3 different interesting combinations.
+
+\begin{center}
+\begin{tabular}{||c | c c||}
+ \hline
+ Test & $k_{p,1}$ & $k_{p,2}$ \\ [0.5ex] 
+ \hline\hline
+ 1 &  1 & 1 \\ 
+ \hline
+ 2 &  1 & 0.25 \\
+ \hline
+ 3 &  ? & ? \\
+ \hline
+\end{tabular}
+\end{center}
 \section{Results}
 
 \subsection{Question 1}
