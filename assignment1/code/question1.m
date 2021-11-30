@@ -8,15 +8,15 @@
 tau1 = 50;
 tau2 = 10;
 
-K11 =  15;
-K12 = -25;
-K21 = -10;
-K22 =  70;
+K_y1u1 =  15;
+K_y1u2 = -11;
+K_y2u1 = -25;
+K_y2u2 =  70;
 
-G_u1y1 = tf( 15, [50 1]);
-G_u1y2 = tf(-25, [50 1]);
-G_u2y1 = tf(-10, [10 1]);
-G_u2y2 = tf( 70, [10 1]);
+G_y1u1 = tf( K_y1u1, [tau1 1]);
+G_y1u2 = tf( K_y1u2, [tau2 1]);
+G_y2u1 = tf( K_y2u1, [tau1 1]);
+G_y2u2 = tf( K_y2u2, [tau2 1]);
 
-G = [G_u1y1 G_u1y2; G_u2y1 G_u2y2]
+G = [G_y1u1 G_y1u2; G_y2u1 G_y2u2]
 

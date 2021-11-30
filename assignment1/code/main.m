@@ -3,6 +3,10 @@
 % Designed to execute all other relevant scripts for the assignment
 %-------------------------------------------------------------------------
 
+clear all;
+close all;
+clc;
+
 run('question1.m')
 run('question2.m')
 run('question3.m')
