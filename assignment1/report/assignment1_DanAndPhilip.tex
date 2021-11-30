@@ -333,27 +333,12 @@ From (8), (10), and (11) above, the system transfer function is found to be:
 G(s)
 &=
 \begin{pmatrix}
-G_{11}(s) & G_{12}(s) \\ G_{21}(s) & G_{22}(s)
+\frac{15}{50s + 1} & \frac{-11}{10s + 1} \\ \frac{-25}{50s + 1} & \frac{70}{10s + 1}
 \end{pmatrix}
 \end{equation}
 
-where
-
-\begin{equation}
-G_{11}(s) = \frac{K_{11}}{\tau_{1} s + 1} = \frac{15}{50s + 1}
-\end{equation}
-\begin{equation}
-G_{12}(s) = \frac{K_{12}}{\tau_{2} s + 1} = \frac{-11}{10s + 1}
-\end{equation}
-\begin{equation}
-G_{21}(s) = \frac{K_{21}}{\tau_{1} s + 1} = \frac{-25}{50s + 1}
-\end{equation}
-\begin{equation}
-G_{22}(s) = \frac{K_{22}}{\tau_{2} s + 1} = \frac{70}{10s + 1}
-\end{equation}
-
 \subsection{Question 2}
-Following the method described in section 2.2 we find the state space representation to be:
+Following the method described in section 2.2 the state space representation is found to be:
 
 \begin{equation}
 \begin{split}
@@ -374,8 +359,40 @@ y &=
 \end{equation}
 
 \subsection{Question 3}
+From section 2.3 the singular values are shown in figure \ref{fig:systemsingular}:
+
+
+\begin{figure}[h!]
+\center
+\includegraphics[scale=0.7]{../code/figures/systemSingular.png}
+\caption{The singular values of the system.}
+\label{fig:systemsingular}
+\end{figure}
+
 
 \subsection{Question 4}
+
+The system is controllable as the controllability matrix has full rank as seen below:
+
+\begin{equation}
+rank
+\begin{pmatrix}
+1.0 & 0 & -0.02 & 0 \\ 0 & 4.0 & 0 & -0.4
+\end{pmatrix}
+= 2
+\end{equation}
+
+
+The system is observable as the observability matrix has full rank as shown:
+
+\begin{equation}
+rank
+\begin{pmatrix}
+0.3 & -0.275 \\ -0.5 & 1.75 \\ -0.006 & 0.0275 \\ 0.01 & -0.175
+\end{pmatrix}
+= 2
+\end{equation}
+
 
 \subsection{Question 5}
 
