@@ -44,7 +44,7 @@ This assignment study an air handling system with a heater and a humidifier, fig
 The system allow control of two variables, temperature $y_1$ and humidity $y_2$.
 This can be done through the flow of of a heater $u_1$ and the flow of a humidifier $u_2$.
 
-\begin{figure}
+\begin{figure}[h!]
 \center
 \includegraphics[scale=1]{../figures/heaterHumidifier.png}
 \caption{Air management system with heater $u_1$, humidifier $u_2$, thermometer $y_1$ and hygrometer $y_2$.}
@@ -212,7 +212,7 @@ The water humidifier was chosen in favor of the steam humidifier as the assignme
 
 \begin{figure}
 \center
-\includegraphics[scale=0.5]{../figures/enthalpyEntropy.png}
+\includegraphics[scale=0.7]{../figures/enthalpyEntropy.png}
 \caption{Temperature and humidity effect of a heater step input (red) and of a humidifier step input (green).}
 \label{fig:entropy}
 \end{figure}
@@ -280,20 +280,20 @@ A controller $u(t)$ will be designed for the system using feedback.
 The general form of a controller is:
 
 \begin{equation}
-u(t) = -L_y(p)y(t) + L_r(p)r(t)
+u(t) = -K_y(p)y(t) + K_r(p)r(t)
 \end{equation}
 
 The assignment asks for a standard proportional controller on each output.
-For a standard proportional controller $L_r = L_y$ and the proportional gains $k_{p,i}$ will be the diagonal of the controller matrix $L_y$.
-With 2 system outputs, 2 control signals and 2 reference values the size of $L_y$ will be a $2 \times 2$ matrix.
+For a standard proportional controller $K_r = K_y$ and the proportional gains $k_{p,i}$ will be the diagonal of the controller matrix $K_y$.
+With 2 system outputs, 2 control signals and 2 reference values the size of $K_y$ will be a $2 \times 2$ matrix.
 For the air handling system with proportional controller feedback the controller will be:
 
 \begin{equation}
 \begin{split}
-u(t) = -L_y(p)y(t) + L_y(p)r(t) &= 
-L_y(p)(-y(t) + r(t)) = 
-L_y(p)e(t) \\
-L_y(p) &= 
+u(t) = -K_y(p)y(t) + K_y(p)r(t) &= 
+K_y(p)(-y(t) + r(t)) = 
+K_y(p)e(t) \\
+K_y(p) &= 
 \begin{pmatrix}
 k_{p,1} 	& 	0 		\\
 0 		&	k_{p,2}	
@@ -301,8 +301,9 @@ k_{p,1} 	& 	0 		\\
 \end{split}
 \end{equation}
 
-The gain values $k_{p,i}$ are selected in 3 different interesting combinations.
+The gain values $k_{p,i}$ are selected in 3 different interesting combinations, shown in table \ref{tab:gains}.
 
+\begin{table}[h!]
 \begin{center}
 \begin{tabular}{||c | c c||}
  \hline
@@ -310,12 +311,19 @@ The gain values $k_{p,i}$ are selected in 3 different interesting combinations.
  \hline\hline
  1 &  1 & 1 \\ 
  \hline
- 2 &  1 & 0.25 \\
+ 2 &  1 & 0.1 \\
  \hline
- 3 &  ? & ? \\
+ 3 &  5 & 5 \\
  \hline
 \end{tabular}
 \end{center}
+\caption{Controller gains used during evaluation.}
+\label{tab:gains}
+\end{table}
+
+With the controller defined the stability functions [\ref{equ:transFunc}] can be calculated using Matlab standard matrix operations.
+The singular values of the stability functions are then plotted, again using \verb|sigma(F)|, the singular value plots are found in results as figures [reference all singular value plots].
+
 \section{Results}
 
 \subsection{Question 1}
