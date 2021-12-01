@@ -5,6 +5,7 @@
 
 % For including figures
 \usepackage{graphicx}
+\usepackage{float}
 
 % Bibiliography setup
 \usepackage[square]{natbib}
@@ -241,20 +242,22 @@ K_{22} \\
 \end{split}
 \end{equation}
 
-With the values found for $K_{ij}$ and $\tau_{ij}$ the full MIMO system transfer function $\boldsymbol{G}(s)$ can be assembled and is presented in results as equation [input reference to result].
+With the values found for $K_{ij}$ and $\tau_{ij}$ the full MIMO system transfer function $\boldsymbol{G}(s)$ can be assembled and is presented in results as equation [\ref{equ:airPlantResult}.
 
 \subsection{System state space formulation}
+\label{sec:stateSpace}
 A linear MIMO system such as the one developed in the previous example can also be expressed on state space form [\ref{equ:stateSpace}].
 A simple way to do this is to take aid of a computer.
 Matlab offer this functionality through the function \verb|ss(tf)|.
 The resulting state space formulation of our system is presented under results as equation [\ref{equ:ssSolution}]
 
 \subsection{Plant model singular values}
+\label{sec:plantSingularValues}
 The singular values $\sigma_i$ of a MIMO system on state space form [\ref{equ:stateSpace}] are the square roots of the eigenvalues $\sqrt{\lambda_i}$ of the matrix $A^*A$.
 The singular values is a measurement of the gain of the system and the input amplification lies between the largest and smallest singular value.
 Hence plotting the minimum and maximum singular values for all frequencies correspond to the MIMO equivalent of the bode gain plot.
 Since this is tedious to do by hand Matlab offer the function \verb|sigma(G)| to this purpose.
-The singular value plot for the air handling system can be found under results as figure [reference figure].
+The singular value plot for the air handling system can be found under results as figure \ref{fig:systemsingular}.
 
 \subsection{System observability and controllability}
 For the air handling system the observability and controllability matrices [\ref{equ:observ}],[\ref{equ:contr}] can be calculated using the Matlab commands \verb|obsv(A,C)| and \verb|ctrb(A,B)|.
@@ -327,12 +330,12 @@ The gain values $k_{p,i}$ are selected in 3 different interesting combinations, 
 \end{table}
 
 With the controller defined the stability functions [\ref{equ:transFunc}] can be calculated using Matlab standard matrix operations.
-The singular values of the stability functions are then plotted, again using \verb|sigma(F)|, the singular value plots are found in results as figures [reference all singular value plots].
+The singular values of the stability functions are then plotted, again using \verb|sigma(F)|, the singular value plots are found in results as figures \ref{fig:plotCL},\ref{fig:plotS},\ref{fig:plotT} and \ref{fig:plotSu}.
 
 \section{Results}
 
 \subsection{Question 1}
-From (8), (10), and (11) above, the system transfer function is found to be:
+From (8), (10), and (11) above, the air handling plant system transfer function is found to be:
 
 \begin{equation}
 G(s)
@@ -340,10 +343,11 @@ G(s)
 \begin{pmatrix}
 \frac{15}{50s + 1} & \frac{-11}{10s + 1} \\ \frac{-25}{50s + 1} & \frac{70}{10s + 1}
 \end{pmatrix}
+\label{equ:airPlantResult}
 \end{equation}
 
 \subsection{Question 2}
-Following the method described in section 2.2 the state space representation is found to be:
+Following the method described in section \ref{sec:stateSpace} the state space representation of the air handling plant is found to be:
 
 \begin{equation}
 \begin{split}
@@ -364,20 +368,20 @@ y &=
 \end{equation}
 
 \subsection{Question 3}
-From section 2.3 the singular values are shown in figure \ref{fig:systemsingular}:
+From section \ref{sec:plantSingularValues} the singular values of the air handling plant are shown in figure \ref{fig:systemsingular}:
 
 
 \begin{figure}[h!]
 \center
 \includegraphics[scale=0.7]{../code/figures/systemSingular.png}
-\caption{The singular values of the system.}
+\caption{The singular values of the air handling plant.}
 \label{fig:systemsingular}
 \end{figure}
 
 
 \subsection{Question 4}
 
-The system is controllable as the controllability matrix has full rank as seen below:
+The system is controllable as the controllability matrix has the same rank as number of rows, ie. full rank:
 
 \begin{equation}
 rank
@@ -388,7 +392,7 @@ rank
 \end{equation}
 
 
-The system is observable as the observability matrix has full rank as shown:
+The system is observable as the observability matrix has the same rank as number of columns, ie. full rank:
 
 \begin{equation}
 rank
@@ -400,11 +404,36 @@ rank
 
 
 \subsection{Question 5}
+The singular values for the stability functions can be seen in figure \ref{fig:plotCL},\ref{fig:plotS},\ref{fig:plotT} and \ref{fig:plotSu}.
 
-\begin{equation}
-U(s) = -L_y(s)Y(s) + L_r(s)R(s) 
-\end{equation}
 
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.7]{../code/figures/plotCL.png}
+\caption{Singular values of the closed loop system with three different proportional controllers.}
+\label{fig:plotCL}
+\end{figure}
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.7]{../code/figures/plotS.png}
+\caption{Singular values of the sensitivity function with three different proportional controllers.}
+\label{fig:plotS}
+\end{figure}
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.7]{../code/figures/plotT.png}
+\caption{Singular values of the complementary sensitivity function with three different proportional controllers.}
+\label{fig:plotT}
+\end{figure}
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.7]{../code/figures/plotSu.png}
+\caption{Singular values of the input sensitivity function with three different proportional controllers.}
+\label{fig:plotSu}
+\end{figure}
 
 
 \section{Conclusion/Discussion}
