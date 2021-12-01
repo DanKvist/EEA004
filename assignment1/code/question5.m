@@ -1,10 +1,10 @@
-%-------------------------------------------------------------------------
+%--------------------------------------------------------
 %% Question 5 - Controller design
 %  Explore three different scenarios:
 %  Scenario 1 - Unity gain controller
 %  Scenario 2 - k1 = 1, k2 = 0.1
 %  Scenario 3 - k1 = 1, k2 = 10
-%-------------------------------------------------------------------------
+%--------------------------------------------------------
 
 %% Scenario 1 - unity gain controller
 
@@ -16,7 +16,10 @@ L_r = L_y;
 
 legendArray = [];
 legendArray = [legendArray;
-    strcat("k_1 = ", num2str(L_y(1,1)), ", k_2 = ", num2str(L_y(2,2)))];
+    strcat( "k_1 = ", ...
+            num2str(L_y(1,1)), ...
+            ", k_2 = ", ...
+            num2str(L_y(2,2)))];
 
 
 %Plot singular values
@@ -26,7 +29,7 @@ opt.YLimMode = 'manual';
 opt.YLim = {[-40, 10]};
 
 plotCL = figure;
-opt.Title.String = "Singular values of Closed Loop System";
+opt.Title.String = "Singular values of G_c";
 sigmaplot(G_cl,opt)
 
 plotS = figure;
@@ -46,7 +49,7 @@ sigmaplot(S_u,opt)
 fig3 = figure;
 subplot(2,2,1)
 opt = pzoptions;
-opt.Title.String = "Pole-Zero Map of Closed Loop System";
+opt.Title.String = "Pole-Zero Map of G_c";
 pzplot(G_cl,opt)
 
 subplot(2,2,2)
@@ -72,7 +75,10 @@ L_r = L_y;
 [G_cl, S, T, S_u] = getStabilityFunc(G, L_y, L_r);
 
 legendArray = [legendArray;
-    strcat("k_1 = ", num2str(L_y(1,1)), ", k_2 = ", num2str(L_y(2,2)))];
+    strcat( "k_1 = ", ...
+            num2str(L_y(1,1)), ...
+            ", k_2 = ", ...
+            num2str(L_y(2,2)))];
 
 %Plot singular values
 figure(plotCL)
@@ -100,7 +106,10 @@ L_r = L_y;
 [G_cl, S, T, S_u] = getStabilityFunc(G, L_y, L_r);
 
 legendArray = [legendArray;
-    strcat("k_1 = ", num2str(L_y(1,1)), ", k_2 = ", num2str(L_y(2,2)))];
+    strcat( "k_1 = ", ...
+            num2str(L_y(1,1)), ...
+            ", k_2 = ", ...
+            num2str(L_y(2,2)))];
 
 %Plot singular values
 figure(plotCL)

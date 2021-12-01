@@ -1,8 +1,8 @@
-%-------------------------------------------------------------------------
+%--------------------------------------------------------
 %% Question 4 - Check observability and controllability
-% Find the controlability matrix and observability matrix and confirm
-% they are full rank.
-%-------------------------------------------------------------------------
+% Find the controlability matrix and observability matrix 
+% and confirm they are full rank.
+%--------------------------------------------------------
 
 %rank(ctrb(G_ss))
 %rank(obsv(G_ss))

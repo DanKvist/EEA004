@@ -6,6 +6,11 @@
 % For including figures
 \usepackage{graphicx}
 
+% Bibiliography setup
+\usepackage[square]{natbib}
+\bibliographystyle{agsm}
+\usepackage[nottoc]{tocbibind}
+
 % For typesetting matlab
 \usepackage{listings}
 \usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
@@ -67,7 +72,7 @@ The heater open fully $u_1 = 1$ will increase incoming air of $10^\circ C, 40\% 
 
 \subsection{Theory}
 A linear system can be represented on state space form.
-The general form of a state space formulation is as follows:
+The general form of a state space formulation is as follows \citep[p.~31]{glad00}:
 
 \begin{equation}
 \begin{split}
@@ -80,7 +85,7 @@ y &= Cx + Du
 
 The final value theorem is something that is often used for system identification.
 It can especially come in handy when a system is exited by a step input and the steady state output after a long time can be measured.
-The final value theorem states:
+The final value theorem states\citep[p.~29]{glad00}:
 
 \begin{equation}
 \lim_{t \to \infty} f(t) = \lim_{s \to 0} sF(s)
@@ -88,7 +93,7 @@ The final value theorem states:
 \end{equation}
 
 Observability of a system loosely indicate if the system states can be reconstructed from the output, if a system is observable the observer poles can be placed arbitrarily.
-The observability matrix is defined as such:
+The observability matrix is defined as such \citep[p.~45]{glad00}:
 
 \begin{equation}
 \mathcal{O}(A,C) = 
@@ -100,7 +105,7 @@ C \\ CA \\ \vdots \\ CA^{n-1}
 
 If the observability matrix $\mathcal{O}$ has full rank (independent rows/columns) the system is observable.
 In a similar fashion, controllability loosely indicate if all states of a system can be controlled by the input, if a system is controllable the poles of a state feedback controller can be arbitrarily chosen.
-The Controllability matrix is defined as such:
+The Controllability matrix is defined as such\citep[p.~31]{glad00}:
 
 \begin{equation}
 \mathcal{S}(A,B) = 
@@ -115,19 +120,19 @@ If the controllability matrix $\mathcal{S}$ has full rank (independent rows/colu
 When analyzing closed loop systems, not only is the closed loop transfer function $G_c$ of interest, but also a few other functions.
 These other functions are related to output stability via noise, disturbance and modeling errors.
 They are the sensitivity function $S$, the complementary sensitivity function $T$ and the input sensitivity function $S_u$.
-They are defined as follow:
+They are defined as follow \citep[p.~149]{glad00}:
 
 \begin{equation}
 \begin{split}
-G_c &= (I + GL_y)^{-1}GL_r \\
-S &= (I + GL_y)^{-1} \\
-T &= (I + GL_y)^{-1}GL_y \\
-S_u &= (I + L_yG)^{-1}
+G_c &= (I + GF_y)^{-1}GF_r \\
+S &= (I + GF_y)^{-1} \\
+T &= (I + GF_y)^{-1}GF_y \\
+S_u &= (I + F_yG)^{-1}
 \end{split}
 \label{equ:transFunc}
 \end{equation}
 
-Here $L_y$ is the feedback controller and $L_r$ the feedforward controller of the standard controller form.
+Here $F_y$ is the feedback controller and $F_r$ the feedforward controller of the standard controller form \citep[p.~147]{glad00}.
 
 \section{Method}
 This section will describe the work flow of identifying the air handling system, doing basic analysis on the identified system and in the end designing a controller for for it.
@@ -277,7 +282,7 @@ If they both are full rank the plant is both observable and controllable.
 
 \subsection{Controller design}
 A controller $u(t)$ will be designed for the system using feedback.
-The general form of a controller is:
+The general form of a controller is \citep[p.~147]{glad00}:
 
 \begin{equation}
 u(t) = -K_y(p)y(t) + K_r(p)r(t)
@@ -313,7 +318,7 @@ The gain values $k_{p,i}$ are selected in 3 different interesting combinations, 
  \hline
  2 &  1 & 0.1 \\
  \hline
- 3 &  5 & 5 \\
+ 3 &  1 & 10 \\
  \hline
 \end{tabular}
 \end{center}
@@ -403,12 +408,46 @@ U(s) = -L_y(s)Y(s) + L_r(s)R(s)
 
 
 \section{Conclusion/Discussion}
+* Mention the usage of temperature change / humidity change when finding steady state gain.
 
+* Mention that states of state space doesn't mean anything.
+* Mention the state space could be modified for the states to mean temperature and humidity if C is invertible.
 
-\section{Example code}
+* Mention that the controller is just pure guess
+* Mention stability of the different controllers
+* Mention amplification of the noise/disturbance
+* Compare what controller is most interesting
+* Mention steady state error of proportional controller.
 
-\includegraphics[scale=0.8]{../code/figures/exampleFigure.png}
+\clearpage
 
-\lstinputlisting{../code/exampleCode.m}
+\bibliography{reference}
+\clearpage
+
+\appendix
+
+\section{Code}
+All code used for the assignment is included in this section.
+It has been sorted per question the code relates to (1-5).
+
+\subsection{Question 1}
+\lstinputlisting{../code/question1.m}
+\clearpage
+
+\subsection{Question 2}
+\lstinputlisting{../code/question2.m}
+\clearpage
+
+\subsection{Question 3}
+\lstinputlisting{../code/question3.m}
+\clearpage
+
+\subsection{Question 4}
+\lstinputlisting{../code/question4.m}
+\clearpage
+
+\subsection{Question 5}
+\lstinputlisting{../code/question5.m}
+\clearpage
 
 \end{document}
