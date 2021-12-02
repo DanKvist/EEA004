@@ -61,6 +61,7 @@ dan@mail.com philipgutierrez67@gmail.com\\
 
 %\maketitle
 
+
 \section{Background/Introduction}
 This assignment study an air handling system with a heater and a humidifier, figure \ref{fig:airSystem}.
 The system allow control of two variables, temperature $y_1$ and humidity $y_2$.
@@ -463,6 +464,25 @@ The singular values for the stability functions can be seen in figure \ref{fig:p
 * Mention amplification of the noise/disturbance
 * Compare what controller is most interesting
 * Mention steady state error of proportional controller.
+
+
+The system is described as an air handling unit that consists of heater and a humidifier.  The incoming air temperature is said to be 10 degrees C with a 40 percent R.H. While not stated in the assignment, it is interesting to note that the ideal relative humidity for health and comfort is between 20-50 percent R.H (mayo clinic) with a recommended minimum temperature of 18 degrees C (WHO2018).  Therefore, the incoming air will likely need to be heated.\\    
+
+It is provided that the heater and humidifier could both be described as first-order systems (?).
+Each of the system outputs (temperature and humidity) can be controlled directly.  However, by reviewing the entropy-enthalpy chart provided (figure ?), it is noticed that each will have a negative impact on the other.  That is, an increase in temperature will result in an undesirable decrease in humidity.  Likewise, an increase in humidity levels, by spraying a cold water mist, will result in an undesirable decrease in temperature.\\
+
+As a consequence, the act of heating and humidifying cannot be treated as two separate, and independent, actions, but instead, the two actions are coupled, and the resultant transfer function reflects this (?).\\
+
+The steady state gain of the system is obtained by employing the Final Value Theorem and obtaining the change in temperature and humidity from the entropy-enthalpy chart(?).  It is interesting to note that an increase of 15 degrees C (K11) will also result in a decrease of 25 percent R.H. (K21), while an increase in R.H. of 70 percent (K22) will result in a decrease in temperature of 11 degrees C (K12).  Thus, the two actions are indeed counteracting each other.\\
+
+A further observation is the effect of choosing a cold-water mist versus a steam mist for humidifying.  The scenario explained above is based on a cold-water mist.  However, a steam based humidifier would result in a lateral shift in the entropy-enthalpy chart indicating a constant temperature is maintained during the humidifying processes.  This would effectively set K12 to zero.  This would simplify the control algorithm, but have the added complexity, and cost, of a steam-based mister.\\   
+   
+The state space representation of a system, in contrast to the transfer function representation, provides a transition from the frequency domain to the time domain.  This form of representation has the advantage that state space models can usually be obtained directly from the underlying physical models of the system[glad00].  An additional motivation is that in MIMO systems, one can convert a system of k n-th order differential equations into a system of kn coupled first-order differential equations [williams07].\\
+
+The concept of state coordinate transformation allows a liner transformation of the state vector that yields a different state equation which also meets the systems overall input-output relationship [williams07].  This has the consequence that a state-space representation is not unique, and the state-space representation in (?) in simply one representation.\\
+
+As an alternative, the state-space model could have been derived directly from the physical plant description, in which case, the state vector could have been such that the state variables represent the physical quantities of temperature and humidity. TODO: I cannot find a reference to that C must be invertible.\\
+
 
 \clearpage
 
