@@ -361,7 +361,8 @@ From (8), (10), and (11) above, the air handling plant system transfer function 
 G(s)
 =
 \begin{pmatrix}
-\frac{15}{50s + 1} & \frac{-11}{10s + 1} \\ \frac{-25}{50s + 1} & \frac{70}{10s + 1}
+\frac{15}{50s + 1} 	& 	\frac{-11}{10s + 1} \\[6pt]
+\frac{-25}{50s + 1} 	& 	\frac{70}{10s + 1}
 \end{pmatrix}
 \label{equ:airPlantResult}
 \end{equation}
@@ -558,6 +559,24 @@ The singular value plot here indicate that controller 2 (red) could amplify such
 What choice of controller is best in practice come down to how the different sources of noise and disturbance behave in the real world system.
 If the sensors are cheap and very noisy one might prefer  controller 2 (red) with the better noise rejection.
 If instead the room being controlled suffer frequent door and window openings, controller 3 with the better disturbance rejection would be preferable.
+
+\subsection{Dummy}
+%This is a cnotinuation for chapter 4.2
+In fact, if one so desires the concluded state space representation could be translated to one where the states have the same physical meaning as the measured output temperature and humidity. 
+Since the state space representation is not unique, a state transformation can be done:
+
+\begin{equation}
+\tilde{x} = Cx
+\end{equation}
+
+This, assuming C is invertible $x = C^{-1}\tilde{x}$ (plausible for a square matrix) would generate the new and equivalent state space representation:
+
+\begin{equation}
+\begin{split}
+\dot{\tilde{x}} &= C\dot{x} = CAC^{-1}\tilde{x} + CBu \\
+y &= Cx = CC^{-1}\tilde{x} = \tilde{x}
+\end{split}
+\end{equation}
 
 \clearpage
 
