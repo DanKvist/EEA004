@@ -476,7 +476,7 @@ The singular values for the stability functions can be seen in figure \ref{fig:p
 
 
 The system is described as an air handling unit that consists of heater and a humidifier.
-The incoming air temperature is said to be $10^\circ C$ with a $40\% R.H.$ 
+%The incoming air temperature is said to be $10^\circ C$ with a $40\% R.H.$ 
 %While not stated in the assignment, it is interesting to note that the ideal relative humidity for health and comfort is between 20-50 percent R.H (mayo clinic) with a recommended minimum temperature of 18 degrees C (WHO2018).
 %Therefore, the incoming air will likely need to be heated.\\    
 
@@ -488,24 +488,28 @@ Likewise, an increase in humidity levels, by spraying a cold water mist, will re
 
 As a consequence, the act of heating and humidifying cannot be treated as two separate, and independent, actions, but instead, the two actions are coupled, and the resultant transfer function reflects this (\ref{equ:airPlantResult}).\\
 
-The steady state gain of the system is obtained by employing the Final Value Theorem (\ref{equ:finalTheorem}) and obtaining the change in temperature and humidity from the entropy-enthalpy chart(fig. \ref{fig:entropy}).  It is interesting to note that an increase of $15^\circ C$ ($K_{11}$) will also result in a decrease of $25\% R.H.$ ($K_{21}$), while an increase in R.H. of $70\%$ ($K_{22}$) will result in a decrease in temperature of $11^\circ C$ ($K_{12}$).  Thus, the two actions are indeed counteracting each other as expected.\\
+The steady state gain of the system is obtained by employing the Final Value Theorem (\ref{equ:finalTheorem}) and obtaining the change in temperature and humidity from the entropy-enthalpy chart(fig. \ref{fig:entropy}).  A change in input $u_1$ from 0 to 1 corresponds to a positive change in temperature of $15^\circ C$ ($K_{11}$).  However, the temperature is also affected by a change in input $u_2$ by reducing the temperature by $11^\circ C$ ($K_{12}$).  The humidity is affected in a similar manner where a change in $u_1$ will counteract the desired set point specified by $u_2$.       
 
+%It is interesting to note that an increase of $15^\circ C$ ($K_{11}$) will also result in a decrease of $25\% R.H.$ ($K_{21}$), while an increase in R.H. of $70\%$ ($K_{22}$) will result in a decrease in temperature of $11^\circ C$ ($K_{12}$).  Thus, the two actions are indeed counteracting each other as expected.\\
+
+All first-order systems with a positive time constant will have poles strictly in the left-hand plane, hence, the system is stable even without a controller.
+ 
 A further observation is the effect of choosing a cold-water mist versus a steam mist for humidifying.  The scenario explained above is based on a cold-water mist.  However, a steam based humidifier would result in a lateral shift in the entropy-enthalpy chart maintaining a constant temperature during the humidifying processes.  This would effectively set $K_{12}$ to zero.  While this would simplify the control algorithm, it would add the complexity and cost of a steam-based humidifier.\\   
 
 \subsection{System State Space Formulation}
    
-The state space representation of a system, in contrast to the transfer function representation, provides a transition from the frequency domain to the time domain.  This form of representation has the advantage that state space models can usually be obtained directly from the underlying physical models of the system \citep[p.~32]{glad00}.  An additional motivation is that in MIMO systems, one can convert a system of k n-th order differential equations into a system of kn coupled first-order differential equations \citep[p.~5]{williams07}.\\
+The state space representation of a system, in contrast to the transfer function representation, provides a transition from the frequency domain to the time domain \citep [p. 3]{williams07}.  This form of representation has the advantage that state space models can usually be obtained directly from the underlying physical models of the system \citep[p.~32]{glad00}.  An additional motivation is that in MIMO systems, one can convert a system of k n-th order differential equations into a system of kn coupled first-order differential equations \citep[p.~5]{williams07}.\\
 
 The concept of state coordinate transformation allows a liner transformation of the state vector that yields a different state equation which also meets the systems overall input-output relationship \citep[p.~72]{williams07}.  Consequently, a state-space representation is not unique, and the state-space representation in (\ref{equ:ssSolution}) in simply one representation.\\
 
-As an alternative, the state-space model could have been derived directly from the physical plant description(\ref{fig:airSystem}), in which case, the state vector could have been such that the state variables represent the physical quantities of temperature and humidity. 
+While the state of a system is indeed a physical concept, and unique at any given time, the means of representing the state is not unique, and any set of state variables may be used to represent the system \cite [p. 43]{melsa69}.  Therefore, the state vector may not necessarily represent physical quantities that can be measured directly. As an example, the state-space model could have been derived directly from the physical plant description(\ref{fig:airSystem}), in which case, the state vector could have been such that the state variables represent the physical quantities of temperature and humidity. 
 TODO: I cannot find a reference to that C must be invertible.\\
 
 \subsection{Plant Model Singular Values}
 
 The singular values plot is shown in Figure \ref{fig:systemsingular}.  All inputs are damped at frequencies above approximately 0.1 rad/s, and the system gain decreases to zero as expected for a first order system.
 
-The attenuation of the upper curve if mainly dictated by the smaller time constant $\tau_{2}=10$ of the humidifier, while the lower curve is dictated by the larger time constant $\tau_{1}=50$ of the heater. 
+By varying the two time constants it is observed that the attenuation of the upper curve seems to be dictated by the smaller time constant $\tau_{2}=10$ of the humidifier, while the lower curve is dictated by the larger time constant $\tau_{1}=50$ of the heater. 
 
 \subsection{System observability and controllability}
 
@@ -513,7 +517,7 @@ The observability matrix has full rank (\ref{equ:actual_observ}) which means tha
 
 The controllability matrix has full rank (\ref{equ:actual_contr}) which means that all state vectors can be stimulated by at least one input.
 
-This state representation (\ref{equ:ssSolution}) is also a minimal realization as it is both observable and controllable, hence, the state vector is of the smallest possible dimension.
+This state representation (\ref{equ:ssSolution}) is also a minimal realization as it is both observable and controllable, hence, the state vector is of the smallest possible dimension \cite [p. 46]{glad00}.
 
 \subsection{Transfer Function of the Closed Loop System}
 
