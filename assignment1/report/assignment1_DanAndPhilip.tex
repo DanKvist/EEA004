@@ -408,6 +408,7 @@ rank
 1.0 & 0 & -0.02 & 0 \\ 0 & 4.0 & 0 & -0.4
 \end{pmatrix}
 = 2
+\label{equ:actual_contr}
 \end{equation}
 
 
@@ -419,6 +420,7 @@ rank
 0.3 & -0.275 \\ -0.5 & 1.75 \\ -0.006 & 0.0275 \\ 0.01 & -0.175
 \end{pmatrix}
 = 2
+\label{equ:actual_observ}
 \end{equation}
 
 
@@ -505,6 +507,16 @@ The singular values plot is shown in Figure \ref{fig:systemsingular}.  All input
 The attenuation of the upper curve if mainly dictated by the smaller time constant $\tau_{2}=10$ of the humidifier, while the lower curve is dictated by the larger time constant $\tau_{1}=50$ of the heater. 
 
 \subsection{System observability and controllability}
+
+The observability matrix has full rank (\ref{equ:actual_observ}) which means that all outputs may be influenced by at least one state vector.
+
+The controllability matrix has full rank (\ref{equ:actual_contr}) which means that all state vectors can be stimulated by at least one input.
+
+This state representation (\ref{equ:ssSolution}) is also a minimal realization as it is both observable and controllable, hence, the state vector is of the smallest possible dimension.
+
+\subsection{Transfer Function of the Closed Loop System}
+
+TBD
 
 \clearpage
 
