@@ -54,7 +54,7 @@
 Group 4\\
 Dan Thilderkvist and Philip Gutierrez\\
 dan.thilderkvist@hotmail.com philipgutierrez67@gmail.com\\
-Matlab file: EA004/assignment1/code/main.m\\
+File: DanTPhilipGAssignment1.zip\\
 \vspace{1cm}
 \today
 \end{center}
@@ -478,16 +478,6 @@ In addition, the poles of the stability functions [\ref{equ:transFunc}] are pres
 
 
 \section{Conclusion/Discussion}
-* Mention the usage of temperature change / humidity change when finding steady state gain.
-
-* Mention that states of state space doesn't mean anything.
-* Mention the state space could be modified for the states to mean temperature and humidity if C is invertible.
-
-* Mention that the controller is just pure guess
-* Mention stability of the different controllers
-* Mention amplification of the noise/disturbance
-* Compare what controller is most interesting
-* Mention steady state error of proportional controller.
 
 \subsection{System Identification}
 
@@ -532,9 +522,9 @@ By varying the two time constants it is observed that the attenuation of the upp
 
 \subsection{System observability and controllability}
 
-The observability matrix has full rank (\ref{equ:actual_observ}) which means that all outputs may be influenced by at least one state vector.
+The observability matrix has full rank (\ref{equ:actual_observ}) which means that all states may influence the outputs.
 
-The controllability matrix has full rank (\ref{equ:actual_contr}) which means that all state vectors can be stimulated by at least one input.
+The controllability matrix has full rank (\ref{equ:actual_contr}) which means that all states can be stimulated by at least one input.
 
 This state representation (\ref{equ:ssSolution}) is also a minimal realization as it is both observable and controllable, hence, the state vector is of the smallest possible dimension \cite [p. 46]{glad00}.
 
