@@ -14,6 +14,8 @@ L_r = L_y;
 
 [G_cl, S, T, S_u] = getStabilityFunc(G, L_y, L_r);
 
+pole(G_cl)
+
 legendArray = [];
 legendArray = [legendArray;
     strcat( "k_1 = ", ...
@@ -74,6 +76,8 @@ L_r = L_y;
 
 [G_cl, S, T, S_u] = getStabilityFunc(G, L_y, L_r);
 
+pole(G_cl)
+
 legendArray = [legendArray;
     strcat( "k_1 = ", ...
             num2str(L_y(1,1)), ...
@@ -104,6 +108,8 @@ L_y = [1 0;0 10];
 L_r = L_y;
 
 [G_cl, S, T, S_u] = getStabilityFunc(G, L_y, L_r);
+
+pole(G_cl)
 
 legendArray = [legendArray;
     strcat( "k_1 = ", ...

@@ -427,6 +427,25 @@ rank
 
 \subsection{Question 5}
 The singular values for the stability functions can be seen in figure \ref{fig:plotCL},\ref{fig:plotS},\ref{fig:plotT} and \ref{fig:plotSu}.
+In addition, the poles of the stability functions [\ref{equ:transFunc}] are presented in table \ref{tab:poles}.
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{||c | c ||}
+ \hline
+ Controller & System poles ($G_c, S, T, S)u$) \\ [0.5ex] 
+ \hline\hline
+ $k_{p,1} = 1, k_{p,2} = 1$ &  $s_1 \approx -7.2, \; s_2 \approx -0.24$ \\ 
+ \hline
+ $k_{p,1} = 1, k_{p,2} = 0.1$ &  $s_1 \approx -0.90, \; s_2 \approx -0.22$ \\
+ \hline
+ $k_{p,1} = 1, k_{p,2} = 10$ &  $s_1 \approx -70, \; s_2 \approx -0.24$ \\
+ \hline
+\end{tabular}
+\end{center}
+\caption{System poles of the stability functions for the different controller gains.}
+\label{tab:poles}
+\end{table}
 
 
 \begin{figure}[H]
@@ -516,8 +535,35 @@ The controllability matrix has full rank (\ref{equ:actual_contr}) which means th
 This state representation (\ref{equ:ssSolution}) is also a minimal realization as it is both observable and controllable, hence, the state vector is of the smallest possible dimension.
 
 \subsection{Transfer Function of the Closed Loop System}
+From table \ref{tab:poles} it can be seen that the closed loop system is stable for all controllers. 
+Since all the stability functions [\ref{equ:transFunc}] has (almost) the same characteristic polynomial, they are all stable.
+With a stable system one can draw conclusions from the singular value plot.
 
-TBD
+The closed loop singular value plot \ref{fig:plotCL} show the gain decrease to zero at high frequency as is typical for a first order system.
+It also show that the low frequency gain (static gain) is not equal to 1 ($0dB$).
+It is below $0dB$ and the upper and lower singular value bound has a range that is nonzero.
+This will result in a steady state error of some magnitude for most input combinations (Controller 2 (red) actually encloses $0dB$ and could have unity static gain for some input).
+This is a very common scenario for a pure proportional controller such as the one used in this assignment.
+
+The sensitivity singular value plot \ref{fig:plotS} show how system disturbances affect the system output.
+It can be seen that higher frequency disturbance propagate through the system while low frequency noise is attenuated.
+Controller 2 (red line) even has a region where the disturbance gets amplified.
+Since plant disturbances are usually of low frequency nature this is a good result and the controller farthest to the right is most advantageous from a disturbance rejection point of view.
+
+The complementary sensitivity plot \ref{fig:plotT} is exactly the same as the closed loop.
+This is due to the controller choice $K_y = K_r$.
+This plot show how measurement noise is propagated though the system.
+Measurement noise is usually of high frequency character.
+Due to this, the low pass characteristic of the plot is desired and the controller furthest to the left is best from a noise rejection point of view.
+What has been mentioned here highlights the conflict between disturbance rejection and noise rejection as the former benefit from a high rise frequency and the latter from a low cutoff frequency.
+
+The last plot \ref{fig:plotSu} is the input sensitivity function.
+It indicate how noise on the input affect the system output.
+The singular value plot here indicate that controller 2 (red) could amplify such noise in a region $0.2 - 10 rad/s$
+
+What choice of controller is best in practice come down to how the different sources of noise and disturbance behave in the real world system.
+If the sensors are cheap and very noisy one might prefer  controller 2 (red) with the better noise rejection.
+If instead the room being controlled suffer frequent door and window openings, controller 3 with the better disturbance rejection would be preferable.
 
 \clearpage
 
