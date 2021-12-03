@@ -512,8 +512,26 @@ The state space representation of a system, in contrast to the transfer function
 
 The concept of state coordinate transformation allows a liner transformation of the state vector that yields a different state equation which also meets the systems overall input-output relationship \citep[p.~72]{williams07}.  Consequently, a state-space representation is not unique, and the state-space representation in (\ref{equ:ssSolution}) in simply one representation.\\
 
-While the state of a system is indeed a physical concept, and unique at any given time, the means of representing the state is not unique, and any set of state variables may be used to represent the system \cite [p. 43]{melsa69}.  Therefore, the state vector may not necessarily represent physical quantities that can be measured directly. As an example, the state-space model could have been derived directly from the physical plant description(\ref{fig:airSystem}), in which case, the state vector could have been such that the state variables represent the physical quantities of temperature and humidity. 
-TODO: I cannot find a reference to that C must be invertible.\\
+While the state of a system is indeed a physical concept, and unique at any given time, the means of representing the state is not unique, and any set of state variables may be used to represent the system \cite [p. 43]{melsa69}.  Therefore, the state vector may not necessarily represent real physical quantities that can be measured directly. 
+
+%As an example, the state-space model could have been derived directly from the physical plant description(\ref{fig:airSystem}), in which case, the state vector could have been such that the state variables represent the physical quantities of temperature and humidity. 
+%TODO: I cannot find a reference to that C must be invertible.\\
+
+However, if one so desires, the concluded state space representation could be translated to one where the states have the same physical meaning as the measured output temperature and humidity. 
+Since the state space representation is not unique, a state transformation can be done:
+
+\begin{equation}
+\tilde{x} = Cx
+\end{equation}
+
+This, assuming C is invertible $x = C^{-1}\tilde{x}$ (plausible for a square matrix) would generate the new and equivalent state space representation:
+
+\begin{equation}
+\begin{split}
+\dot{\tilde{x}} &= C\dot{x} = CAC^{-1}\tilde{x} + CBu \\
+y &= Cx = CC^{-1}\tilde{x} = \tilde{x}
+\end{split}
+\end{equation}
 
 \subsection{Plant Model Singular Values}
 
@@ -559,24 +577,6 @@ The singular value plot here indicate that controller 2 (red) could amplify such
 What choice of controller is best in practice come down to how the different sources of noise and disturbance behave in the real world system.
 If the sensors are cheap and very noisy one might prefer  controller 2 (red) with the better noise rejection.
 If instead the room being controlled suffer frequent door and window openings, controller 3 with the better disturbance rejection would be preferable.
-
-\subsection{Dummy}
-%This is a cnotinuation for chapter 4.2
-In fact, if one so desires the concluded state space representation could be translated to one where the states have the same physical meaning as the measured output temperature and humidity. 
-Since the state space representation is not unique, a state transformation can be done:
-
-\begin{equation}
-\tilde{x} = Cx
-\end{equation}
-
-This, assuming C is invertible $x = C^{-1}\tilde{x}$ (plausible for a square matrix) would generate the new and equivalent state space representation:
-
-\begin{equation}
-\begin{split}
-\dot{\tilde{x}} &= C\dot{x} = CAC^{-1}\tilde{x} + CBu \\
-y &= Cx = CC^{-1}\tilde{x} = \tilde{x}
-\end{split}
-\end{equation}
 
 \clearpage
 
