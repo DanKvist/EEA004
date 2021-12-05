@@ -9,6 +9,7 @@ pzmap(G_ss);
 fig2 = figure;
 sigma(G_ss);
 
-figFolder = "./figures";
+figFolder = "figures";
+mkdir(figFolder)
 saveas(fig1, fullfile(figFolder, 'systemPoles.png'))
 saveas(fig2, fullfile(figFolder, 'systemSingular.png'))

@@ -48,7 +48,7 @@ sigmaplot(S_u,opt)
 
 %-------------------------------------------------
 %Plot poles and zeros
-fig3 = figure;
+poleZeroFigure = figure;
 subplot(2,2,1)
 opt = pzoptions;
 opt.Title.String = "Pole-Zero Map of G_c";
@@ -65,8 +65,6 @@ pzplot(T,opt)
 subplot(2,2,4)
 opt.Title.String = "Pole-Zero Map of S_u";
 pzplot(S_u,opt)
-
-saveas(fig3, fullfile(figFolder, 'PoleZeros.png'))
 
 %% Second guess
 
@@ -144,11 +142,13 @@ hold off
 
 %% Save figures
 
+figFolder = "figures";
+mkdir(figFolder)
 saveas(plotCL, fullfile(figFolder, 'plotCL.png'))
 saveas(plotS, fullfile(figFolder, 'plotS.png'))
 saveas(plotT, fullfile(figFolder, 'plotT.png'))
 saveas(plotSu, fullfile(figFolder, 'plotSu.png'))
-
+saveas(poleZeroFigure, fullfile(figFolder, 'PoleZeros.png'))
 
 %% Calculate stability functions
 function [G_c, S, T, S_u] = getStabilityFunc(G, K_y, K_r)
