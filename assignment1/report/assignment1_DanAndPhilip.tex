@@ -60,7 +60,8 @@ File: DanTPhilipGAssignment1.zip\\
 \end{center}
 \end{titlepage}
 
-%\maketitle
+\tableofcontents
+\clearpage
 
 
 \section{Background/Introduction}
@@ -87,11 +88,11 @@ The time constant $\tau$ has been given for the heater as $\tau_1=50$ and for th
 The static gain $K$ will have to be calculated for each system.
 For that purpose the assignment includes two enthalpy–entropy charts, one for each system.
 There is also information provided how the system reacts to a step input of $u_1 = 1$ or $u_2 = 1$.
-The heater, when fully opened ($u_1 = 1$) will increase the incoming air of $10^\circ C, 40\% \: RH$ by $15^\circ C$, and the humidifier, when fully opened ($u_2 = 1$), will increase the humidity of the incoming air of $20^\circ C, 10\% \: RH$ by $70\% \: RH$.
+The heater, when fully opened ($u_1 = 1$) will increase the incoming air temperature of $10^\circ C, 40\% \: RH$ by $15^\circ C$, and the humidifier, when fully opened ($u_2 = 1$), will increase the incoming air humidity of $20^\circ C, 10\% \: RH$ by $70\% \: RH$.
 
 \subsection{Theory}
 A linear system can be represented in state space form.
-The general form of a state space formulation is as follows \citep[p.~31]{glad00}:
+The general form of a state space formulation is  \citep[p.~31]{glad00}:
 
 \begin{equation}
 \begin{split}
@@ -112,7 +113,7 @@ The final value theorem states\citep[p.~29]{glad00}:
 \end{equation}
 
 Observability of a system loosely indicates if the system states can be reconstructed from the output. If a system is observable the observer poles can be placed arbitrarily.
-The observability matrix is defined as such \citep[p.~45]{glad00}:
+The observability matrix is defined \citep[p.~45]{glad00}:
 
 \begin{equation}
 \mathcal{O}(A,C) = 
@@ -125,7 +126,7 @@ C \\ CA \\ \vdots \\ CA^{n-1}
 If the observability matrix $\mathcal{O}$ has full rank (independent rows/columns) the system is observable.
 
 In a similar fashion, controllability loosely indicates if all states of a system can be controlled by the input. If a system is controllable the poles of a state feedback controller can be arbitrarily chosen.
-The Controllability matrix is defined as such\citep[p.~31]{glad00}:
+The Controllability matrix is defined \citep[p.~45]{glad00}:
 
 \begin{equation}
 \mathcal{S}(A,B) = 
@@ -138,7 +139,7 @@ B & AB & \cdots & A^{n-1}C
 If the controllability matrix $\mathcal{S}$ has full rank (independent rows/columns) the system is controllable.
 
 When analyzing closed loop systems, not only is the closed loop transfer function $G_c$ of interest, but also a few other functions.
-These other functions are related to output stability via noise, disturbance and modeling errors.
+These other functions are related to output stability via  disturbance, measurement noise and input noise.
 They are the sensitivity function $S$, the complementary sensitivity function $T$ and the input sensitivity function $S_u$.
 They are defined as follows \citep[p.~149]{glad00}:
 
@@ -155,10 +156,10 @@ S_u &= (I + F_yG)^{-1}
 Here $F_y$ is the feedback controller and $F_r$ the feedforward controller of the standard controller form \citep[p.~147]{glad00}.
 
 \section{Method}
-This section will describe the work flow of identifying the air handling system, performing basic analysis of the identified system, and in the end, designing a controller for for it.
+This section will describe the work flow of identifying the air handling system, performing basic analysis of the identified system and choosing a controller.
 
 \subsection{System identification}
-The air handling system described in the introduction is one of multiple input multiple output (MIMO).
+The air handling system described in the introduction is one of Multiple Input and Multiple Output (MIMO).
 Such a system will have a transfer function matrix $\boldsymbol{G}(s)$ from input to output. In this particular case it will be a $2x2$ matrix because of the two input $u_1, u_2$ and the two output $y_1, y_2$.
 The system can be written as such:
 
@@ -186,7 +187,7 @@ G_{ij}(s) = \frac{K_{ij}}{\tau_{ij} s + 1}
 \label{equ:firstorderTransFunc}
 \end{equation}
 
-Where $\tau_{11} = \tau_{21} = \tau_1 = 50$ and $\tau_{12} = \tau_{22} = \tau_2 = 10$ are given by the assignment and presented in the introduction.
+Where $\tau_{11} = \tau_{21} = \tau_1 = 50$ and $\tau_{12} = \tau_{22} = \tau_2 = 10$ are given by the assignment as mentioned in the introduction.
 
 In order to find $K_{ij}$ the final value theorem (\ref{equ:finalTheorem}) can be applied along with the steady state information from the introduction.
 
@@ -203,7 +204,7 @@ In order to find $K_{ij}$ the final value theorem (\ref{equ:finalTheorem}) can b
 \end{equation}
 
 If the input $u(t)$ is a unit step function $l(t)$, the transfer function $U(s)$ is $\frac{1}{s}$ and if only one of $u_1(t)/u_2(t)$ is a step and the other is zero, then one of the terms on the right hand side of equation (\ref{equ:finalUsage}) will disappear.
-This will render 2 scenarios for the 2 equations:
+This will render 2 scenarios for each of the 2 equations:
 
 \begin{equation}
 \begin{split}
@@ -243,7 +244,7 @@ The water humidifier was chosen in favor of the steam humidifier as the assignme
 \label{fig:entropy}
 \end{figure}
 
-Reading off the temperature and humidity values from the chart give the final static values of the left hand side of equation (\ref{equ:finalUsage}).
+Reading off the temperature and humidity values from the chart give the final static change in output of the left hand side of equation (\ref{equ:finalUsage}).
 
 \begin{equation}
 \begin{split}
@@ -262,11 +263,11 @@ K_{22} \\
 \end{split}
 \end{equation}
 
-With the values found for $K_{ij}$ and $\tau_{ij}$, the full MIMO system transfer function $\boldsymbol{G}(s)$ can be assembled and is presented in results as equation [\ref{equ:airPlantResult}.
+With the values found for $K_{ij}$ and $\tau_{ij}$, the full MIMO system transfer function $\boldsymbol{G}(s)$ can be assembled and is presented in results as equation (\ref{equ:airPlantResult}).
 
 \subsection{System state space formulation}
 \label{sec:stateSpace}
-A linear MIMO system such as the one developed in the previous example can also be expressed in state space form (\ref{equ:stateSpace}).
+A linear MIMO system such as the one developed in the previous section can also be expressed in state space form (\ref{equ:stateSpace}).
 A simple way to do this is to take aid of a computer.
 Matlab offers this functionality through the function \verb|ss(tf)|.
 The resulting state space formulation of our system is presented under results as equation (\ref{equ:ssSolution})
@@ -304,7 +305,7 @@ The rank can then be compared to the smaller of column count or row count to see
 If they are both full rank the plant is both observable and controllable.
 
 \subsection{Controller design}
-A controller $u(t)$ will be designed for the system using feedback.
+A controller $u(t)$ will be chosen for the system using feedback.
 The general form of a controller is \citep[p.~147]{glad00}:
 
 \begin{equation}
@@ -349,13 +350,14 @@ The gain values $k_{p,i}$ are selected in 3 different interesting combinations, 
 \label{tab:gains}
 \end{table}
 
-With the controller defined, the stability functions [\ref{equ:transFunc}] can be calculated using Matlab standard matrix operations.
-The singular values of the stability functions are then plotted, again using \verb|sigma(F)|, the singular value plots are found in results as figures \ref{fig:plotCL},\ref{fig:plotS},\ref{fig:plotT} and \ref{fig:plotSu}.
+With the controller defined, the stability functions (\ref{equ:transFunc}) can be calculated using Matlab standard matrix operations.
+The singular values of the stability functions are then plotted, again using \verb|sigma(F)|.
+Singular value plots are found in results as figures \ref{fig:plotCL},\ref{fig:plotS},\ref{fig:plotT} and \ref{fig:plotSu}.
 
 \section{Results}
 
 \subsection{Question 1}
-From (8), (10), and (11) above, the air handling plant system transfer function is found to be:
+From equation (8), (10), and (11), the air handling plant  transfer function is found to be:
 
 \begin{equation}
 G(s)
@@ -481,22 +483,17 @@ In addition, the poles of the stability functions (\ref{equ:transFunc}) are pres
 \section{Conclusion/Discussion}
 
 \subsection{System Identification}
-
-%rease incoming air of $20^\circ C, 10\% \: RH$ by $70\% \: RH$.
-
-
 The system is described as an air handling unit that consists of heater and a humidifier.
 %The incoming air temperature is said to be $10^\circ C$ with a $40\% R.H.$ 
 %While not stated in the assignment, it is interesting to note that the ideal relative humidity for health and comfort is between 20-50 percent R.H (mayo clinic) with a recommended minimum temperature of 18 degrees C (WHO2018).
 %Therefore, the incoming air will likely need to be heated.\\    
-
 It is provided that the heater and humidifier could both be described as first-order systems (\ref{equ:firstorderTransFunc}).
 Each of the system outputs (temperature and humidity) can be controlled directly.  
 However, by reviewing the entropy-enthalpy chart provided (\ref{fig:entropy}), it is noticed that each will have a negative impact on the other.  
 That is, an increase in temperature will result in an undesirable decrease in humidity.  
-Likewise, an increase in humidity levels, by spraying a cold water mist, will result in an undesirable decrease in temperature.\\
+Likewise, an increase in humidity levels, by spraying a cold water mist, will result in an undesirable decrease in temperature.
 
-As a consequence, the act of heating and humidifying cannot be treated as two separate, and independent, actions, but instead, the two actions are coupled, and the resultant transfer function reflects this (\ref{equ:airPlantResult}).\\
+As a consequence, the act of heating and humidifying cannot be treated as two separate, and independent, actions, but instead, the two actions are coupled, and the resultant transfer function reflects this (\ref{equ:airPlantResult}).
 
 The steady state gain of the system is obtained by employing the Final Value Theorem (\ref{equ:finalTheorem}) and obtaining the change in temperature and humidity from the entropy-enthalpy chart(fig. \ref{fig:entropy}).  A change in input $u_1$ from 0 to 1 corresponds to a positive change in temperature of $15^\circ C$ ($K_{11}$).  However, the temperature is also affected by a change in input $u_2$ by reducing the temperature by $11^\circ C$ ($K_{12}$).  The humidity is affected in a similar manner where a change in $u_1$ will counteract the desired set point specified by $u_2$.       
 
@@ -507,17 +504,16 @@ All first-order systems with a positive time constant will have poles strictly i
 A further observation is the effect of choosing a cold-water mist versus a steam mist for humidifying.  The scenario explained above is based on a cold-water mist.  However, a steam based humidifier would result in a lateral shift in the entropy-enthalpy chart maintaining a constant temperature during the humidifying processes.  This would effectively set $K_{12}$ to zero.  While this would simplify the control algorithm, it would add the complexity and cost of a steam-based humidifier.\\   
 
 \subsection{System State Space Formulation}
-   
-The state space representation of a system, in contrast to the transfer function representation, provides a transition from the frequency domain to the time domain \citep [p. 3]{williams07}.  This form of representation has the advantage that state space models can usually be obtained directly from the underlying physical models of the system \citep[p.~32]{glad00}.  An additional motivation is that in MIMO systems, one can convert a system of k n-th order differential equations into a system of kn coupled first-order differential equations \citep[p.~5]{williams07}.\\
+The state space representation of a system, in contrast to the transfer function representation, provides a transition from the frequency domain to the time domain \citep [p. 3]{williams07}.  This form of representation has the advantage that state space models can usually be obtained directly from the underlying physical models of the system \citep[p.~32]{glad00}.  An additional motivation is that in MIMO systems, one can convert a system of k n-th order differential equations into a system of kn coupled first-order differential equations \citep[p.~5]{williams07}.
 
-The concept of state coordinate transformation allows a liner transformation of the state vector that yields a different state equation which also meets the systems overall input-output relationship \citep[p.~72]{williams07}.  Consequently, a state-space representation is not unique, and the state-space representation in (\ref{equ:ssSolution}) in simply one representation.\\
+The concept of state coordinate transformation allows a liner transformation of the state vector that yields a different state equation which also meets the systems overall input-output relationship \citep[p.~72]{williams07}.  Consequently, a state-space representation is not unique, and the state-space representation in (\ref{equ:ssSolution}) in simply one representation.
 
 While the state of a system is indeed a physical concept, and unique at any given time, the means of representing the state is not unique, and any set of state variables may be used to represent the system \cite [p. 43]{melsa69}.  Therefore, the state vector may not necessarily represent real physical quantities that can be measured directly. 
 
 %As an example, the state-space model could have been derived directly from the physical plant description(\ref{fig:airSystem}), in which case, the state vector could have been such that the state variables represent the physical quantities of temperature and humidity. 
 %TODO: I cannot find a reference to that C must be invertible.\\
 
-However, if one so desires, the concluded state space representation could be translated to one where the states have the same physical meaning as the measured output temperature and humidity. 
+This mean that, if one so desires, the concluded state space representation could be translated to one where the states have the same physical meaning as the measured output temperature and humidity. 
 Since the state space representation is not unique, a state transformation can be done:
 
 \begin{equation}
@@ -541,7 +537,7 @@ By varying the two time constants it is observed that the attenuation of the upp
 
 \subsection{System observability and controllability}
 
-The observability matrix has full rank (\ref{equ:actual_observ}) which means that all states may influence the outputs.
+The observability matrix has full rank (\ref{equ:actual_observ}) which means that all states influence the outputs.
 
 The controllability matrix has full rank (\ref{equ:actual_contr}) which means that all states can be stimulated by at least one input.
 
@@ -549,7 +545,7 @@ This state representation (\ref{equ:ssSolution}) is also a minimal realization a
 
 \subsection{Transfer Function of the Closed Loop System}
 From table \ref{tab:poles} it can be seen that the closed loop system is stable for all controllers. 
-Since all the stability functions [\ref{equ:transFunc}] has (almost) the same characteristic polynomial, they are all stable.
+Since all the stability functions (\ref{equ:transFunc}) has (almost) the same characteristic polynomial, they are all stable.
 With a stable system one can draw conclusions from the singular value plot.
 
 The closed loop singular value plot \ref{fig:plotCL} show the gain decrease to zero at high frequency as is typical for a first order system.
@@ -570,7 +566,7 @@ Measurement noise is usually of high frequency character.
 Due to this, the low pass characteristic of the plot is desired and the controller furthest to the left is best from a noise rejection point of view.
 What has been mentioned here highlights the conflict between disturbance rejection and noise rejection as the former benefit from a high rise frequency and the latter from a low cutoff frequency.
 
-The last plot \ref{fig:plotSu} is the input sensitivity function.
+The last plot \ref{fig:plotSu}, is the input sensitivity function.
 It indicate how noise on the input affect the system output.
 The singular value plot here indicate that controller 2 (red) could amplify such noise in a region $0.2 - 10 rad/s$
 
