@@ -86,7 +86,7 @@ G(s) = \frac{K}{\tau s + 1}
 The time constant $\tau$ has been given for the heater as $\tau_1=50$ and for the humidifier as $\tau_2=10$ in the assignment.
 The static gain $K$ will have to be calculated for each system.
 For that purpose the assignment includes two enthalpy–entropy charts, one for each system.
-There is also information provided how the system reacts to a step input of $u_1 = 1$ or $u_2 = 2$.
+There is also information provided how the system reacts to a step input of $u_1 = 1$ or $u_2 = 1$.
 The heater, when fully opened ($u_1 = 1$) will increase the incoming air of $10^\circ C, 40\% \: RH$ by $15^\circ C$, and the humidifier, when fully opened ($u_2 = 1$), will increase the humidity of the incoming air of $20^\circ C, 10\% \: RH$ by $70\% \: RH$.
 
 \subsection{Theory}
@@ -188,7 +188,7 @@ G_{ij}(s) = \frac{K_{ij}}{\tau_{ij} s + 1}
 
 Where $\tau_{11} = \tau_{21} = \tau_1 = 50$ and $\tau_{12} = \tau_{22} = \tau_2 = 10$ are given by the assignment and presented in the introduction.
 
-In order to find $K_{ij}$ the final value theorem [\ref{equ:finalTheorem}] can be applied along with the steady state information from the introduction.
+In order to find $K_{ij}$ the final value theorem (\ref{equ:finalTheorem}) can be applied along with the steady state information from the introduction.
 
 \begin{equation}
 \begin{split}
@@ -202,7 +202,7 @@ In order to find $K_{ij}$ the final value theorem [\ref{equ:finalTheorem}] can b
 \label{equ:finalUsage}
 \end{equation}
 
-If the input $u(t)$ is a unit step function $l(t)$, the transfer function $U(s)$ is $\frac{1}{s}$ and if only one of $u_1(t)/u_2(t)$ is a step and the other is zero, then one of the terms on the right hand side of equation [\ref{equ:finalUsage}] will disappear.
+If the input $u(t)$ is a unit step function $l(t)$, the transfer function $U(s)$ is $\frac{1}{s}$ and if only one of $u_1(t)/u_2(t)$ is a step and the other is zero, then one of the terms on the right hand side of equation (\ref{equ:finalUsage}) will disappear.
 This will render 2 scenarios for the 2 equations:
 
 \begin{equation}
@@ -243,7 +243,7 @@ The water humidifier was chosen in favor of the steam humidifier as the assignme
 \label{fig:entropy}
 \end{figure}
 
-Reading off the temperature and humidity values from the chart give the final static values of the left hand side of equation [\ref{equ:finalUsage}].
+Reading off the temperature and humidity values from the chart give the final static values of the left hand side of equation (\ref{equ:finalUsage}).
 
 \begin{equation}
 \begin{split}
@@ -266,21 +266,21 @@ With the values found for $K_{ij}$ and $\tau_{ij}$, the full MIMO system transfe
 
 \subsection{System state space formulation}
 \label{sec:stateSpace}
-A linear MIMO system such as the one developed in the previous example can also be expressed in state space form [\ref{equ:stateSpace}].
+A linear MIMO system such as the one developed in the previous example can also be expressed in state space form (\ref{equ:stateSpace}).
 A simple way to do this is to take aid of a computer.
 Matlab offers this functionality through the function \verb|ss(tf)|.
-The resulting state space formulation of our system is presented under results as equation [\ref{equ:ssSolution}]
+The resulting state space formulation of our system is presented under results as equation (\ref{equ:ssSolution})
 
 \subsection{Plant model singular values}
 \label{sec:plantSingularValues}
-The singular values $\sigma_i$ of a MIMO system in state space form [\ref{equ:stateSpace}] are the square roots of the eigenvalues $\sqrt{\lambda_i}$ of the matrix $A^*A$.
+The singular values $\sigma_i$ of a MIMO system in state space form (\ref{equ:stateSpace}) are the square roots of the eigenvalues $\sqrt{\lambda_i}$ of the matrix $A^*A$.
 The singular values is a measurement of the gain of the system and the input amplification lies between the largest and smallest singular value.
 Hence plotting the minimum and maximum singular values for all frequencies correspond to the MIMO equivalent of the bode gain plot.
 Since this is tedious to do by hand, Matlab offers the function \verb|sigma(G)| for this purpose.
 The singular value plot for the air handling system can be found under results as figure \ref{fig:systemsingular}.
 
 \subsection{System observability and controllability}
-For the air handling system the observability and controllability matrices [\ref{equ:observ}],[\ref{equ:contr}] can be calculated using the Matlab commands \verb|obsv(A,C)| and \verb|ctrb(A,B)|.
+For the air handling system the observability and controllability matrices (\ref{equ:observ}),(\ref{equ:contr}) can be calculated using the Matlab commands \verb|obsv(A,C)| and \verb|ctrb(A,B)|.
 The matrices for the air handling system are:
 
 \begin{equation}
@@ -428,7 +428,7 @@ rank
 
 \subsection{Question 5}
 The singular values for the stability functions can be seen in figure \ref{fig:plotCL},\ref{fig:plotS},\ref{fig:plotT} and \ref{fig:plotSu}.
-In addition, the poles of the stability functions [\ref{equ:transFunc}] are presented in table \ref{tab:poles}.
+In addition, the poles of the stability functions (\ref{equ:transFunc}) are presented in table \ref{tab:poles}.
 
 \begin{table}[h!]
 \begin{center}
