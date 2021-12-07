@@ -5,6 +5,12 @@
 
 % For including figures
 \usepackage{graphicx}
+\usepackage{float}
+
+% Bibiliography setup
+\usepackage[square]{natbib}
+\bibliographystyle{agsm}
+\usepackage[nottoc]{tocbibind}
 
 % For typesetting matlab
 \usepackage{listings}
@@ -13,15 +19,16 @@
 \definecolor{mylilas}{RGB}{170,55,241}
 
 \lstset{language=Matlab,%
-    %basicstyle=\color{red},
+    basicstyle=\small,
     breaklines=true,%
+    frame = single,
     morekeywords={matlab2tikz},
     keywordstyle=\color{blue},%
     morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
     identifierstyle=\color{black},%
     stringstyle=\color{mylilas},
     commentstyle=\color{mygreen},%
-    showstringspaces=false,%without this there will be a symbol in the places where there is a space
+    showstringspaces=false,
     numbers=left,%
     numberstyle={\tiny \color{black}},% size of the numbers
     numbersep=9pt, % this defines how far the numbers are from the text
@@ -39,9 +46,23 @@ System description and analysis\\
 
 \maketitle
 
-\section{Example code}
+\section{First section}
 
+\clearpage
+\bibliography{reference}
+
+\clearpage
+\appendix
+
+\section{Example Section}
+This is an example reference \citep{glad00}.
+
+\begin{figure}[h!]
+\center
 \includegraphics[scale=0.8]{../code/figures/exampleFigure.png}
+\caption{Example caption.}
+\label{fig:exampleLable}
+\end{figure}
 
 \lstinputlisting{../code/exampleCode.m}
 
