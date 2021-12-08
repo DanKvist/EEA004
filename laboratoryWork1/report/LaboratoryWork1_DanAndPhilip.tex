@@ -228,16 +228,23 @@ Figure Y show how the system behaves when pulsing the tension reference and havi
 
 
 \section{Discussion}
-Figure \ref{fig:withoutDecoup} clearly show a repeating pattern in both speed and tension of period 50s.
+Figure \ref{fig:withoutDecoup} clearly show a repeating pattern in both speed and tension with a period 50s.
 This indicate that there is coupling from Motor 2 to both outputs.
 While Motor 2 is running, both motors run at the same speed and there is no tension.
 If Motor 2 is stopped (with positive direction clockwise), the tension on the material increase between Motor 1 and Motor 2 due to either the material slipping on Motor 2 or the material having to sustain the load of rotating motor 2.
 The tension for the remainder of the loop will then decrease (between the jockey and the motors) and this is the measured tension output.
 
-With the pre-compensator $W(s)$, the experiment carried out show that $u_1$ can be used to control the material speed $y_1$ and $u_2$ can be used to control the material tension $y_2$ over the jockey pulley.
+With the pre-compensator $W(s)$, the experiment carried out show that $u_1$ can be used to control the material speed $y_1$, figure X, and $u_2$ can be used to control the material tension $y_2$ over the jockey pulley, figure Y.
+This without one affecting the other and hence the system has been successfully decoupled.
 This could also have been directly read out from the new transfer function $\tilde{G}(s)$ in \ref{equ:decoupled} as the elements are on the diagonal.
 
-TODO: Another part discussing the controller result
+Using feedback control the square wave is now the reference input to the closed loop system.
+It can be seen in figures X and Y that with a decent PID controller the speed and tension can be accurately controlled without steady state error.
+The desired system dynamics can be designed though the gain values of the PID controller.
+Since the assignment didn't specify any requirements for the system it has been arbitrarily designed to have similar rise time for both speed and tension set-point changes.
+It is also worth pointing out that the controllers have purely been designed to a step response and does not take into account robustness or sensitivity.
+Since the controlled system is purely virtual and there is no designed noise or disturbance this is considered adequate.
+Decoupling the system has allowed this simplistic Single Input Single Output PID design approach and significantly reduced the difficulty of control.
 
 \section{Conclusion}
 TODO: Draw some basic conclusions
