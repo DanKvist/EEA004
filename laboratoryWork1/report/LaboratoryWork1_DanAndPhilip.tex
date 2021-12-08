@@ -148,8 +148,60 @@ With the pre-compensator, the experiment just carried out show that $u_1$ can be
 This could also have been directly read out from the new transfer function $\tilde{G}(s)$ as the elements are on the diagonal.
 
 \section{Study the decoupled system with feedback control}
+Now 2 feedback PID controllers are added to the system.
+One for each of the now decoupled inputs to control speed and tension independently.
+For the speed system a PI controller is chosen as the system is only first order.
+The closed loop system with a PI controller is then:
 
+\begin{equation}
+G_{cl} = \frac{GC}{1 + GC} = \frac{1.3182(K_ps+K_i)}{s^2 + (1.3182K_p+1.5152)s + 1.3182K_i}
+\label{equ:closeLoopSpeed}
+\end{equation}
 
+This closed loop system has unity DC gain for any choice if controller gains.
+It has 2 poles and one zero, the zero will increase the speed of the system slightly and increase the overshoot.
+Ignoring the zero, the closed loop system can be compared to the standard model:
+
+\begin{equation}
+\frac{\omega_n^2}{s^2 + 2\zeta\omega_ns + \omega_n^2}
+\end{equation}
+
+Choosing the natural frequency and damping will allow us to design our system (\ref{equ:closeLoopSpeed}) to mimic a standard second order system apart from the effect of the zero.
+Choosing the natural frequency to be 0.4Hz ($\omega_n = 0.4*2*\pi \approx 2.51rad/s$ should hopefully be quick enough.
+Then choosing a damping slightly higher than 1 (due to the overshoot effect of the zero) should give a system without much overshoot.
+
+\begin{equation}
+\begin{split}
+&\begin{cases}
+\omega_n = 2.5 \\ \zeta = 1.2
+\end{cases} \rightarrow \\
+&\begin{cases}
+K_i = \frac{\omega_n^2}{1.3182} = 4.7414 \\
+K_p = \frac{2\zeta\omega_n - 1.5152}{1.3182} = 3.4023
+\end{cases} \rightarrow \\
+&C(s) = K_p + \frac{K_i}{s} = 4.7414 + \frac{3.4023}{s}
+\end{split}
+\end{equation}
+
+The performance of the PI controller for speed control can be seen in figure X.
+
+For designing the tension controller the plant equation is of second order.
+To have full freedom of poles for the closed loop system the full PID controller is required.
+The closed loop system will then become 3rd order with two zeros.
+A third order system could be designed in the same manner as for the speed control if one pole is chosen far from the imaginary axis and the zeros are ignored.
+This is however not straight forward as it require factorization and the effect of two zeros is more complex.
+Instead the PID gains are tuned by trial and error by first incrementing the proportional gain, followed by integral gain and derivative gain until an acceptable performance is acquired.
+This is iterated until the step response is satisfactory.
+Acceptable performance is a system with similar settling time as the speed control system and minimal overshoot.
+Desired performance was acquired with the following gains:
+
+\begin{equation}
+\begin{cases}
+K_p = 0.1 \\ K_i = 3 \\ K_d = 0.02
+\end{cases}
+\end{equation}
+
+The performance of the closed loop tension control system can be seen in figure X.
 
 \clearpage
 \bibliography{reference}
