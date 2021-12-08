@@ -204,27 +204,48 @@ Figure \ref{fig:withoutDecoup} show the result when $u_2$ is a square wave.
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.22]{../figures/task1.png}
+\includegraphics[scale=0.7]{../code/figures/task1.png}
 \caption{Material speed and tension when holding constant $u_1 = 1$ while pulsing $u_2$.}
 \label{fig:withoutDecoup}
 \end{figure}
 
 
 \subsection{Study the step response for a decoupled system}
-Figure \ref{fig:withDecoupSpeed} and X show the system behavior when pulsating the decoupled inputs $u_1$ and $u_2$.
+Figure \ref{fig:withDecoupSpeedA} and \ref{fig:withDecoupSpeedB} show the system behavior when pulsating the decoupled inputs $u_1$ and $u_2$.
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.22]{../figures/task2.png}
+\includegraphics[scale=0.7]{../code/figures/task2a.png}
 \caption{Material speed and tension of the decoupled system (\ref{equ:decoupled}) when holding constant $u_2 = 1$ while pulsing $u_1$.}
-\label{fig:withDecoupSpeed}
+\label{fig:withDecoupSpeedA}
 \end{figure}
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.7]{../code/figures/task2b.png}
+\caption{Material speed and tension of the decoupled system (\ref{equ:decoupled}) when holding constant $u_1 = 1$ while pulsing $u_2$.}
+\label{fig:withDecoupSpeedB}
+\end{figure}
+
 
 \subsection{Study the decoupled system with feedback control}
 Here is shown how the system behaves under PID feedback control for both speed and tension.
-Figure X show how the system behaves when pulsing the speed reference and having a constant tension reference.
-Figure Y show how the system behaves when pulsing the tension reference and having a constant speed reference.
+Figure \ref{fig:withFeedbackDecoupSpeedA} show how the system behaves when pulsing the tension reference and having a constant speed reference.
+Figure \ref{fig:withFeedbackDecoupSpeedB} show how the system behaves when pulsing the speed reference and having a constant tension reference.
 
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.7]{../code/figures/task3a.png}
+\caption{PID feedback control when pulsing the tension reference with constant speed.}
+\label{fig:withFeedbackDecoupSpeedA}
+\end{figure}
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.7]{../code/figures/task3b.png}
+\caption{PID feedback control when pulsing the speed reference with constant tension.}
+\label{fig:withFeedbackDecoupSpeedB}
+\end{figure}
 
 
 \section{Discussion}
