@@ -137,8 +137,8 @@ Calculating the new transfer function from input $U(s)$ to output $Y(s)$ result 
 \end{equation}
 
 With only elements on the diagonal, the system is now completely decoupled.
-Rerunning the experiment were one input is constant ($u_1$) and the other is pulsed ($u_2$) will generate the results in figure X.
-If the inputs were to be exchanged ($u_1$ pulsed, $u_2$ constant) the result is as in figure \ref{fig:withDecoupSpeed}.
+Rerunning the experiment were one input is constant ($u_1$) and the other is pulsed ($u_2$) will generate the results in figure \ref{fig:withDecoupSpeedB}.
+If the inputs were to be exchanged ($u_1$ pulsed, $u_2$ constant) the result is as in figure \ref{fig:withDecoupSpeedA}.
 
 \subsection{Study the decoupled system with feedback control}
 Now 2 feedback PID controllers are added to the system.
@@ -176,13 +176,14 @@ K_p = \frac{2\zeta\omega_n - 1.5152}{1.3182} = 3.4023
 \end{split}
 \end{equation}
 
-The performance of the PI controller for speed control can be seen in figure X.
+The performance of the PI controller for speed control can be seen in figure \ref{fig:withFeedbackDecoupSpeedB}.
 
 For designing the tension controller the plant equation is of second order.
 To have full freedom of poles for the closed loop system the full PID controller is required.
 The closed loop system will then become 3rd order with two zeros.
 A third order system could be designed in the same manner as for the speed control if one pole is chosen far from the imaginary axis and the zeros are ignored.
-This is however not straight forward as it require factorization and the effect of two zeros is more complex.
+Since this does in fact generate a stable system, however the zeros become a problem.
+The design doesn't allow choosing of the zeros and at least one of them end up being nonminimum phase, introducing unwanted dynamics in the wrong direction.
 Instead the PID gains are tuned by trial and error by first incrementing the proportional gain, followed by integral gain and derivative gain until an acceptable performance is acquired.
 This is iterated until the step response is satisfactory.
 Acceptable performance is a system with similar settling time as the speed control system and minimal overshoot.
@@ -194,7 +195,7 @@ K_p = 0.1 \\ K_i = 3 \\ K_d = 0.02
 \end{cases}
 \end{equation}
 
-The performance of the closed loop tension control system can be seen in figure X and figure Y.
+The performance of the closed loop tension control system can be seen in figure \ref{fig:withFeedbackDecoupSpeedA}.
 
 
 \section{Result}
@@ -255,12 +256,12 @@ While Motor 2 is running, both motors run at the same speed and there is no tens
 If Motor 2 is stopped (with positive direction clockwise), the tension on the material increase between Motor 1 and Motor 2 due to either the material slipping on Motor 2 or the material having to sustain the load of rotating motor 2.
 The tension for the remainder of the loop will then decrease (between the jockey and the motors) and this is the measured tension output.
 
-With the pre-compensator $W(s)$, the experiment carried out show that $u_1$ can be used to control the material speed $y_1$, figure X, and $u_2$ can be used to control the material tension $y_2$ over the jockey pulley, figure Y.
+With the pre-compensator $W(s)$, the experiment carried out show that $u_1$ can be used to control the material speed $y_1$, figure \ref{fig:withDecoupSpeedA}, and $u_2$ can be used to control the material tension $y_2$ over the jockey pulley, figure \ref{fig:withDecoupSpeedB}.
 This without one affecting the other and hence the system has been successfully decoupled.
 This could also have been directly read out from the new transfer function $\tilde{G}(s)$ in \ref{equ:decoupled} as the elements are on the diagonal.
 
 Using feedback control the square wave is now the reference input to the closed loop system.
-It can be seen in figures X and Y that with a decent PID controller the speed and tension can be accurately controlled without steady state error.
+It can be seen in figures \ref{fig:withFeedbackDecoupSpeedA} and \ref{fig:withFeedbackDecoupSpeedB} that with a decent PID controller the speed and tension can be accurately controlled without steady state error.
 The desired system dynamics can be designed though the gain values of the PID controller.
 Since the assignment didn't specify any requirements for the system it has been arbitrarily designed to have similar rise time for both speed and tension set-point changes.
 It is also worth pointing out that the controllers have purely been designed to a step response and does not take into account robustness or sensitivity.
