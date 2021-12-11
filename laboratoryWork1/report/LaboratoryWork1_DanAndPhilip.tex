@@ -57,10 +57,7 @@
     Group 4\\
     Dan Thilderkvist and Philip Gutierrez\\
     dan.thilderkvist@hotmail.com philipgutierrez67@gmail.com\\
-    Files: main.m, task1.m, task2.m, task3.m\\ 
-%    Coupled_drives_task1.slx" \\
-%    Coupled_drives_task2a.slx, Coupled_drives_task2b.slx \\
-%    Coupled_drives_task3a.slx, Coupled_drives_task3b.slx \\    
+    Files: main.m, task1.m, task2.m, task3.m, controllerDesign.m,  Coupled\_drives\_task1.slx, Coupled\_drives\_task2a.slx, Coupled\_drives\_task2b.slx, Coupled\_drives\_task3a.slx, Coupled\_drives\_task3b.slx
     
     \vspace{1cm}
     \today
@@ -101,7 +98,7 @@ This section describes the steps performed to carry out the experiment.
 
 \subsection{Study the step response without decoupling}
 In this first experiment the system is stimulated to showcase the coupling.
-Motor 1 $u_1$ is set constant $1$ while Motor 2 $u_2$ is pulsed with square wave of period 50s ans amplitude 1.
+Motor 1 $u_1$ is set constant $1$ while Motor 2 $u_2$ is pulsed with square wave of period 50s and amplitude 1.
 The pulse generator starts high and the resulting speed and tension of the material can be seen in figure \ref{fig:withoutDecoup}.
 
 \subsection{Study the step response for a decoupled system}
@@ -220,7 +217,7 @@ Figure \ref{fig:withDecoupSpeedA} and \ref{fig:withDecoupSpeedB} show the system
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.7]{../code/figures/task2a.png}
-\caption{Material speed and tension of the decoupled system (\ref{equ:decoupled}) when holding constant $u_2 = 1$ while pulsing $u_1$.}
+\caption{Material speed and tension of the decoupled system (\ref{equ:decoupled}) when holding constant $u_2 = 1$ and pulsing $u_1$.}
 \label{fig:withDecoupSpeedA}
 \end{figure}
 
@@ -261,7 +258,7 @@ The tension for the remainder of the loop will then decrease (between the jockey
 
 With the pre-compensator $W(s)$, the experiment carried out show that $u_1$ can be used to control the material speed $y_1$, figure \ref{fig:withDecoupSpeedA}, and $u_2$ can be used to control the material tension $y_2$ over the jockey pulley, figure \ref{fig:withDecoupSpeedB}.
 This without one affecting the other and hence the system has been successfully decoupled.
-This could also have been directly read out from the new transfer function $\tilde{G}(s)$ in \ref{equ:decoupled} as the elements are on the diagonal.
+This could also have been directly read out from the new transfer function $\tilde{G}(s)$ in (\ref{equ:decoupled}) as the elements are on the diagonal.
 
 Using feedback control, the square wave is now the reference input to the closed loop system.
 It can be seen in figures \ref{fig:withFeedbackDecoupSpeedA} and \ref{fig:withFeedbackDecoupSpeedB} that with a decent PID controller the speed and tension can be accurately controlled without steady state error.
@@ -276,22 +273,13 @@ Decoupling the system has allowed this simplistic Single Input Single Output PID
 Cross-coupling between inputs and outputs, and the complexities it brings in designing MIMO based systems, is central to the study of multivariable control.  
 If decoupling is possible, then a complex MIMO problem can be decomposed into several simpler SISO problems, and as seen above, each input-output relationship can be controlled by its own independent controller.  This greatly simplifies the controller analysis and design.   
 
-\clearpage
-\bibliography{reference}
+%\clearpage
+%\bibliography{reference}
 
 \clearpage
 \appendix
 
 \section{Matlab Code}
-This is an example reference \citep{glad00}.
-
-\begin{figure}[h!]
-\center
-%\includegraphics[scale=0.8]{../code/figures/exampleFigure.png}
-%\caption{Example caption.}
-\label{fig:exampleLable}
-\end{figure}
-
 \lstinputlisting{../code/main.m}
 
 \subsection{Task 1}
@@ -305,5 +293,9 @@ This is an example reference \citep{glad00}.
 \subsection{Task 3}
 \lstinputlisting{../code/task3.m}
 \clearpage
+\lstinputlisting{../code/controllerDesign.m}
+\clearpage
+
+
 
 \end{document}
