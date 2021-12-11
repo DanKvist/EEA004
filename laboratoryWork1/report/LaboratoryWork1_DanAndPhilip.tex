@@ -70,7 +70,7 @@
 \section{Introduction}
 In this experiment a coupled system is decoupled and controlled.
 The system studied is the control of speed and tension of a material in a continuous system.
-The experiments herein is carried out using Simulink with a transfer function model based on a real experimental setup, figure \ref{fig:expSys}.
+The experiments herein are carried out using Simulink with a transfer function model based on a real experimental setup, figure \ref{fig:expSys}.
 
 \begin{figure}[h!]
 \center
@@ -97,15 +97,15 @@ Throughout this report the behavior of this system will be studied, both the cou
 
 
 \section{Method}
-This section describe the steps performed to carry out the experiment.
+This section describes the steps performed to carry out the experiment.
 
 \subsection{Study the step response without decoupling}
 In this first experiment the system is stimulated to showcase the coupling.
 Motor 1 $u_1$ is set constant $1$ while Motor 2 $u_2$ is pulsed with square wave of period 50s ans amplitude 1.
-The pulse generator start high and the resulting speed and tension of the material can be seen in figure \ref{fig:withoutDecoup}.
+The pulse generator starts high and the resulting speed and tension of the material can be seen in figure \ref{fig:withoutDecoup}.
 
 \subsection{Study the step response for a decoupled system}
-To decouple the system a decoupling pre-compensator can be added the system.
+To decouple the system a decoupling pre-compensator can be added to the system.
 This will take the input $u_1, u_2$ and output a modified signal $v_1, v_2$ that will be the new input to the coupled system (\ref{equ:transFunc}).
 The transfer function for the pre-compensator is:
 
@@ -116,7 +116,7 @@ W(s) =
 \end{pmatrix}
 \end{equation}
 
-Calculating the new transfer function from input $U(s)$ to output $Y(s)$ result in:
+Calculating the new transfer function from input $U(s)$ to output $Y(s)$ results in:
 
 \begin{equation}
 \begin{split}
@@ -145,8 +145,7 @@ Rerunning the experiment were one input is constant ($u_1$) and the other is pul
 If the inputs were to be exchanged ($u_1$ pulsed, $u_2$ constant) the result is as in figure \ref{fig:withDecoupSpeedA}.
 
 \subsection{Study the decoupled system with feedback control}
-Now 2 feedback PID controllers are added to the system.
-One for each of the now decoupled inputs to control speed and tension independently.
+Now two feedback PID controllers are added to the system, one for each of the now decoupled inputs, to control speed and tension independently.
 For the speed system a PI controller is chosen as the system is only first order.
 The closed loop system with a PI controller is then:
 
@@ -156,14 +155,14 @@ G_{cl} = \frac{GC}{1 + GC} = \frac{1.3182(K_ps+K_i)}{s^2 + (1.3182K_p+1.5152)s +
 \end{equation}
 
 This closed loop system has unity DC gain for any choice if controller gains.
-It has 2 poles and one zero, the zero will increase the speed of the system slightly and increase the overshoot.
+It has two poles and one zero, the zero will increase the speed of the system slightly and increase the overshoot.
 Ignoring the zero, the closed loop system can be compared to the standard model:
 
 \begin{equation}
 \frac{\omega_n^2}{s^2 + 2\zeta\omega_ns + \omega_n^2}
 \end{equation}
 
-Choosing the natural frequency and damping will allow us to design our system (\ref{equ:closeLoopSpeed}) to mimic a standard second order system apart from the effect of the zero.
+Choosing the natural frequency and damping will allow us to design our system (\ref{equ:closeLoopSpeed}) to mimic a standard second order system (apart from the effect of the zero).
 Choosing the natural frequency to be 0.4Hz ($\omega_n = 0.4*2*\pi \approx 2.51rad/s$ should hopefully be quick enough.
 Then choosing a damping slightly higher than 1 (due to the overshoot effect of the zero) should give a system without much overshoot.
 
@@ -182,15 +181,15 @@ K_p = \frac{2\zeta\omega_n - 1.5152}{1.3182} = 3.4023
 
 The performance of the PI controller for speed control can be seen in figure \ref{fig:withFeedbackDecoupSpeedB}.
 
-For designing the tension controller the plant equation is of second order.
+For designing the tension controller, the plant equation is of second order.
 To have full freedom of poles for the closed loop system the full PID controller is required.
-The closed loop system will then become 3rd order with two zeros.
+The closed loop system will then become a 3rd order system with two zeros.
 A third order system could be designed in the same manner as for the speed control if one pole is chosen far from the imaginary axis and the zeros are ignored.
-Since this does in fact generate a stable system, however the zeros become a problem.
-The design doesn't allow choosing of the zeros and at least one of them end up being nonminimum phase, introducing unwanted dynamics in the wrong direction.
+This does in fact generate a stable system, however the zeros become a problem.
+The design doesn't allow for choosing of the zeros, and at least one of them end up being non-minimum phase, introducing unwanted dynamics in the wrong direction.
 Instead the PID gains are tuned by trial and error by first incrementing the proportional gain, followed by integral gain and derivative gain until an acceptable performance is acquired.
 This is iterated until the step response is satisfactory.
-Acceptable performance is a system with similar settling time as the speed control system and minimal overshoot.
+An acceptable performance is a system with similar settling time as the speed control system and minimal overshoot.
 Desired performance was acquired with the following gains:
 
 \begin{equation}
@@ -255,7 +254,7 @@ Figure \ref{fig:withFeedbackDecoupSpeedB} show how the system behaves when pulsi
 
 \section{Discussion}
 Figure \ref{fig:withoutDecoup} clearly show a repeating pattern in both speed and tension with a period 50s.
-This indicate that there is coupling from Motor 2 to both outputs.
+This indicates that there is coupling from Motor 2 to both outputs.
 While Motor 2 is running, both motors run at the same speed and there is no tension.
 If Motor 2 is stopped (with positive direction clockwise), the tension on the material increase between Motor 1 and Motor 2 due to either the material slipping on Motor 2 or the material having to sustain the load of rotating motor 2.
 The tension for the remainder of the loop will then decrease (between the jockey and the motors) and this is the measured tension output.
@@ -264,7 +263,7 @@ With the pre-compensator $W(s)$, the experiment carried out show that $u_1$ can 
 This without one affecting the other and hence the system has been successfully decoupled.
 This could also have been directly read out from the new transfer function $\tilde{G}(s)$ in \ref{equ:decoupled} as the elements are on the diagonal.
 
-Using feedback control the square wave is now the reference input to the closed loop system.
+Using feedback control, the square wave is now the reference input to the closed loop system.
 It can be seen in figures \ref{fig:withFeedbackDecoupSpeedA} and \ref{fig:withFeedbackDecoupSpeedB} that with a decent PID controller the speed and tension can be accurately controlled without steady state error.
 The desired system dynamics can be designed though the gain values of the PID controller.
 Since the assignment didn't specify any requirements for the system it has been arbitrarily designed to have similar rise time for both speed and tension set-point changes.
