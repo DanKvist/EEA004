@@ -57,7 +57,11 @@
     Group 4\\
     Dan Thilderkvist and Philip Gutierrez\\
     dan.thilderkvist@hotmail.com philipgutierrez67@gmail.com\\
-    Files: TBD\\
+    Files: main.m, task1.m, task2.m, task3.m\\ 
+%    Coupled_drives_task1.slx" \\
+%    Coupled_drives_task2a.slx, Coupled_drives_task2b.slx \\
+%    Coupled_drives_task3a.slx, Coupled_drives_task3b.slx \\    
+    
     \vspace{1cm}
     \today
   \end{center}
@@ -269,11 +273,9 @@ Since the controlled system is purely virtual and there is no designed noise or 
 Decoupling the system has allowed this simplistic Single Input Single Output PID design approach and significantly reduced the difficulty of control.
 
 \section{Conclusion}
-TODO: Draw some basic conclusions
-- Decoupling is possible for some systems by adding a pre-compensator.
-- Decoupling simplifies a MIMO problem to several SISO problems
 
-
+Cross-coupling between inputs and outputs, and the complexities it brings in designing MIMO based systems, is central to the study of multivariable control.  
+If decoupling is possible, then a complex MIMO problem can be decomposed into several simpler SISO problems, and as seen above, each input-output relationship can be controlled by its own independent controller.  This greatly simplifies the controller analysis and design.   
 
 \clearpage
 \bibliography{reference}
@@ -281,16 +283,28 @@ TODO: Draw some basic conclusions
 \clearpage
 \appendix
 
-\section{Example Section}
+\section{Matlab Code}
 This is an example reference \citep{glad00}.
 
 \begin{figure}[h!]
 \center
 %\includegraphics[scale=0.8]{../code/figures/exampleFigure.png}
-\caption{Example caption.}
+%\caption{Example caption.}
 \label{fig:exampleLable}
 \end{figure}
 
 \lstinputlisting{../code/main.m}
+
+\subsection{Task 1}
+\lstinputlisting{../code/task1.m}
+\clearpage
+
+\subsection{Task 2}
+\lstinputlisting{../code/task2.m}
+\clearpage
+
+\subsection{Task 3}
+\lstinputlisting{../code/task3.m}
+\clearpage
 
 \end{document}
