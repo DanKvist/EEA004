@@ -47,12 +47,165 @@ System description and analysis\\
 \maketitle
 
 \section{Introduction}
+This assignment is a continuation from a previous assignment where the dynamics of an air handling unit consisting of a heater and humidifier was analyzed.
+In this report the air handling unit will be analyzed and controlled more in-depth.
+That entails looking at more general methods for choosing input output control pairs, constructing decoupling matrices and using optimal state feedback to control the system.
+The air handling system was modeled in the previous assignment but the plant transfer function is stated here for completeness:
+
+\begin{equation}
+G(s) = 
+\begin{pmatrix}
+\frac{15}{50s + 1} && \frac{-11}{10s + 1} \\[6pt]
+\frac{-25}{50s + 1} && \frac{70}{10s + 1}
+\end{pmatrix}
+\end{equation}
+
+\subsection{Theory}
+
+A measurement of system input output interaction is the Relative Gain Array (RGA).
+The RGA for any matrix is defined as below \citep[~p.219]{glad00}:
+
+\begin{equation}
+RGA(A) = A.*(A^{-1})^T
+\end{equation}
+
+Here the multiplication is element-wise and the inverse can be exchanged for the pseudo-inverse if $A$ is not square.
+For a system to be controlled by decoupled controllers the input-output pairs should be chosen such that the RGA matrix elements are non-negative for $s=0$ if A is a transfer function $G(s)$.
+
+TODO: Part about decoupling matrices
+
+TODO: Part about LQR/LQG control
 
 \section{Method}
+This section describes the methodology used to obtain the requested results of the assignment.
+It will go through them step by step, starting by choosing a input-output pairing.
+
+\subsection{Input-Output pairing}
+In order to determine the best control input to plant output pairing one can consult the Relative Gain Array ($RGA(G(s))$).
+Since the RGA requires the system inverse, this is a good place to start.
+
+\begin{equation}
+G^{-1}(s) = 
+\begin{pmatrix}
+\frac{15}{50s + 1} && \frac{-11}{10s + 1} \\[6pt]
+\frac{-25}{50s + 1} && \frac{70}{10s + 1}
+\end{pmatrix}^{-1} = 
+\begin{pmatrix}
+\frac{14(50s + 1)}{155} && \frac{11(50s + 1)}{775} \\[6pt]
+\frac{10s + 1}{31} && \frac{3(10s + 1)}{155}
+\end{pmatrix}
+\end{equation}
+
+Where the operations has been carried out suing matlab.
+Then the RGA can be calculated in matlab as well.
+
+\begin{equation}
+\begin{split}
+RGA(G(s)) &= 
+\begin{pmatrix}
+\frac{15}{50s + 1} && \frac{-11}{10s + 1} \\[6pt]
+\frac{-25}{50s + 1} && \frac{70}{10s + 1}
+\end{pmatrix} .* 
+\begin{pmatrix}
+\frac{14(50s + 1)}{155} && \frac{11(50s + 1)}{775} \\[6pt]
+\frac{10s + 1}{31} && \frac{3(10s + 1)}{155}
+\end{pmatrix}^T = \\
+RGA(G(s)) &= 
+\begin{pmatrix}
+\frac{67.74s + 1.355}{50s + 1} && \frac{-3.548s - 3548}{10s + 1} \\[6pt]
+\frac{-17.74s - 0.3548}{50s + 1} && \frac{13.55s + 1.355}{10s + 1}
+\end{pmatrix}
+\end{split}
+\end{equation} 
+
+Then the pairing should be chosen such that the RGA element corresponding to the paring is not negative for $s=0$.
+The RGA for $s=0$ is found by simple substitution.
+
+\begin{equation}
+RGA(G(0)) = 
+\begin{pmatrix}
+1.3548 && -0.3548 \\
+-0.3548 && 1.3548
+\end{pmatrix}
+\end{equation}
+
+This indicates that a pairing corresponding to the off-diagonal should be avoided.
+In addition, the best pairing is achieved when the paring elements are close to $1$ on the imaginary axis.
+This can be evaluated for the desired crossover frequency $\omega_c = 1/10$.
+
+\begin{equation}
+RGA(G(\omega_ci)) = 
+\begin{pmatrix}
+1.3548 && -0.3548 \\
+-0.3548 && 1.3548
+\end{pmatrix}
+\end{equation}
+
+This again indicates the better pairing is choosing the diagonal.
+The chosen pairing is explicitly written out in the results, X)
+
+\subsection{Decoupling}
+In this part of the assignment the result from choosing the best input-output pairing shall be compared to using decoupling matrices $W_1$ and $W_2$.
+In all cases $W_2 = I$, but $W_1$ shall be chosen $W_1 = G^{-1}(s)$ where there are two cases for $s$, $s_i = 0$ and $s_{ii}=\omega_ci$.
+These cases represent steady-state decoupling (i) and dynamic decoupling (ii).
+For the benchmark case no coupling is chosen $W_1 = I$, but merely the pairing.
+The feedback controller is contrived of the decoupling matrices and a gain gain matrix $K = \begin{pmatrix} 1 && 0 \\ 0 && 1 \end{pmatrix}$.
+The feedback control is constructed such as:
+
+\begin{equation}
+\begin{split}
+u(t) &= F_y(r(t) - y(t)) \\
+F_y &= W_1KW_2
+\end{split}
+\end{equation}
+
+The explicit decoupling matrices used in the evaluation is calculated in Matlab and presented below:
+
+\begin{equation}
+\begin{split}
+W^{(0)}_1 &= 
+\begin{pmatrix}
+1 && 0 \\ 0 && 1
+\end{pmatrix} \\
+W^{(i)}_1 &= G^{-1}(0) = 
+\begin{pmatrix}
+0.0903 && 0.0142 \\ 0.0323 && 0.0194
+\end{pmatrix} \\
+W^{(ii)}_1 &= Re(G^{-1}(\omega_ci)) = 
+\begin{pmatrix}
+2.3484 && 0.3690 \\ 0.0645 && 0.0387
+\end{pmatrix}
+\end{split}
+\end{equation}
+
+Were one can see that the decoupling matrix for $s=\omega_ci$ is complex valued so the real valued matrix have to be chosen for it to be realizable.
+Now with the controllers defined for the different cases, they can be compared using their step responses, see figure X.
+
+
+\subsection{Optimal control}
 
 \section{Results}
+This section states the results achieved.
+
+\subsection{Input-Output pairing}
+For the pairing requested, the RGA matrix was consulted and the best pairing is:
+
+\begin{equation}
+\begin{split}
+u_1 \leftrightarrow y_1 \\
+u_2 \leftrightarrow y_2
+\end{split}
+\end{equation}
+
+\subsection{Decoupling}
+TODO: Plots
+\subsection{Optimal control}
+TODO: Plots
+
 
 \section{Discussion}
+
+
 
 \section{Conclusion}
 

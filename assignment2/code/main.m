@@ -1,16 +1,18 @@
 %% Intorduction
-% Build the plant transfer function
+% Configuration and prerequisites
 
+w_c = 1/10;
+
+s = tf([1 0],1);
+
+% Plant transfer function
 G_11 = tf(15,[50 1]);
 G_12 = tf(-11, [10 1]);
 G_21 = tf(-25, [50 1]);
 G_22 = tf(70, [10 1]);
-
 G = [G_11 G_12;G_21 G_22];
 
 %% Relative gain array
-
-w_c = 1/10;
 
 RGA = G .* (G\eye(2)).'
 
@@ -76,17 +78,3 @@ F_y = L
 G_cl = feedback(G_ss, F_y);
 
 step(G_cl)
-
-% [kest, K, ~] = kalman(G_ss, eye(2), eye(2));
-% 
-% A = G_ss.a;
-% B = G_ss.b;
-% C = G_ss.c;
-% D = G_ss.d;
-% 
-% F_y = L*(s*eye(2) - A + B*L + K*C)\K;
-% F_r = eye(2) - L*(s*eye(2) - A + B*L + K*C)\B;
-% 
-% G_cl = F_r*feedback(G, F_y);
-% 
-% step(G_cl)
