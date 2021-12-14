@@ -1,5 +1,8 @@
 %% Intorduction
 % Configuration and prerequisites
+clear all;
+close all;
+clc;
 
 w_c = 1/10;
 
@@ -29,6 +32,7 @@ W2 = eye(2);
 W1_0 = eye(2);
 G_cl = feedback(W1_0*F_y*G, eye(2));
 
+fig1=figure;
 step(G_cl)
 
 % Case i
@@ -49,7 +53,12 @@ hold on
 step(G_cl)
 hold off
 
+figFolder = "figures";
+mkdir(figFolder)
+saveas(fig1, fullfile(figFolder, 'decoupling_a.png'))
+
 %% Decoupling B
+fig2=figure;
 
 F_y = tf([10 1], [10 0])*eye(2);
 
@@ -62,8 +71,12 @@ G_cl = feedback(W1_ii*F_y*G, eye(2));
 step(G_cl)
 hold off
 
+figFolder = "figures";
+mkdir(figFolder)
+saveas(fig2, fullfile(figFolder, 'decoupling_b.png'))
 
 %% LQG(R) control
+fig3=figure;
 
 Q_1 = 1*eye(2);
 Q_2 = 1*eye(2);
@@ -78,3 +91,7 @@ F_y = L
 G_cl = feedback(G_ss, F_y);
 
 step(G_cl)
+
+figFolder = "figures";
+mkdir(figFolder)
+saveas(fig3, fullfile(figFolder, 'lqg.png'))
