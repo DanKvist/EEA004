@@ -85,13 +85,30 @@ For a system to be controlled by decoupled controllers the input-output pairs sh
 
 TODO: Part about decoupling matrices
 
-TODO: Part about LQR/LQG control
+A Linear Quadratic Regulator (LQR) is a state feedback controller that is optimal based on some defined cost.
+Furthermore the Linear Quadratic Gaussian (LQG) is a state feedback controller that is optimal in the presence of system disturbances.
+The criteria that is minimized by the LQG controller is:
+
+\begin{equation}
+V = \Vert z \Vert^2_{Q_1} + \Vert z \Vert^2_{Q_1}
+\end{equation}
+
+Where $z$ is the system true output, $u$ is the control action and $Q_1, Q_2$ are weight matrices that are used as design parameters.
+The resulting controller is a gain matrix used for state feedback:
+
+\begin{equation}
+u(t) = -L\hat{x}
+\end{equation}
+
+Where $\hat{x}$ is the state estimate by the Kalman filter.
+If the state can be measured the Kalman filter can be omitted, resulting in the LQR controller.
+\citep[~p.242-247]{glad00}
 
 \section{Method}
 This section describes the methodology used to obtain the requested results in the assignment.
 It will go through them step by step, starting by choosing an input-output pairing.
 
-\subsection{Input-Output pairing}
+\subsection{Decentralization}
 In order to determine the best control input to plant output pairing one can consult the Relative Gain Array ($RGA(G(s))$).
 Since the RGA requires the system inverse, that is where the calculation start.
 
@@ -105,6 +122,7 @@ G^{-1}(s) =
 \frac{14(50s + 1)}{155} && \frac{11(50s + 1)}{775} \\[6pt]
 \frac{10s + 1}{31} && \frac{3(10s + 1)}{155}
 \end{pmatrix}
+\label{equ:inverse}
 \end{equation}
 
 Where the operations has been carried out using Matlab.
@@ -159,18 +177,20 @@ The chosen pairing is explicitly written out in the results, X)
 In this part of the assignment the result from choosing the best input-output pairing shall be compared to using decoupling matrices $W_1$ and $W_2$.
 In all cases $W_2 = I$, but $W_1$ shall be chosen $W_1 = G^{-1}(s)$ where there are two cases for $s$, $s_i = 0$ and $s_{ii}=\omega_ci$.
 These cases represent steady-state decoupling (i) and dynamic decoupling (ii).
-For the benchmark case no coupling is chosen $W_1 = I$, but merely the pairing.
+For the benchmark case no decoupling is chosen $W_1 = I$, but merely the pairing.
 The feedback controller is contrived of the decoupling matrices and a gain gain matrix $K = \begin{pmatrix} 1 && 0 \\ 0 && 1 \end{pmatrix}$.
 The feedback control is constructed such as:
 
 \begin{equation}
 \begin{split}
-u(t) &= F_y(r(t) - y(t)) \\
+u(t) &= r(t) - F_yy(t) \\
 F_y &= W_1KW_2
 \end{split}
+\label{equ:fbControl}
 \end{equation}
 
-The explicit decoupling matrices used in the evaluation is calculated in Matlab and presented below:
+To calculate the decoupling matrix $W_1$ the system inverse is required.
+The inverse has already been calculated in (\ref{equ:inverse}), by simple substitution the decoupling matrices can be found.
 
 \begin{equation}
 \begin{split}
@@ -182,18 +202,156 @@ W^{(i)}_1 &= G^{-1}(0) =
 \begin{pmatrix}
 0.0903 && 0.0142 \\ 0.0323 && 0.0194
 \end{pmatrix} \\
-W^{(ii)}_1 &= Re(G^{-1}(\omega_ci)) = 
+W^{(ii)}_1 &= Re(G^{-1}(\omega_ci)) = \\
+&=
+Re\begin{pmatrix}
+0.0903 + 0.4516i && 0.0142 + 0.0710i \\
+0.0323 + 0.0323i && 0.0194 + 0.0194i
+\end{pmatrix} = \\
+&= 
 \begin{pmatrix}
-2.3484 && 0.3690 \\ 0.0645 && 0.0387
+0.0903 && 0.0142 \\ 0.0323 && 0.0194
 \end{pmatrix}
+\end{split}
+\label{equ:decoupling}
+\end{equation}
+
+Since the inverse of $G$ is complex-valued for any non real $s$ the decoupling matrix is a complex-valued matrix.
+In order for the decoupling to be realizable the real part is only used as expressed in (\ref{equ:decoupling}).
+Now with the controllers defined for the three different cases, the closed loop system can be setup.
+
+\begin{equation}
+G_{cl} = \frac{G}{I+GF_y}
+\label{equ:closedLoopDecoup}
+\end{equation}
+
+This results in three closed loop systems, but since $W^{i}_1 = W^{ii}_1$ two systems are identical.
+The system has two reference inputs and 2 outputs.
+In order to compare the decoupling methods the closed loop systems can be evaluated by a step response on input 1 ($r_1$) while input 2 ($r_2$) is zero.
+The step responses and the control signal $u_1, u_2$ for the step response can be seen in figure \ref{fig:decouplingA}.
+
+With a decoupled system, SISO control techniques can be employed.
+Now the control structure (\ref{equ:fbControl}) can be augmented with two PI controllers $F_{PI}$ on the error feedback.
+
+\begin{equation}
+\begin{split}
+u(t) &= F_{PI}(r(t) - F_yy(t)) \\
+F_{PI} &= \frac{10s+1}{10s}
+\begin{pmatrix}
+1 && 0 \\ 0 && 1
+\end{pmatrix} \\
+F_y &= W_2KW^{(ii)}_1
 \end{split}
 \end{equation}
 
-Were one can see that the decoupling matrix for $s=\omega_ci$ is complex valued so the real valued matrix have to be chosen for it to be realizable.
-Now with the controllers defined for the different cases, they can be compared using their step responses, see figure X.
+The new closed loop system is now:
 
+\begin{equation}
+G_{cl} = \frac{GF_{PI}}{I+GF_{PI}F_y}
+\end{equation}
+
+The resulting closed loop system can now be evaluated by the same step response, step on $r_1$ and zero on $r_2$.
+The resulting system response and actuator signal can be seen in results, figure \ref{fig:decouplingB}.
 
 \subsection{Optimal control}
+Instead of performing explicit decoupling, a LQR controller can be used.
+Since a LQR controller require the system states, it is convenient to express $G$ on state space form.
+This was done in the previous assignment, the result is stated here again:
+
+\begin{equation}
+\begin{split}
+\dot{x} &= 
+\begin{pmatrix}
+-0.02 & 0 \\ 0 & -0.1
+\end{pmatrix}x
++
+\begin{pmatrix}
+1 & 0 \\ 0 & 4
+\end{pmatrix}u \\
+y &= 
+\begin{pmatrix}
+0.3 & -0.275 \\ -0.5 & 1.75
+\end{pmatrix}x
+\end{split}
+\label{equ:oldSS}
+\end{equation}
+
+In this representation we are measuring temperature $y_1$ and humidity $y_2$ as per system definition.
+However temperature and humidity is not the system states and we cannot use a state feedback controller without an observer that estimate the states.
+A simpler approach in this case would be to modify the state space representation so that the states are temperature and humidity.
+This can be done with by choosing new states $\tilde{x} = C^{-1}x$, if $C$ is invertible.
+This is valid since a state space representation is arbitrary.
+The new state space model is calculated by the Matlab command \verb|ss2ss(G_ss, G_ss.C)| and give the following model:
+
+\begin{equation}
+\begin{split}
+\dot{\tilde{x}} &= 
+\begin{pmatrix}
+0.008387 && 0.01703 \\ -0.1806 && -0.1284
+\end{pmatrix}\tilde{x}
++
+\begin{pmatrix}
+0.3 && -1.1 \\ -0.5 && 7
+\end{pmatrix}u \\
+y &= 
+\begin{pmatrix}
+1 & 0 \\ 0 & 1
+\end{pmatrix}\tilde{x}
+\end{split}
+\label{equ:newSS}
+\end{equation}
+
+The new state $\tilde{x}$ now represent temperature and humidity and is the same as our measured output $y$.
+The new model will be used for the LQR design and the tilde will be omitted form the new state hereafter.
+
+To design an LQR controller is simple in Matlab through the command \verb|lqr(sys, Q1, Q2)|.
+It requires the two weight matrices $Q_1$ and $Q_2$.
+It is the relation between the weight matrices that set the cost balance between  reference tracking and actuation effort.
+Three cases will be compared where $Q_1 = I$ and $Q_2 = \alpha I$.
+The multiplier $\alpha$ will be chosen differently for the baseline and the two comparison cases.
+
+\begin{equation}
+\begin{split}
+\alpha^{(0)} &= 1 \\
+\alpha^{(i)} &= 10 \\
+\alpha^{(ii)} &= 0.1
+\end{split}
+\end{equation}
+
+Now the LQR controller can be designed using the state space model (\ref{equ:newSS}) and the weight matrices $Q_1$ and $Q_2$.
+The state feedback controller returned from Matlab when minimizing the cost function will be denoted $L$.
+Three such controllers $L^{(0)}, L^{(i)} \:\&\: L^{(ii)}$ are generated and the gains are as follow:
+
+\begin{equation}
+\begin{split}
+L^{(0)} &= 
+\begin{pmatrix}
+0.9110 	&& 0.0685  \\
+-0.1134 	&& 0.9775
+\end{pmatrix} \\
+L^{(i)} &= 
+\begin{pmatrix}
+3.0628 && 0.2451 \\
+-0.2910 && 3.1324
+\end{pmatrix} \\
+L^{(ii)} &= 
+\begin{pmatrix}
+0.2393 && 0.0140 \\
+-0.0557 && 0.2965
+\end{pmatrix}
+\end{split}
+\label{equ:lqrCont}
+\end{equation}
+
+The closed loop system with the LQR controller $L$ is in practice identical to the pure decoupling system (\ref{equ:closedLoopDecoup}).
+
+\begin{equation}
+G_{cl} = \frac{G}{I + GL}
+\end{equation}
+
+The closed loop system is evaluated by the step response of a step on $r_1$ and zero on $r_2$ just as in previous evaluations.
+The resulting system output and actuation can be seen in result, figure \ref{fig:lqgControl}.
+
 
 \section{Results}
 This section states the results achieved.
