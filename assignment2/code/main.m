@@ -131,10 +131,18 @@ function [] = dualPlot(y, u, color)
     plot(y(:,1), "Color", color, "LineStyle", "-")
     hold on
     plot(y(:,2), "Color", color, "LineStyle", "--")
+    xlabel("Time (seconds)")
+    ylabel("Amplitude")
+    title('Step Response')
+    xlim([0 length(y)])
 
     subplot(2,1,2); 
     plot(u(:,1), "Color", color, "LineStyle", "-")
     hold on
     plot(u(:,2), "Color", color, "LineStyle", "--")
+    xlabel("Time (seconds)")
+    ylabel("Amplitude")
+    title('Step Response')
+    xlim([0 length(y)])
 
 end
