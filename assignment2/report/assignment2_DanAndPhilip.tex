@@ -73,7 +73,7 @@ G(s) =
 
 \subsection{Theory}
 
-A measurement of system input output interaction is the Relative Gain Array (RGA).
+A measurement of system input-output interaction is the Relative Gain Array (RGA).
 The RGA for any matrix is defined as below \citep[~p.219]{glad00}:
 
 \begin{equation}
@@ -88,12 +88,12 @@ TODO: Part about decoupling matrices
 TODO: Part about LQR/LQG control
 
 \section{Method}
-This section describes the methodology used to obtain the requested results of the assignment.
-It will go through them step by step, starting by choosing a input-output pairing.
+This section describes the methodology used to obtain the requested results in the assignment.
+It will go through them step by step, starting by choosing an input-output pairing.
 
 \subsection{Input-Output pairing}
 In order to determine the best control input to plant output pairing one can consult the Relative Gain Array ($RGA(G(s))$).
-Since the RGA requires the system inverse, this is a good place to start.
+Since the RGA requires the system inverse, that is where the calculation start.
 
 \begin{equation}
 G^{-1}(s) = 
@@ -107,8 +107,8 @@ G^{-1}(s) =
 \end{pmatrix}
 \end{equation}
 
-Where the operations has been carried out suing matlab.
-Then the RGA can be calculated in matlab as well.
+Where the operations has been carried out using Matlab.
+Then the RGA can be calculated in Matlab as well.
 
 \begin{equation}
 \begin{split}
