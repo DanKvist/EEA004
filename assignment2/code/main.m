@@ -74,13 +74,13 @@ saveas(fig1, fullfile(figFolder, 'decoupling_a.png'))
 
 F_y = tf([10 1], [10 0])*eye(2);
 
-G_cl = feedback(F_y*G, W1_0);
+G_cl = feedback(F_y*G, W1_ii);
 
-fig2=figure(2);
+fig2=figure();
 
 y = lsim(G_cl, r, t);
-u = lsim(F_y, r - (W1_0*y')', t);
-dualPlot(y, u, colors(2))
+u = lsim(F_y, r - (W1_ii*y')', t);
+dualPlot(y, u, colors(1))
 
 saveas(fig2, fullfile(figFolder, 'decoupling_b.png'))
 
