@@ -58,15 +58,17 @@ fig1=figure(1);
 
 y = lsim(G_cl_0, r, t);
 u = ([eye(2) -F_y_0]*[r';y'])';
-dualPlot(y, u, colors(1))
+ax = dualPlot(y, u, colors(1));
 
 y = lsim(G_cl_i, r, t);
 u = ([eye(2) -F_y_i]*[r';y'])';
-dualPlot(y, u, colors(2))
+ax = [ax dualPlot(y, u, colors(2))];
 
 y = lsim(G_cl_ii, r, t);
 u = ([eye(2) -F_y_ii]*[r';y'])';
-dualPlot(y, u, colors(3))
+ax = [ax dualPlot(y, u, colors(3))];
+
+legend(ax([1 3 5]), "Baseline (0)", "Case (i)", "Case (ii)");
 
 saveas(fig1, fullfile(figFolder, 'decoupling_a.png'))
 
@@ -80,7 +82,9 @@ fig2=figure();
 
 y = lsim(G_cl, r, t);
 u = lsim(F_y, r - (W1_ii*y')', t);
-dualPlot(y, u, colors(1))
+ax = dualPlot(y, u, colors(1));
+
+legend(ax(1), "PI controller");
 
 saveas(fig2, fullfile(figFolder, 'decoupling_b.png'))
 
@@ -111,29 +115,31 @@ fig3=figure(3);
 
 y = lsim(G_cl_0, u, t);
 u = ([eye(2) -L_0]*[r';y'])';
-dualPlot(y, u, colors(1))
+ax = dualPlot(y, u, colors(1));
 
 y = lsim(G_cl_i, u, t);
 u = ([eye(2) -L_i]*[r';y'])';
-dualPlot(y, u, colors(2))
+ax = [ax dualPlot(y, u, colors(2))];
 
 y = lsim(G_cl_ii, u, t);
 u = ([eye(2) -L_ii]*[r';y'])';
-dualPlot(y, u, colors(3))
+ax = [ax dualPlot(y, u, colors(3))];
+
+legend(ax([1 3 5]), "\alpha = 1", "\alpha = 0.1", "\alpha = 10");
 
 saveas(fig3, fullfile(figFolder, 'lqg.png'))
 
 %% Utilities
 
-function [] = dualPlot(y, u, color)
+function [handles] = dualPlot(y, u, color)
     
     subplot(2,1,1);
-    plot(y(:,1), "Color", color, "LineStyle", "-")
+    handles(1) = plot(y(:,1), "Color", color, "LineStyle", "-");
     hold on
-    plot(y(:,2), "Color", color, "LineStyle", "--")
+    handles(2) = plot(y(:,2), "Color", color, "LineStyle", "--");
     xlabel("Time (seconds)")
     ylabel("Amplitude")
-    title('Step Response')
+    title({'Step Response', 'Output y_1, y_2'});
     xlim([0 length(y)])
 
     subplot(2,1,2); 
@@ -142,7 +148,7 @@ function [] = dualPlot(y, u, color)
     plot(u(:,2), "Color", color, "LineStyle", "--")
     xlabel("Time (seconds)")
     ylabel("Amplitude")
-    title('Step Response')
+    title('Input u_1, u_2');
     xlim([0 length(y)])
 
 end
