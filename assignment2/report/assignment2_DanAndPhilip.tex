@@ -177,14 +177,14 @@ The chosen pairing is explicitly written out in the results, X)
 In this part of the assignment the result from choosing the best input-output pairing shall be compared to using decoupling matrices $W_1$ and $W_2$.
 In all cases $W_2 = I$, but $W_1$ shall be chosen $W_1 = G^{-1}(s)$ where there are two cases for $s$, $s_i = 0$ and $s_{ii}=\omega_ci$.
 These cases represent steady-state decoupling (i) and dynamic decoupling (ii).
-For the benchmark case no decoupling is chosen $W_1 = I$, but merely the pairing.
-The feedback controller is contrived of the decoupling matrices and a gain gain matrix $K = \begin{pmatrix} 1 && 0 \\ 0 && 1 \end{pmatrix}$.
-The feedback control is constructed such as:
+For the benchmark case (0), no decoupling is chosen $W^{(0)}_1 = I$, but merely the pairing.
+The feedback controller is contrived of the decoupling matrix $W_2$ and a gain gain matrix $K = \begin{pmatrix} 1 && 0 \\ 0 && 1 \end{pmatrix}$ and the decoupling matrix $W_1$ act in feedforward on the feedback error.
+The control signal $u(t)$ is constructed such as:
 
 \begin{equation}
 \begin{split}
-u(t) &= r(t) - F_yy(t) \\
-F_y &= W_1KW_2
+u(t) &= W_1(r(t) - F_yy(t)) \\
+F_y &= KW_2
 \end{split}
 \label{equ:fbControl}
 \end{equation}
@@ -217,11 +217,11 @@ Re\begin{pmatrix}
 \end{equation}
 
 Since the inverse of $G$ is complex-valued for any non real $s$ the decoupling matrix is a complex-valued matrix.
-In order for the decoupling to be realizable the real part is only used as expressed in (\ref{equ:decoupling}).
+In order for the decoupling to be realizable the real part is taken as expressed in (\ref{equ:decoupling}).
 Now with the controllers defined for the three different cases, the closed loop system can be setup.
 
 \begin{equation}
-G_{cl} = \frac{G}{I+GF_y}
+G_{cl} = \frac{GW_1}{I+GW_1F_y}
 \label{equ:closedLoopDecoup}
 \end{equation}
 
@@ -231,23 +231,23 @@ In order to compare the decoupling methods the closed loop systems can be evalua
 The step responses and the control signal $u_1, u_2$ for the step response can be seen in figure \ref{fig:decouplingA}.
 
 With a decoupled system, SISO control techniques can be employed.
-Now the control structure (\ref{equ:fbControl}) can be augmented with two PI controllers $F_{PI}$ on the error feedback.
+Now the control structure (\ref{equ:fbControl}) can be augmented with two PI controllers $F_{PI}$ on the feedback error.
 
 \begin{equation}
 \begin{split}
-u(t) &= F_{PI}(r(t) - F_yy(t)) \\
+u(t) &= F_{PI}W^{(ii)}_1(r(t) - F_yy(t)) \\
 F_{PI} &= \frac{10s+1}{10s}
 \begin{pmatrix}
 1 && 0 \\ 0 && 1
 \end{pmatrix} \\
-F_y &= W_2KW^{(ii)}_1
+F_y &= W_2K
 \end{split}
 \end{equation}
 
 The new closed loop system is now:
 
 \begin{equation}
-G_{cl} = \frac{GF_{PI}}{I+GF_{PI}F_y}
+G_{cl} = \frac{GW^{(ii)}_1F_{PI}}{I+GW^{(ii)}_1F_{PI}F_y}
 \end{equation}
 
 The resulting closed loop system can now be evaluated by the same step response, step on $r_1$ and zero on $r_2$.
@@ -343,7 +343,7 @@ L^{(ii)} &=
 \label{equ:lqrCont}
 \end{equation}
 
-The closed loop system with the LQR controller $L$ is in practice identical to the pure decoupling system (\ref{equ:closedLoopDecoup}).
+With a control topology with gain only on the feedback, the closed loops system is quite simple.
 
 \begin{equation}
 G_{cl} = \frac{G}{I + GL}
@@ -354,7 +354,7 @@ The resulting system output and actuation can be seen in result, figure \ref{fig
 
 
 \section{Results}
-This section states the results achieved.
+This section states the results achieved when comparing decentralization, decoupling and optimal control for a Multiple Input, Multiple Output system.
 
 \subsection{Input-Output pairing}
 For the pairing requested, the RGA matrix was consulted and the best pairing is:
@@ -368,7 +368,7 @@ u_2 \leftrightarrow y_2
 
 \subsection{Decoupling}
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \center
 \includegraphics[scale=0.7]{../code/figures/decoupling_a.png}
 \caption{Feedback without (blue) and with decoupling using unitary feedback controller. Steady-state decoupling (red) and approximate decoupling (yellow).}
@@ -376,7 +376,7 @@ u_2 \leftrightarrow y_2
 \end{figure}
 
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \center
 \includegraphics[scale=0.7]{../code/figures/decoupling_b.png}
 \caption{Feedback without (blue) and with decoupling using PI feedback controller. Steady-state decoupling (red) and approximate decoupling (yellow).}
@@ -388,7 +388,7 @@ u_2 \leftrightarrow y_2
 \subsection{Optimal control}
 TODO: Plots
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \center
 \includegraphics[scale=0.7]{../code/figures/lqg.png}
 \caption{Feedback using a LQG controller.}

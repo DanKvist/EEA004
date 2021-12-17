@@ -40,32 +40,32 @@ r = [ones(size(t))' zeros(size(t))'];
 
 %Case 0
 W1_0 = eye(2);
-F_y_0 = W1_0*F_diag*W2;
-G_cl_0 = feedback(G, F_y_0);
+F_y_0 = F_diag*W2;
+G_cl_0 = feedback(W1_0*G, F_y_0);
 
 % Case i
 W1_i = evalfr(G_inv,0i);
-F_y_i = W1_i*F_diag*W2;
-G_cl_i = feedback(G, F_y_i);
+F_y_i = F_diag*W2;
+G_cl_i = feedback(W1_i*G, F_y_i);
 
 %Case ii
 W1_ii = real(evalfr(G_inv,1i/10));
-F_y_ii = W1_ii*F_diag*W2;
-G_cl_ii = feedback(G, F_y_ii);
+F_y_ii = F_diag*W2;
+G_cl_ii = feedback(W1_ii*G, F_y_ii);
 
 
 fig1=figure(1);
 
 y = lsim(G_cl_0, r, t);
-u = ([eye(2) -F_y_0]*[r';y'])';
+u = (W1_0*[eye(2) -F_y_0]*[r';y'])';
 ax = dualPlot(y, u, colors(1));
 
 y = lsim(G_cl_i, r, t);
-u = ([eye(2) -F_y_i]*[r';y'])';
+u = (W1_i*[eye(2) -F_y_i]*[r';y'])';
 ax = [ax dualPlot(y, u, colors(2))];
 
 y = lsim(G_cl_ii, r, t);
-u = ([eye(2) -F_y_ii]*[r';y'])';
+u = (W1_ii*[eye(2) -F_y_ii]*[r';y'])';
 ax = [ax dualPlot(y, u, colors(3))];
 
 legend(ax([1 3 5]), "Baseline (0)", "Case (i)", "Case (ii)");
@@ -76,12 +76,12 @@ saveas(fig1, fullfile(figFolder, 'decoupling_a.png'))
 
 F_y = tf([10 1], [10 0])*eye(2);
 
-G_cl = feedback(F_y*G, W1_ii);
+G_cl = feedback(F_y*W1_ii*G, W2);
 
 fig2=figure();
 
 y = lsim(G_cl, r, t);
-u = lsim(F_y, r - (W1_ii*y')', t);
+u = lsim(F_y*W1_ii, r - y, t);
 ax = dualPlot(y, u, colors(1));
 
 legend(ax(1), "PI controller");
