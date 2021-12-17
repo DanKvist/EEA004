@@ -156,6 +156,7 @@ RGA(G(0)) =
 1.3548 && -0.3548 \\
 -0.3548 && 1.3548
 \end{pmatrix}
+\label{equ:RBAs0}
 \end{equation}
 
 This indicates that a pairing corresponding to the off-diagonal should be avoided.
@@ -168,10 +169,11 @@ RGA(G(\omega_ci)) =
 1.3548 && -0.3548 \\
 -0.3548 && 1.3548
 \end{pmatrix}
+\label{equ:RGAs10}
 \end{equation}
 
-This again indicates the better pairing is choosing the diagonal.
-The chosen pairing is explicitly written out in the results, X)
+Again, this indicates that the better pairing is done by choosing the diagonal.
+The chosen pairing is explicitly written out in the results section (\ref{equ:RGApairing}).
 
 \subsection{Decoupling}
 In this part of the assignment the result from choosing the best input-output pairing shall be compared to using decoupling matrices $W_1$ and $W_2$.
@@ -357,41 +359,46 @@ The resulting system output and actuation can be seen in result, figure \ref{fig
 This section states the results achieved when comparing decentralization, decoupling and optimal control for a Multiple Input, Multiple Output system.
 
 \subsection{Input-Output pairing}
-For the pairing requested, the RGA matrix was consulted and the best pairing is:
+The ideal pairing is provided by the RGA matrix (\ref{equ:RGAs10}) and is found to be:
 
 \begin{equation}
 \begin{split}
 u_1 \leftrightarrow y_1 \\
 u_2 \leftrightarrow y_2
 \end{split}
+\label{equ:RGApairing}
 \end{equation}
 
 \subsection{Decoupling}
 
+The step response of steady-state decoupling and dynamic decoupling is presented in figure \ref{fig:decouplingA}.  A baseline without decoupling is also shown as a reference.
+
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.7]{../code/figures/decoupling_a.png}
-\caption{Feedback without (blue) and with decoupling using unitary feedback controller. Steady-state decoupling (red) and approximate decoupling (yellow).}
+\caption{Feedback with and without decoupling using unitary feedback controller.}
 \label{fig:decouplingA}
 \end{figure}
 
+The step response of steady-state decoupling and dynamic decoupling with the addition of a PI controller is presented in figure \ref{fig:decouplingB}.
 
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.7]{../code/figures/decoupling_b.png}
-\caption{Feedback without (blue) and with decoupling using PI feedback controller. Steady-state decoupling (red) and approximate decoupling (yellow).}
+\caption{Feedback with decoupling using a PI controller.}
 \label{fig:decouplingB}
 \end{figure}
 
 
 
 \subsection{Optimal control}
-TODO: Plots
+
+The results of using an LQR controller is presented in figure \ref{fig:lqgControl} with three different penalty matrixes. 
 
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.7]{../code/figures/lqg.png}
-\caption{Feedback using a LQG controller.}
+\caption{Feedback using an LQR controller with three different penalty matrixes.}
 \label{fig:lqgControl}
 \end{figure}
 
