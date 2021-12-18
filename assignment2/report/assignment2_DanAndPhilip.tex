@@ -56,6 +56,8 @@
   \end{center}
 \end{titlepage}
 
+\tableofcontents
+\clearpage
 
 \section{Introduction}
 This assignment is a continuation from a previous assignment where the dynamics of an air handling unit consisting of a heater and humidifier was analyzed.
@@ -79,10 +81,11 @@ The RGA for any matrix is defined as below \citep[~p.219]{glad00}:
 
 \begin{equation}
 RGA(A) = A.*(A^{-1})^T
+\label{equ:RGA}
 \end{equation}
 
 Here the multiplication is element-wise and the inverse can be exchanged for the pseudo-inverse if $A$ is not square.
-For a system to be controlled by decoupled controllers the input-output pairs should be chosen such that the RGA matrix elements are non-negative for $s=0$ if A is a transfer function $G(s)$.
+For a system to be controlled by decentralized controllers the input-output pairs should be chosen such that the RGA matrix elements are non-negative for $s=0$ if A is a transfer function $G(s)$.
 
 If the RGA matrix doesn't indicate any good decentralized input-output pairs, decoupling can be used.
 Decoupling is done by pre-/post-multiplying the plant by decoupling matrices $W_1 \& W_2$ to modify the plant dynamics.
@@ -109,7 +112,7 @@ Furthermore the Linear Quadratic Gaussian (LQG) is a state feedback controller t
 The criteria that is minimized by the LQG controller is:
 
 \begin{equation}
-V = \Vert z \Vert^2_{Q_1} + \Vert z \Vert^2_{Q_1}
+V = \Vert z \Vert^2_{Q_1} + \Vert z \Vert^2_{Q_2}
 \end{equation}
 
 Where $z$ is the system true output, $u$ is the control action and $Q_1, Q_2$ are weight matrices that are used as design parameters.
@@ -128,7 +131,7 @@ This section describes the methodology used to obtain the requested results in t
 It will go through them step by step, starting by choosing an input-output pairing.
 
 \subsection{Decentralization}
-In order to determine the best control input to plant output pairing one can consult the Relative Gain Array ($RGA(G(s))$).
+In order to determine the best control input to plant output pairing one can consult the Relative Gain Array (\ref{equ:RGA}).
 Since the RGA requires the system inverse, that is where the calculation start.
 
 \begin{equation}
@@ -144,8 +147,8 @@ G^{-1}(s) =
 \label{equ:inverse}
 \end{equation}
 
-Where the operations has been carried out using Matlab.
-Then the RGA can be calculated in Matlab as well.
+Where the inverse operation has been carried out using Matlab \verb|G\eye(2)|.
+The RGA can now be calculated in Matlab.
 
 \begin{equation}
 \begin{split}
@@ -196,7 +199,7 @@ The chosen pairing is explicitly written out in the results section (\ref{equ:RG
 
 \subsection{Decoupling}
 In this part of the assignment the result from choosing the best input-output pairing shall be compared to using decoupling matrices $W_1$ and $W_2$.
-In all cases $W_2 = I$, but $W_1$ shall be chosen $W_1 = G^{-1}(s)$ where there are two cases for $s$, $s_i = 0$ and $s_{ii}=\omega_ci$.
+In all cases $W_2 = I$, but $W_1$ shall be chosen $W_1 = G^{-1}(s)$ where there are two cases for $s$, $s^{(i)} = 0$ and $s^{(ii)}=\omega_ci$.
 These cases represent steady-state decoupling (i) and dynamic decoupling (ii).
 For the benchmark case (0), no decoupling is chosen $W^{(0)}_1 = I$, but merely the pairing.
 The feedback controller is contrived of the decoupling matrix $W_2$ and a gain gain matrix $K = \begin{pmatrix} 1 && 0 \\ 0 && 1 \end{pmatrix}$ and the decoupling matrix $W_1$ act in feedforward on the feedback error.
@@ -211,7 +214,7 @@ F_y &= KW_2
 \end{equation}
 
 To calculate the decoupling matrix $W_1$ the system inverse is required.
-The inverse has already been calculated in (\ref{equ:inverse}), by simple substitution the decoupling matrices can be found.
+The inverse has already been calculated in (\ref{equ:inverse}) and by simple substitution the decoupling matrices can be found.
 
 \begin{equation}
 \begin{split}
@@ -256,7 +259,7 @@ Now the control structure (\ref{equ:fbControl}) can be augmented with two PI con
 
 \begin{equation}
 \begin{split}
-u(t) &= F_{PI}W^{(ii)}_1(r(t) - F_yy(t)) \\
+u(t) &= W^{(ii)}_1F_{PI}(r(t) - F_yy(t)) \\
 F_{PI} &= \frac{10s+1}{10s}
 \begin{pmatrix}
 1 && 0 \\ 0 && 1
@@ -275,9 +278,9 @@ The resulting closed loop system can now be evaluated by the same step response,
 The resulting system response and actuator signal can be seen in results, figure \ref{fig:decouplingB}.
 
 \subsection{Optimal control}
-Instead of performing explicit decoupling, a LQR controller can be used.
-Since a LQR controller require the system states, it is convenient to express $G$ on state space form.
-This was done in the previous assignment, the result is stated here again:
+Instead of performing explicit decoupling, an LQR controller can be used.
+Since an LQR controller require the system states, it is convenient to express $G$ on state space form.
+This was done in the previous assignment, the result is stated here:
 
 \begin{equation}
 \begin{split}
@@ -325,7 +328,7 @@ y &=
 The new state $\tilde{x}$ now represent temperature and humidity and is the same as our measured output $y$.
 The new model will be used for the LQR design and the tilde will be omitted form the new state hereafter.
 
-To design an LQR controller is simple in Matlab through the command \verb|lqr(sys, Q1, Q2)|.
+The design of an LQR controller is simple in Matlab through the command \verb|lqr(sys, Q1, Q2)|.
 It requires the two weight matrices $Q_1$ and $Q_2$.
 It is the relation between the weight matrices that set the cost balance between  reference tracking and actuation effort.
 Three cases will be compared where $Q_1 = I$ and $Q_2 = \alpha I$.
@@ -364,7 +367,7 @@ L^{(ii)} &=
 \label{equ:lqrCont}
 \end{equation}
 
-With a control topology with gain only on the feedback, the closed loops system is quite simple.
+For a control topology with gain only on the feedback, the closed loop system is quite simple.
 
 \begin{equation}
 G_{cl} = \frac{G}{I + GL}
@@ -390,16 +393,18 @@ u_2 \leftrightarrow y_2
 
 \subsection{Decoupling}
 
-The step response of steady-state decoupling and dynamic decoupling is presented in figure \ref{fig:decouplingA}.  A baseline without decoupling is also shown as a reference.
+The step response of decoupling is presented in figure \ref{fig:decouplingA} compared to the baseline without decoupling as a reference.
+The actuator signal is also shown and the second input $u_2$ and second output $u_2$ of the MIMO system is the dashed lines.
+
+The step response of decoupling, augmented by a PI controller is presented in figure \ref{fig:decouplingB}.
+Again it is evaluated by a step response.
 
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.9]{../code/figures/decoupling_a.png}
-\caption{Feedback with and without decoupling using unitary feedback controller.}
+\caption{Feedback with and without decoupling using a unitary feedback controller.}
 \label{fig:decouplingA}
 \end{figure}
-
-The step response of steady-state decoupling and dynamic decoupling with the addition of a PI controller is presented in figure \ref{fig:decouplingB}.
 
 \begin{figure}[H]
 \center
@@ -412,12 +417,12 @@ The step response of steady-state decoupling and dynamic decoupling with the add
 
 \subsection{Optimal control}
 
-The results of using an LQR controller is presented in figure \ref{fig:lqgControl} with three different penalty matrixes. 
+The results of using an LQR controller is presented in figure \ref{fig:lqgControl} with three different penalty matrices on the actuator effort. 
 
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.9]{../code/figures/lqg.png}
-\caption{Feedback using an LQR controller with three different penalty matrixes.}
+\caption{Feedback using an LQR controller with three different penalty matrices on the actuator effort.}
 \label{fig:lqgControl}
 \end{figure}
 
@@ -430,25 +435,25 @@ That means using the heater for temperature control and humidifier for humidity 
 Taking the control one step further with decoupling it was possible to compare with the results using pure decentralization.
 It was noted that steady-state decoupling $s=0$ and dynamic decoupling $s=i/10$ produced the same decoupling matrices.
 This was not initially expected.
-However, closer review of the system transfer function inverse, $G_{-1}$, reminds us that it comprises of first-order polynomials only, and therefore, the results are the same after the imaginary part is dropped.
+However, closer review of the system transfer function inverse, $G^{-1}$, reminds us that it comprises of first-order polynomials only, and therefore, the results are the same after the imaginary part is dropped.
 In contrast, however, a second or higher order transfer function in $G(s)$ would result in a change in the real part of G as well as the imaginary part and different results would be obtained.
 The results of decoupling shown in figure \ref{fig:decouplingA} show only a single line for case (i) \& (ii) due to this.
 The Baseline case with only pairing show slight couplings effect in figure \ref{fig:decouplingA} where $y_2$ goes negative as a reaction to the step input on temperature.
 It also show a fairly quick response with a rise time around 10s.
-With decoupling implemented the coupling effect into $y_2$ from the step on temperature is gone completely.
-But the system is know considerably slower with a rise time around 50s, but also a much calmer actuator usage.
+With decoupling implemented the coupling effect into $y_2$ from the step on temperature are gone completely.
+But the system is now considerably slower with a rise time around 50s, but also a much calmer actuator usage.
 It is seen in the results that the DC gain of the closed loop system is not unity.
 This can be mitigated by using a pre-filter $F_r$ to scale the closed loop gain, but was explicitly discouraged in the assignment.
 
 Adding a PI controller for the decoupled system has the advantage of removing the steady state error without a pre-filter.
-It also allow design of the closed loop deynamics and with the specific controller gains used the rise time has been reduced to roughly 35s for the decoupled system.
-However, the integral part of the PI controller has made the closed loop system second order and the system now overshoot and oscillates a bit.
-The system is with PI control still well decoupled as there is no noticeable effect on the humidity when commanding a step on temperature.
+It also allow design of the closed loop dynamics and with the specified controller gains the rise time has been reduced to roughly 35s for the decoupled system.
+However, the integral part of the PI controller has made the closed loop system second order and the system now exhibits overshoot and oscillation.
+The system is with PI control still well decoupled as there is no noticeable effect on the humidity when commanding a temperature step.
 
 Using the LQ control method for a state feedback design instead of decoupling matrices appears to be able to achieve decoupling to some extent.
 Most visible in figure \ref{fig:lqgControl} is however the fact that when the penalty is low on control action the step response is faster.
 The coupling effect when using the LQR is also notably higher when using a larger control action penalty as can be noted on the dashed lines for $y_2$ in figure \ref{fig:lqgControl}.
-Noted in the teh optimal control strategy is that for a higher control input penalty, the control signal is actually larger.
+Noted in the the optimal control strategy is that for a higher control input penalty, the control signal is actually larger.
 This is not intuitive at first glace but can be explained by the fact that the system is exposed to a step input.
 The cost function optimized with the \verb|lqr| command in Matlab does by default optimize for a case where the expected output is 0 and the expected control input is also 0.
 This is not the case for a step response and no method to modify this was found going though the Matlab documentation.
@@ -459,9 +464,9 @@ This could better represent the control action required if the system would be i
 
 It has been demonstrated that SISO feedback control can be utilized in a decentralized method for some systems by adequately choosing the best input-output pairing.
 However, with good knowledge of the system model one can achieve even better SISO results by decoupling the system using decoupling matrices.
-An alternative when SISO control might not be sufficient is to utilize Linear Quadratic control.
+An alternative, when SISO control might not be sufficient, is to utilize Linear Quadratic control.
 This has been demonstrated to also achieve decoupling to some extent based on the choice of penalty matrices.
-LQ control is considered a Multi Input Multi Output (MIMO) control method and is easily augmented to handle noise and disturbances, but also scaled to handle more complex systems.
+LQ control is considered a Multiple Input, Multiple Output (MIMO) control method and is easily augmented to handle noise and disturbances, but can also be scaled to handle more complex systems.
 
 
 
@@ -471,15 +476,8 @@ LQ control is considered a Multi Input Multi Output (MIMO) control method and is
 \clearpage
 \appendix
 
-\section{Example Section}
-This is an example reference \citep{glad00}.
-
-%\begin{figure}[h!]
-%\center
-%\includegraphics[scale=0.8]{../code/figures/exampleFigure.png}
-%\caption{Example caption.}
-%\label{fig:exampleLable}
-%\end{figure}
+\section{Appendix}
+Here is the Matlab code used to generate the results in the report and the figures.
 
 \lstinputlisting{../code/main.m}
 
