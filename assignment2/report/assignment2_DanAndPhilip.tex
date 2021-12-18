@@ -83,7 +83,25 @@ RGA(A) = A.*(A^{-1})^T
 Here the multiplication is element-wise and the inverse can be exchanged for the pseudo-inverse if $A$ is not square.
 For a system to be controlled by decoupled controllers the input-output pairs should be chosen such that the RGA matrix elements are non-negative for $s=0$ if A is a transfer function $G(s)$.
 
-TODO: Part about decoupling matrices
+If the RGA matrix doesn't indicate any good decentralized input-output pairs, decoupling can be used.
+Decoupling is done by pre-/post-multiplying the plant by decoupling matrices $W_1 \& W_2$ to modify the plant dynamics.
+
+\begin{equation}
+\tilde{G}(s) = W_2(s)G(s)W_1(s)
+\end{equation}
+
+The decoupling matrices should be chosen such that $RGA(\tilde{G}(s))$ indicate desired properties for decentralized control.
+This is of course achieved when $\tilde{G}(s)$ is diagonal and hence completely decoupled.
+Such $W_i$ will be dynamic and requires very good knowledge about the model.
+A more common, simpler choice is steady state decoupling where $\tilde{G}(0)$ is made diagonal by using constant, real-valued matrices $W_i$.
+Another alternative is to make $\tilde{G}(\omega i)$ diagonal for some frequency $\omega$, normally the cross-over frequency. \citep[~p.226]{glad00}
+
+
+
+
+
+
+
 
 A Linear Quadratic Regulator (LQR) is a state feedback controller that is optimal based on some defined cost.
 Furthermore the Linear Quadratic Gaussian (LQG) is a state feedback controller that is optimal in the presence of system disturbances.
