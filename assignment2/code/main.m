@@ -34,7 +34,7 @@ F_diag = eye(2);
 W2 = eye(2);
 G_inv = G\eye(2);
 
-t = 0:200;
+t = 0:100;
 r = [ones(size(t))' zeros(size(t))'];
 
 
@@ -80,8 +80,8 @@ G_cl = feedback(F_y*W1_ii*G, W2);
 
 fig2=figure();
 
-y = lsim(G_cl, r, t);
-u = lsim(F_y*W1_ii, r - y, t);
+y = lsim(G_cl, [r;r], [t 101:201]);
+u = lsim(F_y*W1_ii, [r;r] - y, [t 101:201]);
 ax = dualPlot(y, u, colors(1));
 
 legend(ax(1), "PI controller");
@@ -113,15 +113,15 @@ G_cl_ii = feedback(G_ss, L_ii);
 
 fig3=figure(3);
 
-y = lsim(G_cl_0, u, t);
+y = lsim(G_cl_0, r, t);
 u = ([eye(2) -L_0]*[r';y'])';
 ax = dualPlot(y, u, colors(1));
 
-y = lsim(G_cl_i, u, t);
+y = lsim(G_cl_i, r, t);
 u = ([eye(2) -L_i]*[r';y'])';
 ax = [ax dualPlot(y, u, colors(2))];
 
-y = lsim(G_cl_ii, u, t);
+y = lsim(G_cl_ii, r, t);
 u = ([eye(2) -L_ii]*[r';y'])';
 ax = [ax dualPlot(y, u, colors(3))];
 

@@ -69,6 +69,7 @@ G(s) =
 \frac{15}{50s + 1} && \frac{-11}{10s + 1} \\[6pt]
 \frac{-25}{50s + 1} && \frac{70}{10s + 1}
 \end{pmatrix}
+\label{equ:origianlG}
 \end{equation}
 
 \subsection{Theory}
@@ -393,7 +394,7 @@ The step response of steady-state decoupling and dynamic decoupling is presented
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.7]{../code/figures/decoupling_a.png}
+\includegraphics[scale=0.9]{../code/figures/decoupling_a.png}
 \caption{Feedback with and without decoupling using unitary feedback controller.}
 \label{fig:decouplingA}
 \end{figure}
@@ -402,7 +403,7 @@ The step response of steady-state decoupling and dynamic decoupling with the add
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.7]{../code/figures/decoupling_b.png}
+\includegraphics[scale=0.9]{../code/figures/decoupling_b.png}
 \caption{Feedback with decoupling using a PI controller.}
 \label{fig:decouplingB}
 \end{figure}
@@ -415,7 +416,7 @@ The results of using an LQR controller is presented in figure \ref{fig:lqgContro
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.7]{../code/figures/lqg.png}
+\includegraphics[scale=0.9]{../code/figures/lqg.png}
 \caption{Feedback using an LQR controller with three different penalty matrixes.}
 \label{fig:lqgControl}
 \end{figure}
@@ -423,10 +424,46 @@ The results of using an LQR controller is presented in figure \ref{fig:lqgContro
 
 \section{Discussion}
 
-TODO: This is a place holder so we don't forget...
-It was noted that steady-state decoupling (s=0) and dynamic decoupling (s=1/10) produced the same results.  This was not initially expected.  However, closer review of the system transfer function, G, reminds us that it comprises of first-order transfer functions only, and therefore, the results are the same after the imaginary part is dropped.  In contrast, however, a second, or higher, order transfer function would result in a change in the real part of G as well as the imaginary part and different results would be obtained.
+Using the RGA it was discovered that the best pairing is the same as one would guess knowing there is a heater and humidifier.
+That means using the heater for temperature control and humidifier for humidity control as would seem logical without the RGA evaluation.
+
+Taking the control one step further with decoupling it was possible to compare with the results using pure decentralization.
+It was noted that steady-state decoupling $s=0$ and dynamic decoupling $s=i/10$ produced the same decoupling matrices.
+This was not initially expected.
+However, closer review of the system transfer function inverse, $G_{-1}$, reminds us that it comprises of first-order polynomials only, and therefore, the results are the same after the imaginary part is dropped.
+In contrast, however, a second or higher order transfer function in $G(s)$ would result in a change in the real part of G as well as the imaginary part and different results would be obtained.
+The results of decoupling shown in figure \ref{fig:decouplingA} show only a single line for case (i) \& (ii) due to this.
+The Baseline case with only pairing show slight couplings effect in figure \ref{fig:decouplingA} where $y_2$ goes negative as a reaction to the step input on temperature.
+It also show a fairly quick response with a rise time around 10s.
+With decoupling implemented the coupling effect into $y_2$ from the step on temperature is gone completely.
+But the system is know considerably slower with a rise time around 50s, but also a much calmer actuator usage.
+It is seen in the results that the DC gain of the closed loop system is not unity.
+This can be mitigated by using a pre-filter $F_r$ to scale the closed loop gain, but was explicitly discouraged in the assignment.
+
+Adding a PI controller for the decoupled system has the advantage of removing the steady state error without a pre-filter.
+It also allow design of the closed loop deynamics and with the specific controller gains used the rise time has been reduced to roughly 35s for the decoupled system.
+However, the integral part of the PI controller has made the closed loop system second order and the system now overshoot and oscillates a bit.
+The system is with PI control still well decoupled as there is no noticeable effect on the humidity when commanding a step on temperature.
+
+Using the LQ control method for a state feedback design instead of decoupling matrices appears to be able to achieve decoupling to some extent.
+Most visible in figure \ref{fig:lqgControl} is however the fact that when the penalty is low on control action the step response is faster.
+The coupling effect when using the LQR is also notably higher when using a larger control action penalty as can be noted on the dashed lines for $y_2$ in figure \ref{fig:lqgControl}.
+Noted in the teh optimal control strategy is that for a higher control input penalty, the control signal is actually larger.
+This is not intuitive at first glace but can be explained by the fact that the system is exposed to a step input.
+The cost function optimized with the \verb|lqr| command in Matlab does by default optimize for a case where the expected output is 0 and the expected control input is also 0.
+This is not the case for a step response and no method to modify this was found going though the Matlab documentation.
+An interesting continuation would be to add the pre-filter that normalize the closed loop system to have unit DC gain.
+This could better represent the control action required if the system would be implemented in practice.
 
 \section{Conclusion}
+
+It has been demonstrated that SISO feedback control can be utilized in a decentralized method for some systems by adequately choosing the best input-output pairing.
+However, with good knowledge of the system model one can achieve even better SISO results by decoupling the system using decoupling matrices.
+An alternative when SISO control might not be sufficient is to utilize Linear Quadratic control.
+This has been demonstrated to also achieve decoupling to some extent based on the choice of penalty matrices.
+LQ control is considered a Multi Input Multi Output (MIMO) control method and is easily augmented to handle noise and disturbances, but also scaled to handle more complex systems.
+
+
 
 \clearpage
 \bibliography{reference}
