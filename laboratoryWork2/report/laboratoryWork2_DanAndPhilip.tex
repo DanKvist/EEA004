@@ -81,7 +81,9 @@ The ball is assumed to roll on the beam without slipping under to force of gravi
  \label{tab:quantities}
 \end{table}
 
-
+Please note that throughout this report radians have been used for measuring angle.
+This means that any reference for $\theta$ has radians as units and any reference to $\dot{\theta}$ has radians per second as unit.
+This despite the laboratory instruction refer to degree as the angle unit, values have been converted where relevant. 
 
 \section{Theory}
 State space systems are a common way to represent dynamic systems.
@@ -383,7 +385,7 @@ Using these, controllability can be checked easily and all the requested combina
 Please note that the numerical solution requires numerical matrices for $a, B \& C$, hence the frequently used equilibrium $\textbf{x}_0 = \begin{pmatrix} 0 & 0 & 0 & 0 \end{pmatrix}^T$ has been used.
 The result is that the system is controllable and all cases $i - vi$ are observable
 
-\subsubsection{Control by pole placement}
+\subsubsection{Controller design by pole placement}
 In the next sections feedback controllers are designed.
 In order to limit the scope of the lab, it is assumed that all the states can be measured.
 This reduces to problem to not require an observer.
@@ -410,32 +412,56 @@ Then the DC gain can be normalized with the reference feed-forward controller.
 
 \begin{equation}
 L_r = (C(-A + BL)^{-1}B)^{\dagger}
+\label{equ:prefilter}
 \end{equation}
 
 Where the $\dagger$ symbol refers to pseudo-inverse.
 The assignment then ask to place the poles in $\begin{pmatrix} -7 & -7 & 0.5+0.5i & 0.5-0.5i \end{pmatrix}$, but since this is an unstable set, the system will not respond in a stable manner.
 Instead the poles have been placed through purposeful trial and error to try and accommodate the step response specifications of maximum 20\% overshoot and 3s settling time.
-The poles $\begin{pmatrix} -7 & -6 & -3+3i & -3-3i \end{pmatrix}$ have been found to generate a good step response on the linearized system.
+The closed-loop poles $\begin{pmatrix} -7 & -6 & -3+3i & -3-3i \end{pmatrix}$ have been found to generate a good step response on the linearized system.
 The controller with those poles are now tested with an initial condition of $\textbf{x}_0 = \begin{pmatrix} 0.4 & 0.2 & 0.0175 & 0.0052 \end{pmatrix}^T$ and a reference of zero.
-The result with the linearized system can be seen in figure X and the result with the nonlinear equations can be seen in figure Y.
+The result with the linearized system can be seen in figure \ref{fig:poleLin} and the result with the nonlinear equations can be seen in figure \ref{fig:poleNon}.
+To test the results on the nonlinear system a feedback system was built in Simulink utilizing the ball and beam model from figure \ref{fig:ballBeamSimulink}.
+It utilizes the standard state feedback controller form for $L$ with a prefilter $L_r$ on the reference input, see figure \ref{fig:feedbackSys}.
 
+\begin{figure}[h!]
+\center
+\includegraphics[scale=0.4]{../figures/feedbackSystemSimulink.png}
+\caption{Simulink implementation of state feedback for the nonlinear ball and beam implementation. The step input here has mainly been used for testing purposes while the results in the report use a zero reference for all states.}
+\label{fig:feedbackSys}
+\end{figure}
 
-\subsubsection{Optimal control}
+\subsubsection{Optimal controller design}
+Optimal control is achieved by minimizing a cost function:
 
+\begin{equation}
+J = \int_0^{\infty} \Delta \textbf{x}^TQ\Delta \textbf{x} + \Delta u^TR\Delta u\,dt
+\end{equation}
 
+The controller on the same form as before (\ref{equ:controller}) that minimizes the cost function can be found using the built-in Matlab function \verb|lqr(sys, Q, R)|.
+Then the prefilter for unity DC gain $L_r$ can be calculated just as before (\ref{equ:prefilter}) as well.
+The operation start by using an identity matrix for $Q$ and $1$ for $R$, then by purpose full trial and error weights that generate good results where found.
+The resulting weights that was found are:
 
+\begin{equation}
+Q = \begin{pmatrix}
+30 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}, \; 
+R = 1
+\end{equation}
 
+The performance results of the optimal controller for the same initial conditions as before and a return to zero step can be seen in results, figure \ref{fig:lqrLin} for the linearized system and figure \ref{fig:lqrNon} for the nonlinear ball and beam.
 
-
-
-
-
-
-
-
-
-
-
+\subsubsection{Controller comparison}
+The pole placement method and the optimal control approach used in previous sections are now compared.
+They are compared using the norms of the error signal and the control signal, taking advantage of the Matlab function \verb|norm|.
+The norm of the error signal is calculated over full state vector error to incorporate the whole system divergence from the reference.
+Additionally they are compared using overshoot, calculated on only the ball position value $r$.
+Also the settling time of the ball position is compared for a settling within $\pm5\%$.
+The calculated comparison result can be found under results, table \ref{tab:compare}.
 
 
 
@@ -449,19 +475,19 @@ The linearized system for the ball and beam is presented below for an equilibriu
 
 \begin{equation}
 \begin{split}
-\dot{\textbf{x}} &= 
+\dot{\Delta\textbf{x}} &= 
 \begin{pmatrix}
 0 & 1 & 0 & 0 \\
 0 & 0 & \frac{mg}{J_R/R^2 + m} & 0 \\
 0 & 0 & 0 & 1 \\
 \frac{mg}{J + mr_0^2} & 0 & 0 & 0
-\end{pmatrix}\textbf{x} + \begin{pmatrix}
+\end{pmatrix}\Delta\textbf{x} + \begin{pmatrix}
 0 \\ 0 \\ 0 \\ \frac{1}{J + mr_0^2}
-\end{pmatrix}\tau \\
-y &= \begin{pmatrix}
+\end{pmatrix}\Delta\tau \\
+\Delta y &= \begin{pmatrix}
 1 & 0 & 0 & 0 \\
 1 & 0 & 1 & 0
-\end{pmatrix}\textbf{x}
+\end{pmatrix}\Delta\textbf{x}
 \end{split}
 \label{equ:linSys}
 \end{equation}
@@ -472,14 +498,14 @@ Simulating the nonlinear equations in (\ref{equ:nonLinSs}) and their response to
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.8]{../code/figures/bbStep.png}
+\includegraphics[scale=0.75]{../code/figures/bbStep.png}
 \caption{Ball and beam step response to a torque step of 0.1Nm at 0.1s.}
 \label{fig:bbStep}
 \end{figure}
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.8]{../code/figures/sineWave.png}
+\includegraphics[scale=0.75]{../code/figures/sineWave.png}
 \caption{Ball and beam sine wave response to a sine wave of amplitude 0.2Nm and frequency 100Hz. The sine wave has been made to attempt to hold the ball on the beam for as long as possible.}
 \label{fig:sineWave}
 \end{figure}
@@ -490,7 +516,7 @@ This solution has been calculated explicitly and by simulation and the differenc
 
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.8]{../code/figures/zeroIn.png}
+\includegraphics[scale=0.75]{../code/figures/zeroIn.png}
 \caption{Difference between the explicit solution and the simulated solution for the linearized ball and beam system}
 \label{fig:zeroIn}
 \end{figure}
@@ -499,15 +525,64 @@ This solution has been calculated explicitly and by simulation and the differenc
 The linearized system (\ref{equ:linSys}) is controllable.
 The system is also observable for all cases $i - vi$ of $y$.
 
+\subsection{Controller design by pole placement}
+The state feedback controller that was designed using pole placement with poles at  $\begin{pmatrix} -7 & -6 & -3+3i & -3-3i \end{pmatrix}$ gave performance on the linearized system seen in figure \ref{fig:poleLin}.
+The performance of the same controller on the nonlinear ball and beam equations can be seen in figure \ref{fig:poleNon}.
+The evaluation was done checking the return to zero response of the system with an initial condition of $\textbf{x}_0 = \begin{pmatrix} 0.4 & 0.2 & 0.0175 & 0.0052 \end{pmatrix}^T$.
 
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.75]{../code/figures/figPoleLin.png}
+\caption{Linearized system response with a state feedback controller designed to have closed-loop poles in $\begin{pmatrix} -7 & -6 & -3+3i & -3-3i \end{pmatrix}$.}
+\label{fig:poleLin}
+\end{figure}
 
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.75]{../code/figures/figPoleNon.png}
+\caption{Nonlinear ball and beam system response with a state feedback controller designed to have closed-loop poles in $\begin{pmatrix} -7 & -6 & -3+3i & -3-3i \end{pmatrix}$.}
+\label{fig:poleNon}
+\end{figure}
 
+\subsection{Optimal controller design}
+The state feedback controller that was designed using optimal control methods gave performance on the linearized system seen in figure \ref{fig:lqrLin}.
+The performance of the same controller on the nonlinear ball and beam equations can be seen in figure \ref{fig:lqrNon}.
+The evaluation was done checking the return to zero response of the system with an initial condition of $\textbf{x}_0 = \begin{pmatrix} 0.4 & 0.2 & 0.0175 & 0.0052 \end{pmatrix}^T$.
 
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.75]{../code/figures/figLqrLin.png}
+\caption{Linearized system response with a state feedback controller designed using optimal control techniques.}
+\label{fig:lqrLin}
+\end{figure}
 
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.75]{../code/figures/figLqrNon.png}
+\caption{Nonlinear ball and beam system response with a state feedback controller designed using optimal control techniques..}
+\label{fig:lqrNon}
+\end{figure}
 
+\subsection{Controller comparison}
+The table \ref{tab:compare} below showcase the performance metrics comparison between the usage of pole placement and optimization for state feedback control.
 
-
-
+\begin{table}[h!]
+\centering
+ \begin{tabular}{||c c c||} 
+ \hline
+ Metric & Pole placement & Optimization \\ [0.5ex] 
+ \hline\hline
+ $\left\lVert \textbf{e}(t)\right\rVert_2^2$ & 30.4 & 22.0 \\ 
+ $\left\lVert \textbf{e}(t)\right\rVert_\infty$ & 9.1 & 6.6 \\
+ $\left\lVert u(t)\right\rVert_2^2$ & 4.1 & 4.8 \\
+ $\left\lVert u(t)\right\rVert_\infty$ & 0.55 & 0.99 \\
+ overshoot [\%] & 31.8 & 0.0 \\
+ settling time [s] & 1.75 & 1.60 \\ [1ex] 
+ \hline
+ \end{tabular}
+ \caption{Comparison of pole placement method and optimal control method performance on a return to zero response for the nonlinear ball and beam.}
+ \label{tab:compare}
+\end{table}
 
 
 \section{Discussion}

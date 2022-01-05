@@ -88,13 +88,15 @@ end
 
 
 %% Simulate system with zero input
+
+%input
 u = zeros(size(t));
 
+%simulate linear system
 y_sim = lsim(linSS, u, t, x_0);
 
 zeroIn = figure(3);
 plot(t, y_cal' - y_sim)
-
 title({'Linearized Ball and Beam', 'Difference between calculation and simulation'})
 xlabel('Time [s]')
 ylabel('States')
@@ -107,7 +109,6 @@ saveas(zeroIn, fullfile(figFolder, 'zeroIn.png'))
 rank(ctrb(linSS))
 
 %% Observability
-
 disp('i')
 disp(rank(obsv(linSS)))
 
@@ -139,14 +140,17 @@ C = [1 0 0 0;
      0 0 1 0;
      0 0 0 1;];
  
-
+%Design parameters
 p = [-7 -6 -3+3i -3-3i];
+
+%Controller design
 L = place(A, B, p);
 L_r = pinv(C*inv(-A + B*L)*B);
 
-
+%Linearized closed loop system
 feedbackSys = ss(A-B*L, B*L_r, C, D);
 
+%Simulate linear system
 t = 0:0.01:5;
 u = zeros(length(t),4);
 % u(:,1) = 0.1;
@@ -162,11 +166,12 @@ legend('r', 'd/dt{r}', '\theta', 'd/dt{\theta}')
 
 saveas(figPoleLin, fullfile(figFolder, 'figPoleLin.png'))
 
+%Simulate nonlinear system
 load_system('feedbackControl')
-outLin = sim('feedbackControl',5);
+outPole = sim('feedbackControl',5);
 
 figPoleNon = figure(5);
-plot(outLin.yout{1}.Values)
+plot(outPole.yout{1}.Values)
 title({'Nonlinear Ball and Beam', 'pole placement control'})
 xlabel('time [s]')
 ylabel('states')
@@ -176,17 +181,21 @@ saveas(figPoleNon, fullfile(figFolder, 'figPoleNon.png'))
 
 %% Optimal control
 
-Q = [30     0       0       0;
+%Design parameters
+Q = [1      0       0       0;
      0      1       0       0;
      0      0       1       0;
-     0      0       0       1];
-R = 1;
+     0      0       0       3];
+R = 200;
 
+%Controller design
 L = lqr(A, B, Q, R);
 L_r = pinv(C*inv(-A + B*L)*B);
 
+%Linearized closed loop system
 feedbackSys = ss(A-B*L, B*L_r, C, D);
 
+%Simulate linear system
 t = 0:0.01:5;
 u = zeros(length(t),4);
 % u(:,1) = 0.1;
@@ -203,14 +212,51 @@ legend('r', 'd/dt{r}', '\theta', 'd/dt{\theta}')
 
 saveas(figLqrLin, fullfile(figFolder, 'figLqrLin.png'))
 
+%Simulate nonlinear system
 load_system('feedbackControl')
-outNon = sim('feedbackControl',5);
+outLqr = sim('feedbackControl',5);
 
 figLqrNon = figure(7);
-plot(outNon.yout{1}.Values)
+plot(outLqr.yout{1}.Values)
 title({'Nonlinear Ball and Beam', 'LQR control'})
 xlabel('time [s]')
 ylabel('states')
 legend('r', 'd/dt{r}', '\theta', 'd/dt{\theta}')
 
 saveas(figLqrNon, fullfile(figFolder, 'figLqrNon.png'))
+
+%% Controller comparison
+
+stepSize = 0.4;
+settleThreshold = 0.05 * stepSize;
+
+metric = [  "Error norm2";...
+            "Error normInf";...
+            "Control norm2";...
+            "Control normInf";...
+            "Overshoot";...
+            "Settling time"];
+
+%Pole placement
+pPlace = norm(outPole.yout{3}.Values.Data);
+pPlace = [pPlace; norm(outPole.yout{3}.Values.Data, inf)];
+pPlace = [pPlace; norm(outPole.yout{2}.Values.Data)];
+pPlace = [pPlace; norm(outPole.yout{2}.Values.Data, inf)];
+pPlace = [pPlace; abs(min(outPole.yout{1}.Values.Data(:,1)) / stepSize)];
+
+notSettled =    outPole.yout{1}.Values.Data(:,1) > settleThreshold |...
+                outPole.yout{1}.Values.Data(:,1) < -settleThreshold;
+pPlace = [pPlace; outPole.yout{1}.Values.Time(find(notSettled,1,'last'))];
+
+%LQR design
+lqrDes = norm(outLqr.yout{3}.Values.Data);
+lqrDes = [lqrDes; norm(outLqr.yout{3}.Values.Data, inf)];
+lqrDes = [lqrDes; norm(outLqr.yout{2}.Values.Data)];
+lqrDes = [lqrDes; norm(outLqr.yout{2}.Values.Data, inf)];
+lqrDes = [lqrDes; abs(min(outLqr.yout{1}.Values.Data(:,1)) / stepSize)];
+
+notSettled =    outLqr.yout{1}.Values.Data(:,1) > settleThreshold |...
+                outLqr.yout{1}.Values.Data(:,1) < -settleThreshold;
+lqrDes = [lqrDes; outLqr.yout{1}.Values.Time(find(notSettled,1,'last'))];
+
+table(metric, pPlace, lqrDes)
