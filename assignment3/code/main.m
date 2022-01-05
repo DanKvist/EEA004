@@ -1,46 +1,58 @@
 %% Assignement main script
-% Designed to execute all other relevant scripts for the assignment
-
-%run('exampleCode.m')
+% Configuration
 clear all;
 close all;
 clc;
 
+%For saving figures
+figFolder = "figures";
+mkdir(figFolder)
+
+%
 G1 = tf(1, [1 1 1])
 G2 = tf(1, [1 3])
 Kvs = [1 1.6 2.5 4 6.3 10 16];
+
+%
 k1 = 1/0.6;
-k2 = 0.5/1;
+k2 = 0.6;
 m=((1/k1)+(1/k2))/2;
 r=abs(((1/k1)-(1/k2))/2);
 
-figure
+fig1 = figure(1);
 nyquist(Kvs(1)*G1*G2)
 circle(m,r);
+saveas(fig1, fullfile(figFolder, 'nyquist1.png'))
 
-figure
+fig2 = figure(2);
 nyquist(Kvs(2)*G1*G2)
 circle(m,r);
+saveas(fig2, fullfile(figFolder, 'nyquist2.png'))
 
-figure
+fig3 = figure(3);
 nyquist(Kvs(3)*G1*G2)
 circle(m,r);
+saveas(fig3, fullfile(figFolder, 'nyquist3.png'))
 
-figure
+fig4 = figure(4);
 nyquist(Kvs(4)*G1*G2)
 circle(m,r);
+saveas(fig4, fullfile(figFolder, 'nyquist4.png'))
 
-figure
+fig5 = figure(5);
 nyquist(Kvs(5)*G1*G2)
 circle(m,r);
+saveas(fig5, fullfile(figFolder, 'nyquist5.png'))
 
-figure
+fig6 = figure(6);
 nyquist(Kvs(6)*G1*G2)
 circle(m,r);
+saveas(fig6, fullfile(figFolder, 'nyquist6.png'))
 
-figure
+fig7 = figure(7);
 nyquist(Kvs(7)*G1*G2)
 circle(m,r);
+saveas(fig7, fullfile(figFolder, 'nyquist7.png'))
 
 %G_cl = feedback(Kvs*G1*G2,[1 1 1 1 1 1 1]')
 
