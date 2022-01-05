@@ -64,22 +64,32 @@ A = [   0                       1   0                   0;
         0                       0   0                   1;
         m*g/(J + m*x_0(1)^2)    0   0                   0];
         
+uncertA = [ 0                           1   0                   0;
+            0                           0   m*g/(J_R/R^2 + m)   0;
+            0                           0   0                   1;
+            m*g/(1.15*J + m*x_0(1)^2)   0   0                   0];
+    
 B = [   0;
         0;
         0;
         1/(J + m*x_0(1)^2)];
+    
+uncertB = [   0;
+        0;
+        0;
+        1/(1.15*J + m*x_0(1)^2)];
     
 C = [   1   0   0   0;
         0   0   1   0];
 
 D = 0;
 
-linSS = ss(A,B,C,D);
+linSS = ss(A, B, C, D);
 linTF = tf(linSS);
-
 %% Calculate the zero input solution
 t = 0:0.01:1;
 x_0 = [0.2; 0.05; deg2rad(1); deg2rad(0.01)];
+% x_0 = [0.2; 0.05; 1; 0.01];
 
 y_cal = zeros(2, length(t));
 for k = 1:length(t)
@@ -144,17 +154,18 @@ C = [1 0 0 0;
 p = [-7 -6 -3+3i -3-3i];
 
 %Controller design
-L = place(A, B, p);
-L_r = pinv(C*inv(-A + B*L)*B);
+ppL = place(A, B, p);
+ppL_r = pinv(C*inv(-A + B*ppL)*B);
 
 %Linearized closed loop system
-feedbackSys = ss(A-B*L, B*L_r, C, D);
+feedbackSys = ss(A-B*ppL, B*ppL_r, C, D);
 
 %Simulate linear system
 t = 0:0.01:5;
 u = zeros(length(t),4);
 % u(:,1) = 0.1;
 x_0 = [0.4 0.2 deg2rad(1) deg2rad(0.3)];
+% x_0 = [0.4 0.2 1 0.3];
 y = lsim(feedbackSys, u, t, x_0);
 
 figPoleLin = figure(4);
@@ -167,6 +178,8 @@ legend('r', 'd/dt{r}', '\theta', 'd/dt{\theta}')
 saveas(figPoleLin, fullfile(figFolder, 'figPoleLin.png'))
 
 %Simulate nonlinear system
+L = ppL;
+L_r = ppL_r;
 load_system('feedbackControl')
 outPole = sim('feedbackControl',5);
 
@@ -189,17 +202,18 @@ Q = [1      0       0       0;
 R = 200;
 
 %Controller design
-L = lqr(A, B, Q, R);
-L_r = pinv(C*inv(-A + B*L)*B);
+lqrL = lqr(A, B, Q, R);
+lqrL_r = pinv(C*inv(-A + B*lqrL)*B);
 
 %Linearized closed loop system
-feedbackSys = ss(A-B*L, B*L_r, C, D);
+feedbackSys = ss(A-B*lqrL, B*lqrL_r, C, D);
 
 %Simulate linear system
 t = 0:0.01:5;
 u = zeros(length(t),4);
 % u(:,1) = 0.1;
 x_0 = [0.4 0.2 deg2rad(1) deg2rad(0.3)];
+% x_0 = [0.4 0.2 1 0.3];
 % x_0 = [0; 0; 0; 0];
 y = lsim(feedbackSys, u, t, x_0);
 
@@ -213,6 +227,8 @@ legend('r', 'd/dt{r}', '\theta', 'd/dt{\theta}')
 saveas(figLqrLin, fullfile(figFolder, 'figLqrLin.png'))
 
 %Simulate nonlinear system
+L = lqrL;
+L_r = lqrL_r;
 load_system('feedbackControl')
 outLqr = sim('feedbackControl',5);
 
@@ -260,3 +276,43 @@ notSettled =    outLqr.yout{1}.Values.Data(:,1) > settleThreshold |...
 lqrDes = [lqrDes; outLqr.yout{1}.Values.Time(find(notSettled,1,'last'))];
 
 table(metric, pPlace, lqrDes)
+
+%% Uncertain plant model
+
+%Build uncertain linear feedback systems
+uncertPpSys = ss(uncertA - B*ppL, uncertB*ppL_r, C, D);
+uncertLqrSys = ss(uncertA - B*lqrL, uncertB*lqrL_r, C, D);
+
+%Simulate uncertain linear system
+t = 0:0.01:5;
+u = zeros(length(t),4);
+x_0 = [0.4 0.2 deg2rad(1) deg2rad(0.3)];
+% x_0 = [0.4 0.2 1 0.3];
+ppY = lsim(uncertPpSys, u, t, x_0);
+lqrY = lsim(uncertLqrSys, u, t, x_0);
+
+%Uncertain beam inerita example
+J = 1.15*J;
+
+%Simulate uncertain nonlinear system
+L = ppL;
+L_r = ppL_r;
+load_system('feedbackControl')
+outPole = sim('feedbackControl',5);
+
+L = lqrL;
+L_r = lqrL_r;
+outLqr = sim('feedbackControl',5);
+
+figUncert = figure(8);
+plot(t, [ppY(:,1) lqrY(:,1)])
+hold on
+plot(outPole.yout{1}.Values.Time, outPole.yout{1}.Values.Data(:,1))
+plot(outLqr.yout{1}.Values.Time, outLqr.yout{1}.Values.Data(:,1))
+hold off
+title({'Uncertain Ball and Beam', 'ball position r when beam inertia is off by 15%'})
+xlabel('time [s]')
+ylabel('states')
+legend('linear PP', 'linear LQR', 'Nonlin PP', 'Nonlin LQR')
+
+saveas(figUncert, fullfile(figFolder, 'figUncert.png'))

@@ -44,7 +44,25 @@ System description and analysis\\
 
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+\begin{center}
+\vspace*{1cm}
+\includegraphics[scale=1.0]{../figures/hig_logo_eng.png}\\
+\vspace{1.5cm}
+\large EEA004 - Multivariable and Nonlinear Control Systems\\
+\large Laboratory Work 2\\
+\vspace{1.5cm}
+Group 4\\
+Dan Thilderkvist and Philip Gutierrez\\
+dan.thilderkvist@hotmail.com philipgutierrez67@gmail.com\\
+Files: main.m, feedbackControl.slx, systemAnalysis.slx, helperLibrary.slx\\
+\vspace{1cm}
+\today
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
 
 \section{Introduction}
 In this laboratory work an unstable system is to be analyzed.
@@ -83,9 +101,20 @@ The ball is assumed to roll on the beam without slipping under to force of gravi
 
 Please note that throughout this report radians have been used for measuring angle.
 This means that any reference for $\theta$ has radians as units and any reference to $\dot{\theta}$ has radians per second as unit.
-This despite the laboratory instruction refer to degree as the angle unit, values have been converted where relevant. 
+However the laboratory instructions have been interpreted as degree and relevant conversion have been done where applicable. 
 
 \section{Theory}
+A nonlinear system $\dot{\textbf{x}} = f(\textbf{x},u)$ can be linearized around an equilibrium $(\textbf{x}_0, u_0)$ with he usage of the Jacobian. 
+The linearized system is now based on the new state $\Delta \textbf{x}$ around the equilibrium \citep[~p.204]{astrom21}.
+
+\begin{equation}
+\begin{split}
+\dot{\Delta \textbf{x}} = A \Delta \textbf{x} + B \Delta \textbf{u} \\
+A = \left.\frac{\partial f}{\partial \textbf{x}}\right|_{\textbf{x}_0, u_0} \\
+B = \left.\frac{\partial f}{\partial u}\right|_{\textbf{x}_0, u_0}
+\end{split}
+\end{equation}
+
 State space systems are a common way to represent dynamic systems.
 For a linear state space system (\ref{equ:genSS}), the time domain solution has been proven to be (\ref{equ:ssSolution}) \citep[~p.189]{astrom21}.
 
@@ -463,8 +492,14 @@ Additionally they are compared using overshoot, calculated on only the ball posi
 Also the settling time of the ball position is compared for a settling within $\pm5\%$.
 The calculated comparison result can be found under results, table \ref{tab:compare}.
 
-
-
+\subsubsection{Plant model uncertainty}
+It is often the case that there exist variations an uncertainties in the derived models of a system.
+The effect of this is explored here by assuming a 15\% error the on the beam inertia from table \ref{tab:quantities}.
+This mean that the model used to computer the controllers is not fully representative of the system it will actually be used on.
+To visualize this, the derived pole placement (PP) controller and optimal controller (LQR) have been tested on a virtual ball and beam system with $J_{uncert} = J*1.15$.
+The controllers where tested on both the lineraized dynamics and the full nonlinear system implemented in Simulink.
+The results are presented in figure \ref{fig:uncert}, where only the ball position has been plotted for the different cases/controllers to improve the plot readability.
+The effect on the remaining states has also been investigated and convey similar behavior as the ball position for the uncertain system.
 
 
 \section{Results}
@@ -572,27 +607,107 @@ The table \ref{tab:compare} below showcase the performance metrics comparison be
  \hline
  Metric & Pole placement & Optimization \\ [0.5ex] 
  \hline\hline
- $\left\lVert \textbf{e}(t)\right\rVert_2^2$ & 30.4 & 22.0 \\ 
- $\left\lVert \textbf{e}(t)\right\rVert_\infty$ & 9.1 & 6.6 \\
- $\left\lVert u(t)\right\rVert_2^2$ & 4.1 & 4.8 \\
+ $\left\lVert \textbf{e}(t)\right\rVert_2^2$ & 28.8 & 22.0 \\ 
+ $\left\lVert \textbf{e}(t)\right\rVert_\infty$ & 8.7 & 6.6 \\
+ $\left\lVert u(t)\right\rVert_2^2$ & 4.3 & 4.8 \\
  $\left\lVert u(t)\right\rVert_\infty$ & 0.55 & 0.99 \\
- overshoot [\%] & 31.8 & 0.0 \\
- settling time [s] & 1.75 & 1.60 \\ [1ex] 
+ overshoot [\%] & 36.8 & 0.0 \\
+ settling time [s] & 1.82 & 1.60 \\ [1ex] 
  \hline
  \end{tabular}
  \caption{Comparison of pole placement method and optimal control method performance on a return to zero response for the nonlinear ball and beam.}
  \label{tab:compare}
 \end{table}
 
+\subsection{Plant model uncertainty}
+Simulations of the same pole placement (PP) and optimal (LQR) controllers as before on a system with a beam inertia 15\% greater is seen in figure \ref{fig:uncert}. 
+The figure show the ball position for the two controllers and the two cases of linear and nonlinear system.
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.75]{../code/figures/figUncert.png}
+\caption{Controller performance for an uncertain system example where the inertia is 15\% greater than designed for. The figure show the ball position for the different cases.}
+\label{fig:uncert}
+\end{figure}
+
 
 \section{Discussion}
-- White box modeling is difficult
-- Linearization is error prone
-- Step response = Unstable system, 0.1Nm enough to dominate the ball weights
-- Sine wave: Centering the beam oscillations
-- Step response of linear and nonlinear similar around [0 0 0 0]
+\subsection{System modeling}
+An easy to spot equilibrium of the system is that of the ball above the beam pivot point.
+However technically all ball positions along a level beam are equilibrium points as stated in (\ref{equ:stateEqulibrium}).
+This indicate that it should be possible to control the ball at any position along the level beam as long as the system is quick and strong enough.
+However the experiments carried out have assumed the equilibrium of $\textbf{x}_0 = \begin{pmatrix} 0 & 0 & 0 & 0 \end{pmatrix}^T$, $\tau_0 = 0$
+
+
+Modeling a system using the white-box approach demonstrated during this lab is lots of work.
+A majority of the work put in was dedicated tot he Lagrange method to come up with the nonlinear differential equations followed by the linearization.
+It is however very important as any errors in the model will propagate downstream to the controller design.
+It is also found to be quite error prone as it is often done by hand, this is demonstrated by the paper \citep{BolvarVincenty2014ModellingTB}, where several parts of the derivation was found to be left out/forgotten.
+
+Implementing the nonlinear system in Simulink was not very difficult.
+However including the relevant saturation such as beam width, max torque and beam angle was difficult.
+In the end it was not completed fully as the system ended up in deadlock if any of the state saturations were reached.
+The difficulty lies in that while saturating the ball position at the edges of the beam is possible, also the velocity must be zeroed at the beam edge without preventing the ball from gaining velocity in the opposite direction.
+This was not achieved.
+
+The step response of the nonlinear system, figure \ref{fig:bbStep}, show an unstable system.
+But it also show that a torque of 1Nm is able to dominate the beam angle behavior as long as the ball is reasonably close to the center.
+This is seen by the linear behavior of the beam angle for the initial part of the step response.
+Using the step response knowledge, a sine wave torque application of 2Nm in amplitude was tested to "keep" the ball on the beam.
+To have any success the sine wave had a phase shift that allowed the beam velocity to oscillate around zero.
+Further to have the beam angle oscillate around the level state it was given an initial angle.
+This achieved a little more than a second of ball "balance".
+But since the ball position affect the beam angle though gravity, the system eventually become unstable due to the fact the ball must roll to one side initially. 
+
+\subsection{Controller design}
+The first part of Task 2 was quite difficult to understand.
+The interpretation was that the linearized system was to be evaluated, using both explicit solution and simulation.
+It mentioned the matrix transfer function, that can easily be found with Matlab, but there is no need for the transfer function if the state space system is already found.
+Anyhow, the explicit solution to a state space system was found using the state space matrices.
+It was then compared to the simulation of the very same system, using the two systems difference instead of absolute value due to them being unstable system, figure \ref{fig:zeroIn}.
+A growing difference was observed, however the magnitude was very small ($10^{-12}$).
+The small error indicate this might originate from the floating point quantization that occur in a computer.
+Each calculation will introduce this effect for both system, but the simulated system values depend on previous values, hence the quantization will accumulate over time compared to the explicit solution.
+
+The linear system was found controllable and observable for a multitude of measurement combinations $i - vi$.
+This enables state feedback control where the poles can be placed arbitrarily and the usage of an observer with arbitrary poles.
+
+
+Two state feedback controllers were designed, one using pole placement and one using optimization.
+The difference in calculation required to find the controller gains were pretty much similar due to the abstraction provided by the Matlab functions.
+In the sense of controller calculation required during operation they are exactly the same as both are the same state feedback structure.
+Other performance aspects than calculation was investigated adn listed in table \ref{tab:compare}.
+The results show that the LQR controller acquire better response performance, at the cost of larger amplitude control action.
+It was particular difficult to find weight matrices Q \& R that generated a controller adhering the the torque limitation $|\tau| < 1Nm$.
+A better solution could be using the similar but more complicated Model Predictive Control (MPC) method as it allows incorporating the saturation to the optimization.
+Also notable is that the LQR technique generate controllers that have no overshoot, making them much better than pole placement in this case.
+But it could also be argued that the pole placement method could do similar by placing all poles on the real axis.
+
+In general the optimization method was easier to work with as the weights used as design parameters directly relate to system behaviors.
+This facilitated trial and error that was more meaningful, whereas the pole locations don't translate as well system behavior.
+This is especially true then the system is higher than second order or has zeros.
+
+Comparing the linearized system with the nonlinear it was seen that they behave similar for a step response at the equilibrium point $\textbf{x}_0 = \textbf{0}$ (figures not included in report).
+This is expected as the linearization is only valid in a small region around this point.
+For the response tested in figures \ref{fig:poleLin} - \ref{fig:lqrNon} they exhibit slightly different behavior for linear and nonlinear model.
+This can be contributed to the initial condition $\textbf{x}_0 = \begin{pmatrix} 0.4 & 0.2 & 0.0175 & 0.0052 \end{pmatrix}^T$ that is quite far from the linearization equilibrium.
+
+Doing a basic test of controller robustness by applying uncertainty to the beam inertia $J$ gave the ball position results seen in figure \ref{fig:uncert}.
+Notably is the larger settling time and the substantial increase in overshoot and oscillation.
+All test cases remain stable, but the difference is visible especially in the oscillation.
+This highlight the fact that accurate models are very important when doing control design and that robustness is something that should be taken into account.
+The LQR controller used on the nonlinear system could be argued performing the best on the uncertain system with no oscillation.
+If this is pure chance of a feature of the method can not be determined by these limited experiments.
+
 
 \section{Conclusion}
+It was shown that the Lagrange method is a powerful modeling method for complex nonlinear system. It allows a white-box modeling approach that is well setup for subsequent linearization around an equilibrium.
+
+Several state feedback controllers were designed using the linearized dynamics and it was shown to be sufficient for controlling the nonlinear system.
+
+Lastly, it was demonstrated the value of an accurate system model for control design.
+This was apparent as the system exhibited substantially more oscillation when the beam inertia was incorrect by 15\%.
+
 
 \clearpage
 \bibliography{reference}
@@ -600,16 +715,10 @@ The table \ref{tab:compare} below showcase the performance metrics comparison be
 \clearpage
 \appendix
 
-\section{Example Section}
-This is an example reference \citep{glad00}.
+\section{Code}
+The Matlab code used for throughout the work in this report is state below.
+The Simulink code used for the nonlinear simulation can be provided upon request only due to the limitation of its' paste-ability and the file extension limitation of canvas.
 
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.8]{../code/figures/exampleFigure.png}
-\caption{Example caption.}
-\label{fig:exampleLable}
-\end{figure}
-
-\lstinputlisting{../code/exampleCode.m}
+\lstinputlisting{../code/main.m}
 
 \end{document}
