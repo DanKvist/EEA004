@@ -296,6 +296,29 @@ K_{MAX} < \frac{13C\pi}{4} = 5.10 for C=0.5
 \label{equ:maximum_k}
 \end{equation}
 
+\subsection{Graphical Solution using Describing Function}
+
+As an alternative, equation (\ref{equ:selfOsc}) can be solved graphically by finding the intersection of the two graphs:
+
+\begin{equation}
+G(iw) = \frac{-1}{Y_{f}(C)}
+\end{equation}
+
+or, specifically:
+
+\begin{equation}
+G(iw) = \frac{-C\pi}{4}
+\end{equation}
+
+where the graph of $G(iw)$ is simply the Nyquist diagram of $G(iw)$ with the plot of $-1/Y_{f}(C)$ superimposed.
+
+The plot of $-1/Y_{f}(C)$ with varying values of C is included in the Nyquist diagram in figure \ref{fig:circCrit}, and the point where $C=0.5$ is marked with a red circle.
+
+Note also that $-1/Y_{f}(C)$ goes from right to left in the diagram with increasing C, so the intersection of the two graphs must occur to the right of the circle to have $C < 0.5$ as required.
+
+Parenthetically, note that $-1/Y_{f}(C)$ is negative and real, so it will simply appear as a straight line on the negative real axis. 
+
+
 \section{Results}
 
 \subsection{Circle Criteria Results}
@@ -394,6 +417,7 @@ K_{vs} = 4.0
 \label{equ:k_max}
 \end{equation}
 
+As confirmation of these results, we can inspect figure \ref{fig:circCrit} visually and note that the Nyquist curve for $K_{vs}=4.0$ crosses the real axis to the right of the red circle which indicates C=0.5.  Furthermore, $K_{vs}=6.3$ crosses the real axis to the left.  Hence, the answer in (\ref{equ:k_max}) is indeed correct. 
 
 \section{Discussion}
 \section{Conclusion}

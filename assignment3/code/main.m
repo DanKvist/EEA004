@@ -82,6 +82,16 @@ end
 hold off
 circle(m,r);
 
+%Add describing function plot for comparison
+C = (.1:.1:1);
+Y = 4 ./ (pi .* C);
+YY = -1 ./ Y;
+XX = zeros(1,length(C));
+hold on
+plot(YY,XX,'r','LineWidth',2);
+%plot(-1/(4/(pi*.4)),0,'r+','LineWidth',2);
+plot(-1/(4/(pi*.5)),0,'ro','LineWidth',2);
+hold off
 
 legend(labels)
 
