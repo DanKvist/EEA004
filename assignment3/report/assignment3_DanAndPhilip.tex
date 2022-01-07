@@ -77,6 +77,33 @@ Both the heater and the valve have non-linear, but complementary, characteristic
 \citep[p.123]{glad00}
 
 \subsection{Theory}
+
+\subsection{Describing Function}
+
+The describing function is defined to be \citep[p. 358]{glad00}:
+
+\begin{equation}
+	Y_{f}(C) = \frac{b(C)+ia(C)}{(C}
+	\label{equ:descrbingFunction}
+\end{equation}
+
+where $a(C)$ and $b(C)$ are the Fourier coefficients provided by:
+
+\begin{equation}
+\begin{split}
+	a(C) = A(C)sin( phi(C) ) \\
+	b(C) = A(C)con( phi(C) )
+\end{split}
+\label{equ:fourier}
+\end{equation}
+
+Self-sustained oscillation may occur if the following relationship is met \citep[p. 359]{glad00}:
+
+\begin{equation}
+	Y_{f}(C)G(iw) = -1
+\label{equ:selfOsc}
+\end{equation}
+ 
 \section{Method}
 \subsection{System Transfer Function}
 The system to be analyzed is provided and is specified to be:
@@ -120,8 +147,69 @@ k_{2} = \frac{0.6-0}{1-0} = 0.6
 
 The values of $k_{1}$ and $k_{2}$ are used to form an exclusion region in the Nyquist diagram bounded by a circle which intersects the real axis at 1/$k_{1}$ and 1/$k_{2}$.  See Nyquist diagrams in the results section.
 
+\subsection{Describing Function}
+
+An ideal relay can be modeled as \citep[p. 358]{glad00}:
+
+\begin{equation}
+\begin{split}
+f(e) = 1 if e > 0 \\
+f(e) = -1 if e <0
+\end{split}
+\label{equ:relay}
+\end{equation}
+
+By using \ref{equ:descrbingFunction} and \ref{equ:fourier} the resulting describing function of the relay can be found to be:
+
+\begin{equation}
+Y_{f}(C) = \frac{4}{piC}
+\label{equ:relayDescribingFuntion}
+\end{equation}
+
+For oscillation to occur, the relationship \ref{equ:selfOsc} must be satisfied.  Since the describing function of the relay \ref{equ:relayDescribingFuntion} is real and positive, we observe that $G(iw)$ in \ref{equ:selfOsc} must be real and negative.
+
+From the system transfer function \ref{equ:systemTF} above we see that :
+
+\begin{equation}
+\begin{split}
+G(iw) = \frac{K_{vs}}{((iw)^2+(iw)+1)((iw)+3)}\\
+= \frac{K[(3-4w^2)-i(4w-w^3)]}{[(3-4w^2)+i(4w-w^3)][(3-4w^2)-i(4w-w^3)]}
+\end{split}
+\label{equ:systemTFiw}
+\end{equation}
+
+This equation is real when:
+
+\begin{equation}
+4-w^2 = 0 => w=2
+\label{equ:systemTFreal}
+\end{equation}
+
+At this frequency we find that equation \ref{equ:systemTFiw} yields:
+
+\begin{equation}
+G(i2) = \frac{-K}{13}
+\label{equ:systemTFw2}
+\end{equation}
+
+Finally, with the describing function of the relay specified in  (\ref{equ:relayDescribingFuntion}) and $G(iw)$ evaluated at the oscillating frequency $w=2$ provided in (\ref{equ:systemTFreal}) we can use the relationship from (\ref{equ:selfOsc}) to obtain:
+
+\begin{equation}
+Y_{f}(C)G(iw) = \frac{4}{piC}\frac{-K}{13} = -1
+\label{equ:systemTFw2}
+\end{equation}
+
+The assignment asks for a magnitude of oscillation below $C < 0.5$.
+Therefore, from (\ref{equ:systemTFw2}) above we find the maximum value of $K_{vs}$ to be:
+
+\begin{equation}
+K_{MAX} < \frac{13Cpi}{4} = 5.10 for C=0.5
+\label{equ:maximum_k}
+\end{equation}
+
 \section{Results}
 
+\subsection{Circle Criteria Results}
 The following Nyquist diagrams include a circle of exclusion which is bounded by $1/k_{1}$ and $1/k_{2}$.  The diagrams also include an exclusion region bounded by $1/k_{2}$ (shown as a vertical line in the graphs) which is used when analyzing the case with saturation in the valve.
 
 \begin{figure}[h!]
@@ -172,6 +260,29 @@ The following Nyquist diagrams include a circle of exclusion which is bounded by
 \caption{Nyquist diagram for $K_{vs}=16$}
 \label{fig:nyquist7}
 \end{figure}
+
+\subsection{Describing Function Results}
+
+From the relationship given in (\ref{equ:selfOsc}) and the frequency of oscillation provided by (\ref{equ:systemTFiw}) and (\ref{equ:systemTFreal}), we find the frequency of oscillation to be:
+
+\begin{equation}
+w=2
+\label{equ:omega_zero}
+\end{equation}
+
+At this frequency, equation (\ref{equ:maximum_k}) provides a maximum value of $K$ value of:
+
+\begin{equation}
+K_{MAX} < 5.10
+\label{equ:k_valid}
+\end{equation}
+
+Since the valves come in specific sizes (1, 1.6, 2.5, 4.0, 6.3, 10, and 16) we find that the maximum valve coefficient is:
+
+\begin{equation}
+K_{vs} = 4.0
+\label{equ:k_max}
+\end{equation}
 
 
 \section{Discussion}
