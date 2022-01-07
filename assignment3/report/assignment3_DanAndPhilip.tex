@@ -79,25 +79,69 @@ Both the heater and the valve have non-linear, but complementary, characteristic
 \subsection{Theory}
 
 \subsection{Describing Function}
-
-The describing function is defined to be \citep[p. 358]{glad00}:
+Assume the input of a static nonlinearity $f(.)$ is sinusoidal:
 
 \begin{equation}
-	Y_{f}(C) = \frac{b(C)+ia(C)}{(C}
+	e(t) = Csin(wt)
+	\label{equ:input_e}
+\end{equation}
+
+then we would expect the output $w(t)$ to also be periodic of the form:
+
+\begin{equation}
+	w(t) = f(Csin(wt))
+\end{equation}
+
+Since this output is periodic, it may be expanded into a Fourier series such as:
+
+\begin{equation}
+	w(t) = \sum{a_{n}cos(nwt)+b_{n}sin(nwt)}
+\end{equation}
+
+where the constant term of the Fourier series can be assumed to be zero if we assume $f(.)$ is odd \citep[p. 358]{glad00}.  If we further assume that the system has a low pass characteristic, then Fourier components with angular frequencies $2w$, $3w$ and so on, can be ignored and $w(t)$ can be approximated using only the first terms of the Fourier series.  With this, $w(t)$ can be simplified as:
+
+\begin{equation}
+	w(t) = \sqrt{a_{1}^2+b_{1}^2}sin(wt+arctan(a_{1}/b_{1}))
+\end{equation}
+
+As $w(t)$ enters the system transfer function $G(.)$, the output $y(t)$ will be scaled by $|G(.)|$ and phase shifted by $arg(G(.))$, and $y(t)$ may be written as:
+
+\begin{equation}
+	y(t) = -\sqrt{a_{1}^2+b_{1}^2}|G(iw)|sin(wt+arctan(a_{1}/b_{1})+arg(G(iw)))
+	\label{equ:output_y}
+\end{equation}
+ 
+
+We define a function, called the describing function, to be \citep[p. 358]{glad00}:
+
+\begin{equation}
+	Y_{f}(C) = \frac{b(C)+ia(C)}{C}
 	\label{equ:descrbingFunction}
 \end{equation}
 
-where $a(C)$ and $b(C)$ are the Fourier coefficients provided by:
+With this definition we note that
+
+\begin{equation}
+	|Y_{f}(C)|C = \sqrt{a_{1}^2+b_{1}^2}
+\end{equation}
+
+and
+
+\begin{equation}
+	arg(Y_{f}(C)) = arctan(a/b)
+\end{equation}
+
+To reach a condition of Harmonic Balance we wish to equate (\ref{equ:output_y}) with our assumed input of (\ref{equ:input_e}).   
+In particular, we need to match the amplitudes and match the phase shifts (where $\pi$ is used because of the minus sign in $y(t)$). 
 
 \begin{equation}
 \begin{split}
-	a(C) = A(C)sin( phi(C) ) \\
-	b(C) = A(C)con( phi(C) )
+	|Y_{f}(C)|C|G(iw)| = C \\
+	arg(Y_{f}(C))+arg(G(iw)) = \pi
 \end{split}
-\label{equ:fourier}
 \end{equation}
 
-Self-sustained oscillation may occur if the following relationship is met \citep[p. 359]{glad00}:
+Under these conditions, self-sustained oscillation may occur.  The above expressions may also be written as \citep[p. 359]{glad00}:
 
 \begin{equation}
 	Y_{f}(C)G(iw) = -1
@@ -105,26 +149,28 @@ Self-sustained oscillation may occur if the following relationship is met \citep
 \end{equation}
  
 \section{Method}
+The following sections describe the methods used to obtain the results presented in this report.
+
 \subsection{System Transfer Function}
-The system to be analyzed is provided and is specified to be:
+The system to be controlled is provided in the assignment and is specified to be:
 
 \begin{equation}
 	G(s) = \frac{1}{(s^2+s+1)(s+3)}
 	\label{equ:system}
 \end{equation}
 
-The system will be controlled by a valve which is considered to be static.  This valve has a gain $K_vs$, known as the "valve coefficient", and is available only with specific values.
-With the addition of the gain $K_vs$ the new dynamic system becomes:
+The system will be controlled by a valve which is considered to be static.  The valve has a gain $K_{vs}$, known as the "valve coefficient", and is available only with specific values.
+With the addition of the gain $K_{vs}$ the new dynamic system becomes:
 
 \begin{equation}
-	G_{kv}(s) = \frac{K_{vs}}{(s^2+s+1)(s+3)} for K_{vs}=1, 1.6, 2.5, 4, 6.3, 10, and 16.
+	G_{K_{vs}}(s) = \frac{K_{vs}}{(s^2+s+1)(s+3)} for K_{vs}=1, 1.6, 2.5, 4, 6.3, 10, and 16.
 	\label{equ:systemTF}
 \end{equation}
 
 
-\subsection{Circle Criteria}
+\subsection{Circle Criteria without Valve Saturation}
 
-The method of Circle Criteria will be used to identify the valve with maximum power.  The exact nonlinearity is not known, but it is known to be limited to be inside the region specified by the blue arches as seen in figure \ref{fig:valvepower}.
+The method of Circle Criteria will be used to identify the valve with maximum power.  The exact nonlinearity caused by valve authority is not known, but it is specified to be limited inside the region bounded by the blue arches as seen in figure \ref{fig:valvepower}.
 
 \begin{figure}[h!]
 \center
@@ -133,10 +179,10 @@ The method of Circle Criteria will be used to identify the valve with maximum po
 \label{fig:valvepower}
 \end{figure}
 
-To apply the circle criteria, the region of known nonlinearity is bounded by two lines with slopes $k_{1}$ and $k_{2}$.  By inspection, these slopes are chosen to bound a region that includes the known region of nonlinearity of the valves.  From figure \ref{fig:valvepower} we find that:
+To apply the circle criteria, the region of known nonlinearity is bounded by two lines with slopes $k_{1}$ and $k_{2}$.  By inspection, these slopes are chosen to form a region that includes the known region of nonlinearity of the valves.  From figure \ref{fig:valvepower} we find these slopes to be:
 
 \begin{equation}
-k_{1} = \frac{1-0}{0.6-0} = \frac{1}{0.6}
+k_{1} = \frac{1-0}{0.6-0} = 1.6
 \label{equ:k1_value}
 \end{equation}
 
@@ -146,6 +192,17 @@ k_{2} = \frac{0.6-0}{1-0} = 0.6
 \end{equation}
 
 The values of $k_{1}$ and $k_{2}$ are used to form an exclusion region in the Nyquist diagram bounded by a circle which intersects the real axis at 1/$k_{1}$ and 1/$k_{2}$.  See Nyquist diagrams in the results section.
+
+The Circle Criterion \citep[p. 334]{glad00} states that a sufficient condition for input output stability is that the Nyquist curve does not enter the circle specified by 1/$k_{1}$ and 1/$k_{2}$.
+
+We proceed to generate a Nyquist diagram for each of the systems specified in \ref{equ:systemTF}, and superimpose a circle region of exclusion in each graph.
+For stability, the Nyquist curve must not enter the circle of exclusion.
+
+\subsection{Circle Criteria with Valve Saturation}
+
+In the case of a valve with saturation, we extend the circle of exclusion to have infinite radius by allowing $k_{2}$ to approach the x-axis and become zero.  This circle with infinite radius will appear as a vertical line in the Nyquist plots.
+
+The circle criterion can be applied as before, and stability is achieved as long as the Nyquist curve does not cross the vertical line.
 
 \subsection{Describing Function}
 
@@ -159,21 +216,21 @@ f(e) = -1 if e <0
 \label{equ:relay}
 \end{equation}
 
-By using \ref{equ:descrbingFunction} and \ref{equ:fourier} the resulting describing function of the relay can be found to be:
+By using (\ref{equ:descrbingFunction}) the resulting describing function of the relay can be found to be \citep[P. 359]{glad00}
 
 \begin{equation}
-Y_{f}(C) = \frac{4}{piC}
+Y_{f}(C) = \frac{4}{\pi C}
 \label{equ:relayDescribingFuntion}
 \end{equation}
 
-For oscillation to occur, the relationship \ref{equ:selfOsc} must be satisfied.  Since the describing function of the relay \ref{equ:relayDescribingFuntion} is real and positive, we observe that $G(iw)$ in \ref{equ:selfOsc} must be real and negative.
+For oscillation to occur, the relationship (\ref{equ:selfOsc}) must be satisfied.  Since the describing function of the relay (\ref{equ:relayDescribingFuntion}) is real and positive, we observe that $G(iw)$ in (\ref{equ:selfOsc}) must be real and negative.
 
-From the system transfer function \ref{equ:systemTF} above we see that :
+To accomplish this, the system transfer function (\ref{equ:systemTF}) yields:
 
 \begin{equation}
 \begin{split}
 G(iw) = \frac{K_{vs}}{((iw)^2+(iw)+1)((iw)+3)}\\
-= \frac{K[(3-4w^2)-i(4w-w^3)]}{[(3-4w^2)+i(4w-w^3)][(3-4w^2)-i(4w-w^3)]}
+= \frac{K_{vs}[(3-4w^2)-i(4w-w^3)]}{[(3-4w^2)+i(4w-w^3)][(3-4w^2)-i(4w-w^3)]}
 \end{split}
 \label{equ:systemTFiw}
 \end{equation}
@@ -185,32 +242,34 @@ This equation is real when:
 \label{equ:systemTFreal}
 \end{equation}
 
-At this frequency we find that equation \ref{equ:systemTFiw} yields:
+At this frequency we find that equation (\ref{equ:systemTFiw}) provides:
 
 \begin{equation}
 G(i2) = \frac{-K}{13}
 \label{equ:systemTFw2}
 \end{equation}
 
-Finally, with the describing function of the relay specified in  (\ref{equ:relayDescribingFuntion}) and $G(iw)$ evaluated at the oscillating frequency $w=2$ provided in (\ref{equ:systemTFreal}) we can use the relationship from (\ref{equ:selfOsc}) to obtain:
+which indeed is real and negative as required.
+
+Finally, with the describing function of the relay specified in  (\ref{equ:relayDescribingFuntion}) and $G(iw)$ evaluated at the oscillating frequency $w=2$ provided in (\ref{equ:systemTFw2}) we can use the relationship from (\ref{equ:selfOsc}) to obtain:
 
 \begin{equation}
-Y_{f}(C)G(iw) = \frac{4}{piC}\frac{-K}{13} = -1
-\label{equ:systemTFw2}
+Y_{f}(C)G(iw) = \frac{4}{\pi C}\frac{(-K)}{13} = -1
+\label{equ:selfOscw2}
 \end{equation}
 
 The assignment asks for a magnitude of oscillation below $C < 0.5$.
-Therefore, from (\ref{equ:systemTFw2}) above we find the maximum value of $K_{vs}$ to be:
+Therefore, from (\ref{equ:selfOscw2}) above we find the maximum value of $K_{vs}$ to be:
 
 \begin{equation}
-K_{MAX} < \frac{13Cpi}{4} = 5.10 for C=0.5
+K_{MAX} < \frac{13C\pi}{4} = 5.10 for C=0.5
 \label{equ:maximum_k}
 \end{equation}
 
 \section{Results}
 
 \subsection{Circle Criteria Results}
-The following Nyquist diagrams include a circle of exclusion which is bounded by $1/k_{1}$ and $1/k_{2}$.  The diagrams also include an exclusion region bounded by $1/k_{2}$ (shown as a vertical line in the graphs) which is used when analyzing the case with saturation in the valve.
+The following Nyquist diagrams include a circle of exclusion which is bounded by $1/k_{1}$ and $1/k_{2}$.  The diagrams also include an exclusion region bounded by $1/k_{1}$ (shown as a vertical line in the graphs) which is used when analyzing the case with saturation in the valve.
 
 \begin{figure}[h!]
 \center
@@ -260,6 +319,20 @@ The following Nyquist diagrams include a circle of exclusion which is bounded by
 \caption{Nyquist diagram for $K_{vs}=16$}
 \label{fig:nyquist7}
 \end{figure}
+
+We notice that the Nyquist curve crosses the circle of exclusion for $K_{vs}=6.3$.  Therefore, the maximum size valve (without saturation) is:
+
+\begin{equation}
+K_{vs} = 4.0
+\label{equ:k_max_wo_saturation}
+\end{equation}
+
+Similarly, we find that the maximum size valve (with saturation) is:
+
+\begin{equation}
+K_{vs} = 2.5
+\label{equ:k_max_w_saturation}
+\end{equation}
 
 \subsection{Describing Function Results}
 
