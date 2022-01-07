@@ -78,6 +78,28 @@ Both the heater and the valve have non-linear, but complementary, characteristic
 
 \subsection{Theory}
 
+\subsubsection{Circle Criterion}
+The circle criterion can be used to check input-output stability of a nonlinear system, assuming that system can be divided into two cascaded blocks $f(\cdot)$ and $G(s)$, the former encapsulating all nonlinearities of the system.
+The nonlinearity $f(\cdot)$ is assumed static and the dynamic linear part $G(s)$ has no poles in the right hand half-plane.
+The circle criteria is an extension of the small gain theorem that is less restrictive.
+Further, assume the nonlinear function can be enclosed by the cone-shaped region bounded by two linear functions $k_1y$ and $k_2y$, see figure \ref{fig:cirEx} as an example.
+
+\begin{equation}
+k_1 \leq \frac{f(y)}{y} \leq k_2 
+\end{equation} 
+
+If two such constants $k_1$ and $k_2$ can be found for $f(\cdot)$, the circle criteria claim that the system is input-output stable if the Nyquist curve of $G(i_\omega)$ does not enter or enclose the circle that cross the real axis at $-\frac{1}{k_1}$ and $-\frac{1}{k_2}$.
+It shall be noted that not full-filling the circle criteria does not directly imply instability. \citep[~p.329-334]{glad00}
+
+\begin{figure}[h!]
+\center
+\includegraphics[scale=1]{../figures/circleExample.png}
+\caption{Example of circle criteria with with the Nyquist curve $G(i\omega)$ and the circle $\left(-\frac{1}{k_1}, -\frac{1}{k_2}\right)$. This example show the criteria met as the curve does not enter the circle nor enclose it. \citep[~p.333]{glad00}}
+\label{fig:cirEx}
+\end{figure}
+
+
+
 \subsection{Describing Function}
 Assume the input of a static nonlinearity $f(.)$ is sinusoidal:
 
