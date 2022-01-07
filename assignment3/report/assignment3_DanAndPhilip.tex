@@ -100,7 +100,7 @@ It shall be noted that not full-filling the circle criteria does not directly im
 
 
 
-\subsection{Describing Function}
+\subsubsection{Describing Function}
 Assume the input of a static nonlinearity $f(.)$ is sinusoidal:
 
 \begin{equation}
@@ -170,29 +170,37 @@ Under these conditions, self-sustained oscillation may occur.  The above express
 \label{equ:selfOsc}
 \end{equation}
  
+ 
+ 
+ 
 \section{Method}
 The following sections describe the methods used to obtain the results presented in this report.
 
+
 \subsection{System Transfer Function}
-The system to be controlled is provided in the assignment and is specified to be:
+In order to control the heater system, a valve is used.
+Since the heater is nonlinear, a valve with complementary nonlinearity is used and the system is now linear.
+However the valve does not completely complement the system nonlinearity and hence some nonlinearity remains, called valve authority effect.
+The linear part of complete system to be controlled is provided in the assignment and is specified to be:
 
 \begin{equation}
 	G(s) = \frac{1}{(s^2+s+1)(s+3)}
 	\label{equ:system}
 \end{equation}
 
-The system will be controlled by a valve which is considered to be static.  The valve has a gain $K_{vs}$, known as the "valve coefficient", and is available only with specific values.
-With the addition of the gain $K_{vs}$ the new dynamic system becomes:
+The nonlinearity introduced by the valve is considered to be static.  Additionally, the valve has a gain $K_{vs}$, known as the "valve coefficient", and is available only with specific values.
+With the addition of the gain $K_{vs}$ the linear part of the system becomes:
 
 \begin{equation}
-	G_{K_{vs}}(s) = \frac{K_{vs}}{(s^2+s+1)(s+3)} for K_{vs}=1, 1.6, 2.5, 4, 6.3, 10, and 16.
+	G_{K_{vs}}(s) = \frac{K_{vs}}{(s^2+s+1)(s+3)}, \; K_{vs}=1, 1.6, 2.5, 4, 6.3, 10, 16.
 	\label{equ:systemTF}
 \end{equation}
 
+The nonlinearity part of the system $f(\cdot)$, introduced as the valve authority effect is not fully known.
 
 \subsection{Circle Criteria without Valve Saturation}
 
-The method of Circle Criteria will be used to identify the valve with maximum power.  The exact nonlinearity caused by valve authority is not known, but it is specified to be limited inside the region bounded by the blue arches as seen in figure \ref{fig:valvepower}.
+The circle criteria will be used to identify the valve with maximum power that can be used.  The exact nonlinearity caused by valve authority is not known, but it is specified to be limited inside the region bounded by the blue arches as seen in figure \ref{fig:valvepower}.
 
 \begin{figure}[h!]
 \center
@@ -213,16 +221,16 @@ k_{2} = \frac{0.6-0}{1-0} = 0.6
 \label{equ:k2_value}
 \end{equation}
 
-The values of $k_{1}$ and $k_{2}$ are used to form an exclusion region in the Nyquist diagram bounded by a circle which intersects the real axis at 1/$k_{1}$ and 1/$k_{2}$.  See Nyquist diagrams in the results section.
+The values of $k_{1}$ and $k_{2}$ are used to form an exclusion region in the Nyquist diagram bounded by a circle which intersects the real axis at $-1/k_{1}$ and $-1/k_{2}$, results figure \ref{fig:circCrit}.
 
-The Circle Criterion \citep[p. 334]{glad00} states that a sufficient condition for input output stability is that the Nyquist curve does not enter the circle specified by 1/$k_{1}$ and 1/$k_{2}$.
+With the circle criterion, input-output stability is verified if the Nyquist curve of $G_{K_{vs}}(i\omega)$ does not enter or enclose the exclusion region.
 
-We proceed to generate a Nyquist diagram for each of the systems specified in \ref{equ:systemTF}, and superimpose a circle region of exclusion in each graph.
-For stability, the Nyquist curve must not enter the circle of exclusion.
+We proceed to generate a Nyquist diagram for each value of $K_{vs}$ specified in \ref{equ:systemTF}, and superimpose a circle region of exclusion in each graph, see figure \ref{fig:circCrit}.
+For stability, the Nyquist curve must not enter or encircle the area of exclusion.
 
 \subsection{Circle Criteria with Valve Saturation}
 
-In the case of a valve with saturation, we extend the circle of exclusion to have infinite radius by allowing $k_{2}$ to approach the x-axis and become zero.  This circle with infinite radius will appear as a vertical line in the Nyquist plots.
+For a valve with saturation, the circle of exclusion is extended to have infinite radius by allowing $k_{2}$ to approach the x-axis and become zero.  This circle with infinite radius will appear as a vertical line in the Nyquist plots, figure \ref{fig:circCrit}.
 
 The circle criterion can be applied as before, and stability is achieved as long as the Nyquist curve does not cross the vertical line.
 
@@ -291,65 +299,72 @@ K_{MAX} < \frac{13C\pi}{4} = 5.10 for C=0.5
 \section{Results}
 
 \subsection{Circle Criteria Results}
-The following Nyquist diagrams include a circle of exclusion which is bounded by $1/k_{1}$ and $1/k_{2}$.  The diagrams also include an exclusion region bounded by $1/k_{1}$ (shown as a vertical line in the graphs) which is used when analyzing the case with saturation in the valve.
+Figure \ref{fig:circCrit} show the Nyquist curves of $G_{K_{vs}}(i\omega)$ and include a circle of exclusion which is bounded by $1/k_{1}$ and $1/k_{2}$.  The diagram also include an exclusion region bounded by $1/k_{1}$ (shown as a vertical line in the figure) which is used when analyzing the case with saturation in the valve.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \center
-\includegraphics[scale=0.25]{../code/figures/nyquist1.png}
-\caption{Nyquist diagram for $K_{vs}=1.0$}
-\label{fig:nyquist1}
+\includegraphics[scale=0.75]{../code/figures/circFig.png}
+\caption{Nyquist diagram for $G_{K_{vs}}(i\omega)$ for applying the circle criterion.Exclusion regions are marked with thick red.}
+\label{fig:circCrit}
 \end{figure}
 
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.25]{../code/figures/nyquist2.png}
-\caption{Nyquist diagram for $K_{vs}=1.6$}
-\label{fig:nyquist2}
-\end{figure}
+%\begin{figure}[h!]
+%\center
+%\includegraphics[scale=0.25]{../code/figures/nyquist1.png}
+%\caption{Nyquist diagram for $K_{vs}=1.0$}
+%\label{fig:nyquist1}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%\center
+%\includegraphics[scale=0.25]{../code/figures/nyquist2.png}
+%\caption{Nyquist diagram for $K_{vs}=1.6$}
+%\label{fig:nyquist2}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%\center
+%\includegraphics[scale=0.25]{../code/figures/nyquist3.png}
+%\caption{Nyquist diagram for $K_{vs}=2.5$}
+%\label{fig:nyquist3}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%\center
+%\includegraphics[scale=0.25]{../code/figures/nyquist4.png}
+%\caption{Nyquist diagram for $K_{vs}=4.0$}
+%\label{fig:nyquist4}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%\center
+%\includegraphics[scale=0.25]{../code/figures/nyquist5.png}
+%\caption{Nyquist diagram for $K_{vs}=6.3$}
+%\label{fig:nyquist5}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%\center
+%\includegraphics[scale=0.25]{../code/figures/nyquist6.png}
+%\caption{Nyquist diagram for $K_{vs}=10$}
+%\label{fig:nyquist6}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%\center
+%\includegraphics[scale=0.25]{../code/figures/nyquist7.png}
+%\caption{Nyquist diagram for $K_{vs}=16$}
+%\label{fig:nyquist7}
+%\end{figure}
 
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.25]{../code/figures/nyquist3.png}
-\caption{Nyquist diagram for $K_{vs}=2.5$}
-\label{fig:nyquist3}
-\end{figure}
-
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.25]{../code/figures/nyquist4.png}
-\caption{Nyquist diagram for $K_{vs}=4.0$}
-\label{fig:nyquist4}
-\end{figure}
-
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.25]{../code/figures/nyquist5.png}
-\caption{Nyquist diagram for $K_{vs}=6.3$}
-\label{fig:nyquist5}
-\end{figure}
-
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.25]{../code/figures/nyquist6.png}
-\caption{Nyquist diagram for $K_{vs}=10$}
-\label{fig:nyquist6}
-\end{figure}
-
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.25]{../code/figures/nyquist7.png}
-\caption{Nyquist diagram for $K_{vs}=16$}
-\label{fig:nyquist7}
-\end{figure}
-
-We notice that the Nyquist curve crosses the circle of exclusion for $K_{vs}=6.3$.  Therefore, the maximum size valve (without saturation) is:
+Figure \ref{fig:circCrit} show that the Nyquist curve crosses the circle of exclusion for $K_{vs}=6.3$.  Therefore, the maximum size valve (without saturation) is:
 
 \begin{equation}
 K_{vs} = 4.0
 \label{equ:k_max_wo_saturation}
 \end{equation}
 
-Similarly, we find that the maximum size valve (with saturation) is:
+Similarly, the Nyquist curve crosses the exclusion line for $K_{vs}=4.0$, showing the maximum size valve with saturation to be:
 
 \begin{equation}
 K_{vs} = 2.5
