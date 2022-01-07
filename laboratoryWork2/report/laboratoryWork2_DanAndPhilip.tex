@@ -44,14 +44,32 @@ System description and analysis\\
 
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+\begin{center}
+\vspace*{1cm}
+\includegraphics[scale=1.0]{../figures/hig_logo_eng.png}\\
+\vspace{1.5cm}
+\large EEA004 - Multivariable and Nonlinear Control Systems\\
+\large Laboratory Work 2\\
+\vspace{1.5cm}
+Group 4\\
+Dan Thilderkvist and Philip Gutierrez\\
+dan.thilderkvist@hotmail.com, philipgutierrez67@gmail.com\\
+Files: main.m, feedbackControl.slx, systemAnalysis.slx, helperLibrary.slx\\
+\vspace{1cm}
+\today
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
 
 \section{Introduction}
-In this laboratory work an unstable system is to be analyzed.
-The ball and beam experiment setup, figure \ref{fig:ballAndBeam}, will serve the purpose as the unstable system.
+In this laboratory work an unstable system is analyzed.
+The ball and beam experiment setup, figure \ref{fig:ballAndBeam}, will serve the purpose of the unstable system.
 The ball and beam setup is controlled by the DC motor torque and the measured output is the position of the ball on the beam.
 In table \ref{tab:quantities}, the physical quantities of the system are listed.
-The ball is assumed to roll on the beam without slipping under to force of gravity.
+The ball is assumed to roll on the beam under to force of gravity without slipping.
 
 \begin{figure}[h!]
 \center
@@ -83,10 +101,21 @@ The ball is assumed to roll on the beam without slipping under to force of gravi
 
 Please note that throughout this report radians have been used for measuring angle.
 This means that any reference for $\theta$ has radians as units and any reference to $\dot{\theta}$ has radians per second as unit.
-This despite the laboratory instruction refer to degree as the angle unit, values have been converted where relevant. 
+However the laboratory instructions have been interpreted as degree and relevant conversion have been done where applicable. 
 
 \section{Theory}
-State space systems are a common way to represent dynamic systems.
+A nonlinear system $\dot{\textbf{x}} = f(\textbf{x},u)$ can be linearized around an equilibrium $(\textbf{x}_0, u_0)$ with he usage of the Jacobian. 
+The linearized system is now based on the new state $\Delta \textbf{x}$ around the equilibrium \citep[~p.204]{astrom21}.
+
+\begin{equation}
+\begin{split}
+\dot{\Delta \textbf{x}} = A \Delta \textbf{x} + B \Delta \textbf{u} \\
+A = \left.\frac{\partial f}{\partial \textbf{x}}\right|_{\textbf{x}_0, u_0} \\
+B = \left.\frac{\partial f}{\partial u}\right|_{\textbf{x}_0, u_0}
+\end{split}
+\end{equation}
+
+State space representation are a common way to represent dynamic systems.
 For a linear state space system (\ref{equ:genSS}), the time domain solution has been proven to be (\ref{equ:ssSolution}) \citep[~p.189]{astrom21}.
 
 \begin{equation}
@@ -136,8 +165,8 @@ Then a controller will be developed based on pole placement and one using optima
 \subsection{Modeling and simulation}
 This part focus on the derivation of the differential equations governing the ball and beam system.
 This is done using Lagrangian Mechanics, a subject not that familiar to the authors of this report.
-Due to that limitation and the textbook used for this class not covering the subject help as been taken from \citep{BolvarVincenty2014ModellingTB}.
-However several errors have been found in that report, hence it has only been used as inspiration rather than replicating the exact mathematics.
+Due to that limitation and it not being covered by the lectures, subject help as been taken from \citep{BolvarVincenty2014ModellingTB}.
+However several errors have been found in that report, hence it has only been used as inspiration rather than replicating the mathematics.
 
 \subsubsection{Equilibrium}
 Due to gravity being the force moving the ball, the beam is required to be perpendicular to gravity in order for the ball to be stationary $\theta_0 = 0$.
@@ -159,7 +188,7 @@ Where $r_0$ can take any value within the length of the beam $-0.5 < r_0 < 0.5$.
 
 \subsubsection{Selecting variables}
 We choose a Cartesian coordinate system centered at the beam pivot point, with $x$ pointing in the direction of $r$ and $y$ pointing up.
-The movement of the system can be expressed completely by two independent generalized variables, in our case the ones seen in figure \ref{fig:ballAndBeam}, $r$ and $\theta$.
+The movement of the system can be expressed completely by two independent generalized variables, $r$ and $\theta$ seen in figure \ref{fig:ballAndBeam}, .
 The relation between the generalized coordinates and the Cartesian coordinates is described below.
 
 \begin{equation}
@@ -215,7 +244,7 @@ U &= -mgr\sin{\theta}
 \end{equation}
 
 \subsubsection{Dynamic system}
-With the kinetic and potential energy available from the previous part, the Langrangian $L$ can be setup.
+With the kinetic and potential energy available, the Langrangian $L$ can be setup.
 
 \begin{equation}
 L = K - U = 
@@ -225,7 +254,8 @@ L = K - U =
 mgr\sin{\theta}
 \end{equation}
 
-Now the equation of motion for the ball can be calculated using the first Lagrange equation.
+Now the equation of motion for the ball can be calculated using the Lagrange equation.
+The first Lagrange equation give:
 
 \begin{equation}
 \begin{split}
@@ -236,7 +266,7 @@ Now the equation of motion for the ball can be calculated using the first Lagran
 \end{split}
 \end{equation}
 
-The right hand side is zero since there are no unaccounted internal or external forces acting on the ball.
+The right hand side is zero since there are no unaccounted internal or external forces acting on the ball in the $r$ direction.
 Similarly the second Lagrange equation can be used to find the equation of motion for the beam.
 
 \begin{equation}
@@ -249,7 +279,7 @@ Similarly the second Lagrange equation can be used to find the equation of motio
 \end{equation}
 
 This time the right hand side is the torque that can be applied to the beam.
-The two differential equations (\ref{equ:ballDiff}) and \ref{equ:beamDiff} are the systems governing equations and together describe the system motion.
+The two differential equations (\ref{equ:ballDiff}) and (\ref{equ:beamDiff}) are the systems governing equations and together describe the system motion.
 
 \begin{equation}
 \begin{split}
@@ -317,6 +347,7 @@ For the equilibrium point, the torque $\tau_0$ shall be calculated using $f(\tex
 \end{equation}
 
 Now the linearized system can be acquired by populating the Jacobians with the values of the equilibrium point $(\textbf{x}_0, \tau_0)$.
+When explicit values are required, $r_0 = 0$ was chosen as the specific equilibrium used throughout the laboratory work.
 
 \begin{equation}
 \begin{split}
@@ -363,7 +394,7 @@ This part focusing on controller design for the ball and beam system modeled and
 
 \subsubsection{Linear system zero input response}
 The equivalent transfer function to the state space system in (\ref{equ:linSys}) can be found using the Matlab command \verb|tf(sys)|.
-However, for us to calculate the time domain solution to the system for the initial condition $\textbf{x}_0 = \begin{pmatrix} 0.2 & 0.05 & 1 & 0.01	 \end{pmatrix}^T$ the transfer function is not required.
+However, for us to calculate the solution to the system, with initial conditions $\textbf{x}_0 = \begin{pmatrix} 0.2 & 0.05 & 1 & 0.01	 \end{pmatrix}^T$, the transfer function is not required.
 The first order differential equation system has the solution (\ref{equ:ssSolution}) based on the matrix exponential.
 For the zero response, the second part of (\ref{equ:ssSolution}) can be omitted and the solution is:
 
@@ -372,21 +403,19 @@ For the zero response, the second part of (\ref{equ:ssSolution}) can be omitted 
 \end{equation}
 
 Since the system is unstable the solution is expected to grow to infinity as time goes to infinity.
-An alternative to calculating solution is to simulate the linear system using the Matlab command \verb|lsim(sys, u, t, x_0)|.
+An alternative to calculating the solution is to simulate the linear system using the Matlab command \verb|lsim(sys, u, t, x_0)|.
 This has been done with the same initial conditions.
 For comparison between explicit calculation and simulation see results, figure \ref{fig:zeroIn}.
-This figure show the difference between the two solutions.
-For both calculation and simulation the system was linearized around the equilibrium $\textbf{x}_0 = \begin{pmatrix} 0 & 0 & 0 & 0 \end{pmatrix}^T$ as it was expected to have zero input (this is the only equilibrium with zero input).
+The figure show the difference between the two solutions.
 
 \subsubsection{Controllability and Observability}
 Checking both controllability and observability require substantial matrix multiplication for complex systems according to the theory of (\ref{equ:ctrb}) and (\ref{equ:obsv}).
-Luckily Matlab offers these operations with implemented function commands \verb|obsv| and \verb|ctrb| along with a check of rank \verb|rank|.
+Luckily Matlab offers these operations with implemented function commands \verb|obsv| and \verb|ctrb| along with a check of \verb|rank|.
 Using these, controllability can be checked easily and all the requested combinations of C matrices can be checked for observability.
-Please note that the numerical solution requires numerical matrices for $a, B \& C$, hence the frequently used equilibrium $\textbf{x}_0 = \begin{pmatrix} 0 & 0 & 0 & 0 \end{pmatrix}^T$ has been used.
 The result is that the system is controllable and all cases $i - vi$ are observable
 
 \subsubsection{Controller design by pole placement}
-In the next sections feedback controllers are designed.
+In the next sections, feedback controllers are designed.
 In order to limit the scope of the lab, it is assumed that all the states can be measured.
 This reduces to problem to not require an observer.
 
@@ -420,6 +449,7 @@ The assignment then ask to place the poles in $\begin{pmatrix} -7 & -7 & 0.5+0.5
 Instead the poles have been placed through purposeful trial and error to try and accommodate the step response specifications of maximum 20\% overshoot and 3s settling time.
 The closed-loop poles $\begin{pmatrix} -7 & -6 & -3+3i & -3-3i \end{pmatrix}$ have been found to generate a good step response on the linearized system.
 The controller with those poles are now tested with an initial condition of $\textbf{x}_0 = \begin{pmatrix} 0.4 & 0.2 & 0.0175 & 0.0052 \end{pmatrix}^T$ and a reference of zero.
+This initial condition was used in favor of the proposed initial condition on the beam limit $r_0 = 0.5$ at that work poorly with the nonlinear system.
 The result with the linearized system can be seen in figure \ref{fig:poleLin} and the result with the nonlinear equations can be seen in figure \ref{fig:poleNon}.
 To test the results on the nonlinear system a feedback system was built in Simulink utilizing the ball and beam model from figure \ref{fig:ballBeamSimulink}.
 It utilizes the standard state feedback controller form for $L$ with a prefilter $L_r$ on the reference input, see figure \ref{fig:feedbackSys}.
@@ -439,18 +469,18 @@ J = \int_0^{\infty} \Delta \textbf{x}^TQ\Delta \textbf{x} + \Delta u^TR\Delta u\
 \end{equation}
 
 The controller on the same form as before (\ref{equ:controller}) that minimizes the cost function can be found using the built-in Matlab function \verb|lqr(sys, Q, R)|.
-Then the prefilter for unity DC gain $L_r$ can be calculated just as before (\ref{equ:prefilter}) as well.
-The operation start by using an identity matrix for $Q$ and $1$ for $R$, then by purpose full trial and error weights that generate good results where found.
+Then the prefilter for unity DC gain $L_r$ can be calculated just as before (\ref{equ:prefilter}).
+The task start by using an identity matrix for $Q$ and $1$ for $R$, then by purpose full trial and error, weights that generate good results where found.
 The resulting weights that was found are:
 
 \begin{equation}
 Q = \begin{pmatrix}
-30 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 \\
 0 & 1 & 0 & 0 \\
 0 & 0 & 1 & 0 \\
-0 & 0 & 0 & 1
+0 & 0 & 0 & 3
 \end{pmatrix}, \; 
-R = 1
+R = 200
 \end{equation}
 
 The performance results of the optimal controller for the same initial conditions as before and a return to zero step can be seen in results, figure \ref{fig:lqrLin} for the linearized system and figure \ref{fig:lqrNon} for the nonlinear ball and beam.
@@ -463,8 +493,14 @@ Additionally they are compared using overshoot, calculated on only the ball posi
 Also the settling time of the ball position is compared for a settling within $\pm5\%$.
 The calculated comparison result can be found under results, table \ref{tab:compare}.
 
-
-
+\subsubsection{Plant model uncertainty}
+It is often the case that there exist variations and uncertainties in the derived models of a system.
+The effect of this is explored here by assuming a 15\% error on the beam inertia from table \ref{tab:quantities}.
+This mean that the model used to compute the controllers is not fully representative of the system it will actually be used on.
+To visualize this, the derived pole placement (PP) controller and optimal controller (LQR) have been tested on a virtual ball and beam system with $J_{uncert} = J*1.15$.
+The controllers where tested on both the lineraized dynamics and the full nonlinear system implemented in Simulink.
+The results are presented in figure \ref{fig:uncert}, where only the ball position has been plotted for the different cases/controllers to improve the plot readability.
+The effect on the remaining states has also been investigated and convey similar behavior as the ball position for the uncertain system.
 
 
 \section{Results}
@@ -512,7 +548,7 @@ Simulating the nonlinear equations in (\ref{equ:nonLinSs}) and their response to
 
 \subsection{Linear system zero input response}
 The time evolution of the linearized system (\ref{equ:linSys}) grows to infinity for the initial condition $\textbf{x}_0 = \begin{pmatrix} 0.2 & 0.05 & 1 & 0.01 \end{pmatrix}^T$.
-This solution has been calculated explicitly and by simulation and the difference between the results can be seen in figure \ref{fig:zeroIn}.
+This solution has been calculated explicitly and by simulation, the difference between the results can be seen in figure \ref{fig:zeroIn}.
 
 \begin{figure}[H]
 \center
@@ -572,27 +608,107 @@ The table \ref{tab:compare} below showcase the performance metrics comparison be
  \hline
  Metric & Pole placement & Optimization \\ [0.5ex] 
  \hline\hline
- $\left\lVert \textbf{e}(t)\right\rVert_2^2$ & 30.4 & 22.0 \\ 
- $\left\lVert \textbf{e}(t)\right\rVert_\infty$ & 9.1 & 6.6 \\
- $\left\lVert u(t)\right\rVert_2^2$ & 4.1 & 4.8 \\
+ $\left\lVert \textbf{e}(t)\right\rVert_2^2$ & 28.8 & 22.0 \\ 
+ $\left\lVert \textbf{e}(t)\right\rVert_\infty$ & 8.7 & 6.6 \\
+ $\left\lVert u(t)\right\rVert_2^2$ & 4.3 & 4.8 \\
  $\left\lVert u(t)\right\rVert_\infty$ & 0.55 & 0.99 \\
- overshoot [\%] & 31.8 & 0.0 \\
- settling time [s] & 1.75 & 1.60 \\ [1ex] 
+ overshoot [\%] & 36.8 & 0.0 \\
+ settling time [s] & 1.82 & 1.60 \\ [1ex] 
  \hline
  \end{tabular}
  \caption{Comparison of pole placement method and optimal control method performance on a return to zero response for the nonlinear ball and beam.}
  \label{tab:compare}
 \end{table}
 
+\subsection{Plant model uncertainty}
+Simulations of the same pole placement (PP) and optimal (LQR) controllers as before on a system with a beam inertia 15\% greater is seen in figure \ref{fig:uncert}. 
+The figure show the ball position for the two controllers and the two cases of linear and nonlinear system.
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.75]{../code/figures/figUncert.png}
+\caption{Controller performance for an uncertain system example where the inertia is 15\% greater than designed for. The figure show the ball position for the different cases.}
+\label{fig:uncert}
+\end{figure}
+
 
 \section{Discussion}
-- White box modeling is difficult
-- Linearization is error prone
-- Step response = Unstable system, 0.1Nm enough to dominate the ball weights
-- Sine wave: Centering the beam oscillations
-- Step response of linear and nonlinear similar around [0 0 0 0]
+\subsection{System modeling}
+An easy to spot equilibrium of the system is that of the ball above the beam pivot point.
+However technically all ball positions along a level beam are equilibrium points as stated in (\ref{equ:stateEqulibrium}).
+This indicate that it should be possible to control the ball at any position along the level beam as long as the system is fast and strong enough.
+However the experiments carried out have assumed the equilibrium of $\textbf{x}_0 = \begin{pmatrix} 0 & 0 & 0 & 0 \end{pmatrix}^T$, $\tau_0 = 0$
+
+
+Modeling a system using the white-box approach demonstrated during this lab is lots of work.
+A majority of the work put in was dedicated to the Lagrange method to come up with the nonlinear differential equations followed by the linearization.
+It is however very important to do right as any errors in the model will propagate downstream to the controller design.
+It is also found to be quite error prone as it is often done by hand, this is demonstrated by the paper \citep{BolvarVincenty2014ModellingTB}, where several parts of the derivation was found to be left out/forgotten.
+
+Implementing the nonlinear system in Simulink was not very difficult.
+However including the relevant saturation such as beam width, max torque and beam angle was difficult.
+In the end it was not completed fully as the system ended up in deadlock if any of the state saturations were reached.
+The difficulty lies in that while saturating the ball position at the edges of the beam is possible, also the velocity must be zeroed at the beam edge without preventing the ball from gaining velocity in the opposite direction.
+This was not achieved.
+
+The step response of the nonlinear system, figure \ref{fig:bbStep}, show an unstable system.
+It also show that a torque of 0.1Nm is able to dominate the beam angle behavior as long as the ball is reasonably close to the center.
+This is seen by the linear behavior of the beam angular velocity for the initial part of the step response.
+Using the step response knowledge, a sine wave torque application of 0.2Nm in amplitude was tested to "keep" the ball on the beam.
+To have any success the sine wave had a phase shift that allowed the beam velocity to oscillate around zero.
+Further to have the beam angle oscillate around the level state it was given an initial angle.
+This achieved a little more than a second of ball "balance".
+But since the ball position affect the beam angle though gravity, the system eventually become unstable due to the fact the ball must roll to one side initially. 
+
+\subsection{Controller design}
+The first part of Task 2 was quite difficult to understand.
+The interpretation was that the linearized system was to be evaluated, using both explicit solution and simulation.
+It mentioned the matrix transfer function, that can easily be found with Matlab, but there is no need for the transfer function if the state space system is already found.
+Anyhow, the explicit solution to a state space system was found using the state space matrices.
+It was then compared to the simulation of the very same system, using the two systems difference instead of absolute value due to them being unstable system, figure \ref{fig:zeroIn}.
+A growing difference was observed, however the magnitude was very small ($10^{-12}$).
+The small error indicate this might originate from the floating point quantization that occur in a computer.
+Each calculation will introduce this effect for both system, but the simulated system values depend on previous values, hence the quantization will accumulate over time compared to the explicit solution.
+
+The linear system was found controllable and observable for a multitude of measurement combinations $i - vi$.
+This enables state feedback control where the poles can be placed arbitrarily and the usage of an observer with arbitrary poles.
+
+
+Two state feedback controllers were designed, one using pole placement and one using optimization.
+The difference in calculation required to find the controller gains were pretty much similar due to the abstraction provided by the Matlab functions.
+In the sense of controller calculation required during operation they are exactly the same as both are the same state feedback structure.
+Other performance aspects than calculation were investigated and listed in table \ref{tab:compare}.
+The results show that the LQR controller acquire better response performance, at the cost of larger amplitude control action.
+It was particular difficult to find weight matrices Q \& R that generated a controller adhering the the torque limitation $|\tau| < 1Nm$.
+A better solution could be using the similar but more complicated Model Predictive Control (MPC) method as it allows incorporating the saturation to the optimization.
+Also notable is that the LQR technique generate controllers that have no overshoot, making them much better than pole placement on that aspect.
+But it could also be argued that the pole placement method could achieve similar result by placing all poles on the real axis.
+
+In general the optimization method was easier to work with as the weights used as design parameters directly relate to system behaviors.
+This facilitated trial and error that was more meaningful, whereas the pole locations don't translate as well system behavior.
+This is especially true then the system is higher than second order or has zeros.
+
+Comparing the linearized system with the nonlinear it was seen that they behave similar for a step response at the equilibrium point $\textbf{x}_0 = \textbf{0}$ (figures not included in report).
+This is expected as the linearization is only valid in a small region around this point.
+For the response tested in figures \ref{fig:poleLin} - \ref{fig:lqrNon} they exhibit slightly different behavior for linear and nonlinear model.
+This can be contributed to the initial condition $\textbf{x}_0 = \begin{pmatrix} 0.4 & 0.2 & 0.0175 & 0.0052 \end{pmatrix}^T$ that is quite far from the linearization equilibrium.
+
+Doing a basic test of controller robustness by applying uncertainty to the beam inertia $J$ gave the ball position results seen in figure \ref{fig:uncert}.
+Notably is the larger settling time and the substantial increase in overshoot and oscillation.
+All test cases remain stable, but the difference is visible especially in the oscillation.
+This highlight the fact that accurate models are very important when doing control design and that robustness is something that should be taken into account.
+The LQR controller used on the nonlinear system could be argued performing the best on the uncertain system with no oscillation.
+If this is pure chance or a feature of the method can not be determined by these limited experiments.
+
 
 \section{Conclusion}
+It was shown that the Lagrange method is a powerful modeling method for complex nonlinear system. It allows a white-box modeling approach that is well setup for subsequent linearization around an equilibrium.
+
+Several state feedback controllers were designed using the linearized dynamics and it was shown to be sufficient for controlling the nonlinear system.
+
+Lastly, it was demonstrated the value of an accurate system model for control design.
+This was apparent as the system exhibited substantially more oscillation when the beam inertia was incorrect by 15\%.
+
 
 \clearpage
 \bibliography{reference}
@@ -600,16 +716,10 @@ The table \ref{tab:compare} below showcase the performance metrics comparison be
 \clearpage
 \appendix
 
-\section{Example Section}
-This is an example reference \citep{glad00}.
+\section{Code}
+The Matlab code used for throughout the work in this report is state below.
+The Simulink code used for the nonlinear simulation can be provided upon request only due to the limitation of its' paste-ability and the file extension limitation of canvas.
 
-\begin{figure}[h!]
-\center
-\includegraphics[scale=0.8]{../code/figures/exampleFigure.png}
-\caption{Example caption.}
-\label{fig:exampleLable}
-\end{figure}
-
-\lstinputlisting{../code/exampleCode.m}
+\lstinputlisting{../code/main.m}
 
 \end{document}
