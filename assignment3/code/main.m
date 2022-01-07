@@ -67,14 +67,33 @@ G_cl7 = feedback(Kvs(7)*G1*G2,1)
 figure
 pzmap(G_cl1, G_cl2, G_cl3, G_cl4, G_cl5, G_cl6, G_cl7)
 
-%
-% Draw a circle at location -m with radius r.
+%% Plot nyquist curves on single figure
+
+labels = ["1","1.6","2.5","4.0","6.3","10","16"];
+
+circFig = figure(8);
+plotoptions = nyquistoptions;
+plotoptions.XLim = {[-2 2]};
+plotoptions.YLim = {[-2 2]};
+for k = 1:length(labels)
+    nyquistplot(Kvs(k)*G1*G2, plotoptions);
+    hold on
+end
+hold off
+circle(m,r);
+
+
+legend(labels)
+
+saveas(circFig, fullfile(figFolder, 'circFig.png'))
+
+%% Draw a circle at location -m with radius r.
 %
 function circle (m,r)
     hold on;
     fi=(-1:0.01:1)*pi;
     x=-m+r*exp(1i*fi);
-    plot(x);
-    plot([(-m+r) (-m+r)], [-10 10])
+    plot(x, 'r','LineWidth',2);
+    plot([(-m+r) (-m+r)], [-10 10],'r','LineWidth',2)
     hold off;
 end
