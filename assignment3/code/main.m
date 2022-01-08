@@ -18,41 +18,41 @@ k2 = 0.6;
 m=((1/k1)+(1/k2))/2;
 r=abs(((1/k1)-(1/k2))/2);
 
-%Plot Nyquist diagrams for each Kvs
-fig1 = figure(1);
-nyquist(Kvs(1)*G1*G2)
-circle(m,r);
-saveas(fig1, fullfile(figFolder, 'nyquist1.png'))
-
-fig2 = figure(2);
-nyquist(Kvs(2)*G1*G2)
-circle(m,r);
-saveas(fig2, fullfile(figFolder, 'nyquist2.png'))
-
-fig3 = figure(3);
-nyquist(Kvs(3)*G1*G2)
-circle(m,r);
-saveas(fig3, fullfile(figFolder, 'nyquist3.png'))
-
-fig4 = figure(4);
-nyquist(Kvs(4)*G1*G2)
-circle(m,r);
-saveas(fig4, fullfile(figFolder, 'nyquist4.png'))
-
-fig5 = figure(5);
-nyquist(Kvs(5)*G1*G2)
-circle(m,r);
-saveas(fig5, fullfile(figFolder, 'nyquist5.png'))
-
-fig6 = figure(6);
-nyquist(Kvs(6)*G1*G2)
-circle(m,r);
-saveas(fig6, fullfile(figFolder, 'nyquist6.png'))
-
-fig7 = figure(7);
-nyquist(Kvs(7)*G1*G2)
-circle(m,r);
-saveas(fig7, fullfile(figFolder, 'nyquist7.png'))
+% %Plot Nyquist diagrams for each Kvs
+% fig1 = figure(1);
+% nyquist(Kvs(1)*G1*G2)
+% circle(m,r);
+% saveas(fig1, fullfile(figFolder, 'nyquist1.png'))
+% 
+% fig2 = figure(2);
+% nyquist(Kvs(2)*G1*G2)
+% circle(m,r);
+% saveas(fig2, fullfile(figFolder, 'nyquist2.png'))
+% 
+% fig3 = figure(3);
+% nyquist(Kvs(3)*G1*G2)
+% circle(m,r);
+% saveas(fig3, fullfile(figFolder, 'nyquist3.png'))
+% 
+% fig4 = figure(4);
+% nyquist(Kvs(4)*G1*G2)
+% circle(m,r);
+% saveas(fig4, fullfile(figFolder, 'nyquist4.png'))
+% 
+% fig5 = figure(5);
+% nyquist(Kvs(5)*G1*G2)
+% circle(m,r);
+% saveas(fig5, fullfile(figFolder, 'nyquist5.png'))
+% 
+% fig6 = figure(6);
+% nyquist(Kvs(6)*G1*G2)
+% circle(m,r);
+% saveas(fig6, fullfile(figFolder, 'nyquist6.png'))
+% 
+% fig7 = figure(7);
+% nyquist(Kvs(7)*G1*G2)
+% circle(m,r);
+% saveas(fig7, fullfile(figFolder, 'nyquist7.png'))
 
 %Check closed loop poles as a sanity check
 
@@ -75,6 +75,7 @@ circFig = figure(8);
 plotoptions = nyquistoptions;
 plotoptions.XLim = {[-2 2]};
 plotoptions.YLim = {[-2 2]};
+plotoptions.ShowFullContour = 'off';
 for k = 1:length(labels)
     nyquistplot(Kvs(k)*G1*G2, plotoptions);
     hold on
@@ -82,20 +83,37 @@ end
 hold off
 circle(m,r);
 
+legend(labels)
+
+saveas(circFig, fullfile(figFolder, 'circFig.png'))
+
+%% Plot describing function
+
+descFig = figure(9);
+plotoptions = nyquistoptions;
+plotoptions.XLim = {[-0.6 0.6]};
+plotoptions.YLim = {[-0.6 0.6]};
+plotoptions.ShowFullContour = 'off';
+for k = 1:length(labels)
+    nyquistplot(Kvs(k)*G1*G2, plotoptions);
+    hold on
+end
+hold off
+
 %Add describing function plot for comparison
-C = (.1:.1:1);
+C = (0:.1:10);
 Y = 4 ./ (pi .* C);
 YY = -1 ./ Y;
 XX = zeros(1,length(C));
 hold on
 plot(YY,XX,'r','LineWidth',2);
-%plot(-1/(4/(pi*.4)),0,'r+','LineWidth',2);
-plot(-1/(4/(pi*.5)),0,'ro','LineWidth',2);
+plot(-1/(4/(pi*.5)),0,'ko','LineWidth',2);
+quiver(0,0,-1/(4/(pi*.5)),0,'r','LineWidth',2)
 hold off
 
 legend(labels)
 
-saveas(circFig, fullfile(figFolder, 'circFig.png'))
+saveas(descFig, fullfile(figFolder, 'descFig.png'))
 
 %% Draw a circle at location -m with radius r.
 %
