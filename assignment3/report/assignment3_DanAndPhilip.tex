@@ -420,8 +420,45 @@ K_{vs} = 4.0
 As confirmation of these results, we can inspect figure \ref{fig:circCrit} visually and note that the Nyquist curve for $K_{vs}=4.0$ crosses the real axis to the right of the red circle which indicates C=0.5.  Furthermore, $K_{vs}=6.3$ crosses the real axis to the left.  Hence, the answer in (\ref{equ:k_max}) is indeed correct. 
 
 \section{Discussion}
+
+For certain nonlinearities, $f(.)$, which are static and unique, way may employ the circle criterion to determine stability if the following conditions are met:
+
+\begin{equation}
+\begin{split}
+f(0) = 0 \\
+k_{1} {\leq} \frac{f(y)}{y} {\leq} k_{2},  y {\neq} 0
+\end{split}
+\end{equation}
+
+Illustrated in figure \ref{fig:valvepower}, $k_{1}$ and $k_{2}$ are chosen to fully enclose the region of known nonlinearity.  As stated earlier, a sufficient condition for input output stability is that the Nyquist curve does not enter or enclose the circle as seen in figure \ref{fig:circCrit}. It is interesting to note, however, that if the circle criterion is not satisfied, then that does not imply instability.   
+
+Satisfying the circle criterion limits the selection of valves to the valves with smaller valve coefficients (and less valve authority).  Specifically, to those less than $K_{vs}=4.0$.
+
+In the case of valves with saturation, further restriction is imposed and the largest valve is $K_{vs}=2.5$
+
+Since, in general, a higher valve authority is preferred, the radius of the circle is important as an overly large radius, caused by selecting $k_{1}$ and $k_{2}$ too conservatively,  may exclude valves unnecessarily. This leads to an interesting question of absolute stability and robustness.  In other words, how close to the circle is "safe"?
+
+Another observation from figure \ref{fig:valvepower} is that a large region of nonlinearity will require a large sector to be blocked out.  This may be a costly proposition to ensure global absolute stability, and perhaps it is possible to study absolute stability within a finite region as a compromise.
+
+A describing function of a relay was used to analyze undesired oscillations in the system.  The task was to identify the largest valve that would limit the amplitude of oscillation to less than 0.5.
+Two approaches were taken for this assignment.  First an algebraic method was used followed by a graphical approach.
+
+An algebraic approach was possible since the system in (\ref{equ:systemTF}) and the describing function (\ref{equ:relayDescribingFuntion}) are not too complex.  However, it became evident that an algebraic approach would be limited to only relatively simple systems due to the complexity of the calculations.
+
+The graphical solution provides a simple means to solve the describing function approach by plotting the inverse of the describing function in the Nyquist diagram and noting where the two curves intersect each other. By identifying the point on the describing function curve where $C=0.5$, it was a straight forward effort to find the largest allowable valve by noting which Nyquist curve that intersected the describing curve to the left of the $C=0.5$ point.
+
+In both the algebraic and graphical approach, the maximum valve size was found to be $K_{vs}=4.0$.
+
+An interesting benefit of the algebraic approach was that a maximum value of $K_{vs}=5.10$ could be obtained explicitly. This information is not evident by looking at the graphical solution alone.  The graphical solution could only help identify which of the standard valve sizes that should be chosen.    
+
+ 
 \section{Conclusion}
 
+The circle criterion is a powerful method for absolute stability analysis.  In this assignment we used the circle criterion to select a valve size that would provide maximum power given the nonlinear behavior of the valve authority effect.  The method of circle criterion was easily extended to support analysis of valves with and without saturation.
+
+Furthermore, the method of describing function was used to analyze the harmonic balance of the system, and to choose a valve that would limit the magnitude of oscillations.  Both an algebraic and graphical approach was used, and the benefits of both approaches were discussed.
+
+This assignment highlighted several interesting areas for future study, such as, the relationship between absolute stability and robustness, and global stability vs. stability in a finite region, and finally, generalized sector selection of the nonlinearity to reduce conservatism.   
 
 
 
