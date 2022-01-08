@@ -65,9 +65,9 @@ Files: main.m, feedbackControl.slx, systemAnalysis.slx, helperLibrary.slx\\
 \clearpage
 
 \section{Introduction}
-In this laboratory work an unstable system is analyzed.
+In this laboratory work, an unstable system is analyzed.
 The ball and beam experiment setup, figure \ref{fig:ballAndBeam}, will serve the purpose of the unstable system.
-The ball and beam setup is controlled by the DC motor torque and the measured output is the position of the ball on the beam.
+The setup is controlled by the DC motor torque and the main measured output is the position of the ball on the beam.
 In table \ref{tab:quantities}, the physical quantities of the system are listed.
 The ball is assumed to roll on the beam under to force of gravity without slipping.
 
@@ -159,7 +159,7 @@ If the controllability matrix $\mathcal{S}$ has full rank (independent rows/colu
 
 \section{Method}
 This section will go though the methodology used to solve the tasks in the order they are assigned in the instructions.
-First the system will be modeled and linearized, the modeled system will be analyzed by step and sinusoidal response
+First the system will be modeled and linearized, the modeled system will be analyzed by step and sinusoidal response.
 Then a controller will be developed based on pole placement and one using optimal control, these will be compared.
 
 \subsection{Modeling and simulation}
@@ -254,7 +254,7 @@ L = K - U =
 mgr\sin{\theta}
 \end{equation}
 
-Now the equation of motion for the ball can be calculated using the Lagrange equation.
+The equation of motion for the ball can be calculated using the Lagrange equation.
 The first Lagrange equation give:
 
 \begin{equation}
@@ -366,7 +366,7 @@ B &= \frac{\partial}{\partial \tau}f(\textbf{x}_0, \tau_0) =
 \end{equation}
 
 The linearized system has been included in the result section as (\ref{equ:linSys}).
-It has been given a sensor for ball position and beam angle $y = \begin{pmatrix} x_1 & x_3 \end{pmatrix}^T$.
+It has been given a sensor for ball position $y = x_1$.
 
 \subsubsection{System simulation}
 The instructions ask to simulate the step response of the nonlinear system using the state space equations in (\ref{equ:nonLinSs}).
@@ -393,7 +393,7 @@ For the sine wave experiment it was found that using an initial condition $\text
 This part focusing on controller design for the ball and beam system modeled and evaluated in the previous section.
 
 \subsubsection{Linear system zero input response}
-The equivalent transfer function to the state space system in (\ref{equ:linSys}) can be found using the Matlab command \verb|tf(sys)|.
+The equivalent transfer function to the linearized state space system in (\ref{equ:linSys}) can be found using the Matlab command \verb|tf(sys)|.
 However, for us to calculate the solution to the system, with initial conditions $\textbf{x}_0 = \begin{pmatrix} 0.2 & 0.05 & 1 & 0.01	 \end{pmatrix}^T$, the transfer function is not required.
 The first order differential equation system has the solution (\ref{equ:ssSolution}) based on the matrix exponential.
 For the zero response, the second part of (\ref{equ:ssSolution}) can be omitted and the solution is:
@@ -406,7 +406,7 @@ Since the system is unstable the solution is expected to grow to infinity as tim
 An alternative to calculating the solution is to simulate the linear system using the Matlab command \verb|lsim(sys, u, t, x_0)|.
 This has been done with the same initial conditions.
 For comparison between explicit calculation and simulation see results, figure \ref{fig:zeroIn}.
-The figure show the difference between the two solutions.
+The figure show the difference between the two solutions as the unstable output is of limited interest on a graph.
 
 \subsubsection{Controllability and Observability}
 Checking both controllability and observability require substantial matrix multiplication for complex systems according to the theory of (\ref{equ:ctrb}) and (\ref{equ:obsv}).
@@ -449,7 +449,7 @@ The assignment then ask to place the poles in $\begin{pmatrix} -7 & -7 & 0.5+0.5
 Instead the poles have been placed through purposeful trial and error to try and accommodate the step response specifications of maximum 20\% overshoot and 3s settling time.
 The closed-loop poles $\begin{pmatrix} -7 & -6 & -3+3i & -3-3i \end{pmatrix}$ have been found to generate a good step response on the linearized system.
 The controller with those poles are now tested with an initial condition of $\textbf{x}_0 = \begin{pmatrix} 0.4 & 0.2 & 0.0175 & 0.0052 \end{pmatrix}^T$ and a reference of zero.
-This initial condition was used in favor of the proposed initial condition on the beam limit $r_0 = 0.5$ at that work poorly with the nonlinear system.
+This initial condition was used in favor of the proposed initial condition on the beam limit $r_0 = 0.5$ as that work poorly with the nonlinear system.
 The result with the linearized system can be seen in figure \ref{fig:poleLin} and the result with the nonlinear equations can be seen in figure \ref{fig:poleNon}.
 To test the results on the nonlinear system a feedback system was built in Simulink utilizing the ball and beam model from figure \ref{fig:ballBeamSimulink}.
 It utilizes the standard state feedback controller form for $L$ with a prefilter $L_r$ on the reference input, see figure \ref{fig:feedbackSys}.
@@ -521,8 +521,7 @@ The linearized system for the ball and beam is presented below for an equilibriu
 0 \\ 0 \\ 0 \\ \frac{1}{J + mr_0^2}
 \end{pmatrix}\Delta\tau \\
 \Delta y &= \begin{pmatrix}
-1 & 0 & 0 & 0 \\
-1 & 0 & 1 & 0
+1 & 0 & 0 & 0
 \end{pmatrix}\Delta\textbf{x}
 \end{split}
 \label{equ:linSys}
@@ -547,13 +546,13 @@ Simulating the nonlinear equations in (\ref{equ:nonLinSs}) and their response to
 \end{figure}
 
 \subsection{Linear system zero input response}
-The time evolution of the linearized system (\ref{equ:linSys}) grows to infinity for the initial condition $\textbf{x}_0 = \begin{pmatrix} 0.2 & 0.05 & 1 & 0.01 \end{pmatrix}^T$.
+The time evolution of ball position in the linearized system (\ref{equ:linSys}) grows to infinity for the initial condition $\textbf{x}_0 = \begin{pmatrix} 0.2 & 0.05 & 1 & 0.01 \end{pmatrix}^T$.
 This solution has been calculated explicitly and by simulation, the difference between the results can be seen in figure \ref{fig:zeroIn}.
 
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.75]{../code/figures/zeroIn.png}
-\caption{Difference between the explicit solution and the simulated solution for the linearized ball and beam system}
+\caption{Difference between the explicit solution and the simulated solution for the linearized ball and beam system, measuring ball position with initial condition $\textbf{x}_0 = \begin{pmatrix} 0.2 & 0.05 & 1 & 0.01 \end{pmatrix}^T$.}
 \label{fig:zeroIn}
 \end{figure}
 
@@ -649,7 +648,7 @@ Implementing the nonlinear system in Simulink was not very difficult.
 However including the relevant saturation such as beam width, max torque and beam angle was difficult.
 In the end it was not completed fully as the system ended up in deadlock if any of the state saturations were reached.
 The difficulty lies in that while saturating the ball position at the edges of the beam is possible, also the velocity must be zeroed at the beam edge without preventing the ball from gaining velocity in the opposite direction.
-This was not achieved.
+When this was achieved it had the effect of putting the system in deadlock.
 
 The step response of the nonlinear system, figure \ref{fig:bbStep}, show an unstable system.
 It also show that a torque of 0.1Nm is able to dominate the beam angle behavior as long as the ball is reasonably close to the center.
