@@ -158,8 +158,8 @@ In particular, we need to match the amplitudes and match the phase shifts (where
 
 \begin{equation}
 \begin{split}
-	|Y_{f}(C)|C|G(iw)| = C \\
-	arg(Y_{f}(C))+arg(G(iw)) = \pi
+	|Y_{f}(C)|C|G(iw)| &= C \\
+	arg(Y_{f}(C))+arg(G(iw)) &= \pi
 \end{split}
 \end{equation}
 
@@ -188,15 +188,15 @@ The linear part of complete system to be controlled is provided in the assignmen
 	\label{equ:system}
 \end{equation}
 
-The nonlinearity introduced by the valve is considered to be static.  Additionally, the valve has a gain $K_{vs}$, known as the "valve coefficient", and is available only with specific values.
-With the addition of the gain $K_{vs}$ the linear part of the system becomes:
+The nonlinearity introduced by the valve is considered to be static.  Additionally, the valve has a gain $K_{vs}$, known as the "valve coefficient", and is available only at specific values.
+With the addition of the gain $K_{vs}$, the linear part of the system become:
 
 \begin{equation}
 	G_{K_{vs}}(s) = \frac{K_{vs}}{(s^2+s+1)(s+3)}, \; K_{vs}=1, 1.6, 2.5, 4, 6.3, 10, 16.
 	\label{equ:systemTF}
 \end{equation}
 
-The nonlinearity part of the system $f(\cdot)$, introduced as the valve authority effect is not fully known.
+The nonlinear part of the system $f(\cdot)$, introduced as the valve authority effect is not explicitly known.
 
 \subsection{Circle Criteria without Valve Saturation}
 
@@ -212,13 +212,11 @@ The circle criteria will be used to identify the valve with maximum power that c
 To apply the circle criteria, the region of known nonlinearity is bounded by two lines with slopes $k_{1}$ and $k_{2}$.  By inspection, these slopes are chosen to form a region that includes the known region of nonlinearity of the valves.  From figure \ref{fig:valvepower} we find these slopes to be:
 
 \begin{equation}
-k_{1} = \frac{1-0}{0.6-0} = 1.6
-\label{equ:k1_value}
-\end{equation}
-
-\begin{equation}
-k_{2} = \frac{0.6-0}{1-0} = 0.6
-\label{equ:k2_value}
+\begin{split}
+k_{1} &= \frac{1-0}{0.6-0} = 1.6 \\
+k_{2} &= \frac{0.6-0}{1-0} = 0.6
+\end{split}
+\label{equ:k_values}
 \end{equation}
 
 The values of $k_{1}$ and $k_{2}$ are used to form an exclusion region in the Nyquist diagram bounded by a circle which intersects the real axis at $-1/k_{1}$ and $-1/k_{2}$, results figure \ref{fig:circCrit}.
@@ -240,13 +238,15 @@ An ideal relay can be modeled as \citep[p. 358]{glad00}:
 
 \begin{equation}
 \begin{split}
-f(e) = 1 if e > 0 \\
-f(e) = -1 if e <0
+f(e) = \begin{cases}
+1 & e > 0 \\
+-1 & e <0
+\end{cases}
 \end{split}
 \label{equ:relay}
 \end{equation}
 
-By using (\ref{equ:descrbingFunction}) the resulting describing function of the relay can be found to be \citep[P. 359]{glad00}
+By using (\ref{equ:descrbingFunction}) the resulting describing function of the relay can be found to be \citep[P. 359]{glad00}:
 
 \begin{equation}
 Y_{f}(C) = \frac{4}{\pi C}
@@ -259,8 +259,8 @@ To accomplish this, the system transfer function (\ref{equ:systemTF}) yields:
 
 \begin{equation}
 \begin{split}
-G(iw) = \frac{K_{vs}}{((iw)^2+(iw)+1)((iw)+3)}\\
-= \frac{K_{vs}[(3-4w^2)-i(4w-w^3)]}{[(3-4w^2)+i(4w-w^3)][(3-4w^2)-i(4w-w^3)]}
+G(iw) &= \frac{K_{vs}}{((iw)^2+(iw)+1)((iw)+3)}\\
+&= \frac{K_{vs}[(3-4w^2)-i(4w-w^3)]}{[(3-4w^2)+i(4w-w^3)][(3-4w^2)-i(4w-w^3)]}
 \end{split}
 \label{equ:systemTFiw}
 \end{equation}
@@ -292,7 +292,7 @@ The assignment asks for a magnitude of oscillation below $C < 0.5$.
 Therefore, from (\ref{equ:selfOscw2}) above we find the maximum value of $K_{vs}$ to be:
 
 \begin{equation}
-K_{MAX} < \frac{13C\pi}{4} = 5.10 for C=0.5
+K_{MAX} = \frac{13C_{MAX}\pi}{4} < \frac{13 \cdot 0.5\pi}{4}= 5.10
 \label{equ:maximum_k}
 \end{equation}
 
@@ -301,13 +301,7 @@ K_{MAX} < \frac{13C\pi}{4} = 5.10 for C=0.5
 As an alternative, equation (\ref{equ:selfOsc}) can be solved graphically by finding the intersection of the two graphs:
 
 \begin{equation}
-G(iw) = \frac{-1}{Y_{f}(C)}
-\end{equation}
-
-or, specifically:
-
-\begin{equation}
-G(iw) = \frac{-C\pi}{4}
+G(iw) = \frac{-1}{Y_{f}(C)} = -\frac{C\pi}{4}
 \end{equation}
 
 where the graph of $G(iw)$ is simply the Nyquist diagram of $G(iw)$ with the plot of $-1/Y_{f}(C)$ superimposed.
@@ -322,12 +316,12 @@ Parenthetically, note that $-1/Y_{f}(C)$ is negative and real, so it will simply
 \section{Results}
 
 \subsection{Circle Criteria Results}
-Figure \ref{fig:circCrit} show the Nyquist curves of $G_{K_{vs}}(i\omega)$ and include a circle of exclusion which is bounded by $1/k_{1}$ and $1/k_{2}$.  The diagram also include an exclusion region bounded by $1/k_{1}$ (shown as a vertical line in the figure) which is used when analyzing the case with saturation in the valve.
+Figure \ref{fig:circCrit} show the Nyquist curves of $G_{K_{vs}}(i\omega)$ and include a circle of exclusion which is bounded by $-1/k_{1}$ and $-1/k_{2}$.  The diagram also include an exclusion region bounded by $-1/k_{1}$ (shown as a vertical line in the figure) which is used when analyzing the case with saturation in the valve.
 
 \begin{figure}[H]
 \center
 \includegraphics[scale=0.75]{../code/figures/circFig.png}
-\caption{Nyquist diagram for $G_{K_{vs}}(i\omega)$ for applying the circle criterion.Exclusion regions are marked with thick red.}
+\caption{Nyquist diagram for $G_{K_{vs}}(i\omega)$ for applying the circle criterion. Exclusion regions are marked with thick red.}
 \label{fig:circCrit}
 \end{figure}
 
@@ -421,12 +415,12 @@ As confirmation of these results, we can inspect figure \ref{fig:circCrit} visua
 
 \section{Discussion}
 
-For certain nonlinearities, $f(.)$, which are static and unique, way may employ the circle criterion to determine stability if the following conditions are met:
+For certain nonlinearities, $f(.)$, which are static and unique, we may employ the circle criterion to determine stability if the following conditions are met:
 
 \begin{equation}
 \begin{split}
-f(0) = 0 \\
-k_{1} {\leq} \frac{f(y)}{y} {\leq} k_{2},  y {\neq} 0
+f(0) &= 0 \\
+k_{1} {\leq} \frac{f(y)}{y} &{\leq} k_{2}, \; y {\neq} 0
 \end{split}
 \end{equation}
 
